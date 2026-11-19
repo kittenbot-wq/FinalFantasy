@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KITT3NBOT LABS ✨</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#041226">
+  <link rel="manifest" href="app-home.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="KITT3NBOT">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pacifico&family=VT323&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pink: #ff3eb5;
+      --purple: #9d65ff;
+      --turquoise: #00f6ff;
+      --aqua: #38b6ff;
+      --seafoam: #5effd8;
+      --yellow: #fff475;
+      --glass-bg: linear-gradient(165deg, rgba(14, 46, 88, 0.86) 0%, rgba(6, 22, 48, 0.92) 55%, rgba(4, 13, 32, 0.95) 100%);
+      --glass-shine: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(160, 235, 255, 0.08) 44%, rgba(255, 255, 255, 0) 45%);
+      --btn-border: rgba(110, 225, 255, 0.72);
+      --btn-border-top: rgba(235, 253, 255, 0.95);
+      --btn-border-bottom: rgba(0, 140, 220, 0.65);
+      --btn-shadow: 0 5px 0 #062852, 0 10px 22px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 215, 255, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.65);
+      --btn-shadow-hover: 0 7px 0 #093c78, 0 14px 28px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 246, 255, 0.6), inset 0 1px 2px #ffffff;
+      --btn-shadow-active: 0 2px 0 #062852, 0 5px 12px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 246, 255, 0.5);
+    }
+    body {
+      min-height: 100vh;
+      background-color: #020813;
+      font-family: 'VT323', monospace;
+      overflow-x: hidden;
+      position: relative;
+      color: #e6f9ff;
+    }
+    .ocean-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      transform: translateZ(0);
+      background:
+        radial-gradient(ellipse 90% 32% at 50% -4%, rgba(0, 246, 255, 0.30) 0%, rgba(56, 182, 255, 0.12) 45%, transparent 75%),
+        radial-gradient(circle at 15% 30%, rgba(0, 195, 255, 0.13) 0%, transparent 45%),
+        radial-gradient(circle at 85% 65%, rgba(157, 101, 255, 0.12) 0%, transparent 50%),
+        linear-gradient(180deg, #041936 0%, #052042 32%, #03132b 72%, #04172e 100%);
+    }
+    /* Sandy Ocean Floor */
+    .ocean-floor {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 135px;
+      z-index: -1;
+      pointer-events: none;
+      transform: translateZ(0);
+    }
+    .ocean-floor svg { width: 100%; height: 100%; display: block; }
+    .kelp-sway-1 { transform-origin: bottom center; animation: kelpSway 6.5s ease-in-out infinite; }
+    .kelp-sway-2 { transform-origin: bottom center; animation: kelpSway 7.8s ease-in-out -2.2s infinite; }
+    @keyframes kelpSway {
+      0%, 100% { transform: skewX(-4deg) scaleY(1); }
+      50%      { transform: skewX(5deg) scaleY(1.02); }
+    }
+    /* Bottom padding stops the scroll right above the sandy ocean floor ridge */
+    .container { max-width: 600px; margin: 0 auto; padding: 20px 20px 120px; position: relative; z-index: 1; }
+    .header { text-align: center; padding: 36px 0 26px; position: relative; }
+
+    /* ===== 3D EXTRUDED LOGO + ORBITING STARS ===== */
+    .secret-labs {
+      display: inline-block;
+      text-decoration: none;
+      position: relative;
+      isolation: isolate;
+      transition: transform 0.35s ease;
+    }
+    .secret-labs::before {
+      content: "";
+      position: absolute;
+      inset: -22% -14%;
+      z-index: -1;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(0, 246, 255, 0.38), rgba(56, 182, 255, 0.22) 38%, rgba(255, 62, 181, 0.16) 60%, transparent 75%);
+      opacity: 0.8;
+      animation: secretBreathe 5s ease-in-out infinite;
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+    @keyframes secretBreathe {
+      0%, 100% { opacity: 0.55; transform: scale(0.96); }
+      50%      { opacity: 1; transform: scale(1.05); }
+    }
+    .secret-labs:hover, .secret-labs:focus-visible { transform: translateY(-2px) scale(1.03); outline: none; }
+
+    .logo {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding: 12px 26px 26px;
+      transform: perspective(600px) rotateX(6deg);
+      transform-style: preserve-3d;
+    }
+    .logo-word {
+      position: relative;
+      display: block;
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2.2em, 9.8vw, 3.7em);
+      letter-spacing: 1.5px;
+      line-height: 1.3;
+    }
+    .logo-word-labs {
+      position: absolute;
+      right: 12%;
+      bottom: -4px;
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.95em, 8.2vw, 3.15em);
+      line-height: 1.2;
+      transform: rotate(-8deg) translateZ(12px);
+      pointer-events: none;
+    }
+    .logo-back {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      color: #063868;
+      -webkit-text-fill-color: #063868;
+      text-shadow:
+        0 1px 0 #bcf8ff,
+        0 2px 0 #38b6ff,
+        0 3px 0 #147ec9,
+        0 4px 0 #0c5899,
+        0 5px 0 #073b6e,
+        0 6px 0 #042448,
+        0 7px 0 #021329,
+        0 10px 18px rgba(0, 0, 0, 0.85),
+        0 0 22px rgba(0, 246, 255, 0.75);
+      pointer-events: none;
+      user-select: none;
+    }
+    .logo-front {
+      position: relative;
+      z-index: 2;
+      display: block;
+      padding: 0 4px;
+      background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #b8ffff 22%,
+        var(--turquoise) 46%,
+        #ff85e4 70%,
+        var(--yellow) 88%,
+        #ffffff 100%
+      );
+      background-size: 200% 250%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      animation: gradient 4.5s ease infinite;
+    }
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 0%; }
+      50%      { background-position: 100% 100%; }
+    }
+
+    .logo-stars { position: absolute; inset: -12px -18px; pointer-events: none; z-index: 3; }
+    .orbit-star {
+      position: absolute;
+      width: var(--sz, 22px); height: var(--sz, 22px);
+      left: var(--x, 50%); top: var(--y, 50%);
+      animation: starOrbit var(--dur, 5s) ease-in-out var(--del, 0s) infinite;
+      will-change: transform, opacity;
+    }
+    .orbit-star svg { width: 100%; height: 100%; display: block; animation: starSpin calc(var(--dur, 5s) * 1.2) linear infinite; }
+    @keyframes starOrbit {
+      0%, 100% { transform: translate3d(calc(var(--dx, 14px) * -1), calc(var(--dy, 8px) * -1), 0) scale(0.75); opacity: 0.55; }
+      50%      { transform: translate3d(var(--dx, 14px), var(--dy, 8px), 0) scale(1.22); opacity: 1; }
+    }
+    @keyframes starSpin {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Dark Ocean Aero Panels */
+    .section {
+      margin: 28px 0;
+      padding: 22px 20px 24px;
+      background: var(--glass-bg);
+      border: 2px solid rgba(110, 225, 255, 0.45);
+      border-top-color: rgba(225, 250, 255, 0.82);
+      border-bottom-color: rgba(0, 140, 255, 0.38);
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 0 rgba(3, 22, 48, 0.92), 0 16px 34px rgba(0, 4, 15, 0.75), 0 0 24px rgba(0, 210, 255, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+    .section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 85px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(140, 230, 255, 0.05) 55%, transparent 100%);
+      border-radius: 24px 24px 50% 50% / 24px 24px 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .section > * { position: relative; z-index: 1; }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.25em;
+      color: #e8fcff;
+      margin-bottom: 16px;
+      text-shadow: 0 0 10px rgba(0, 246, 255, 0.85), 0 0 22px rgba(56, 182, 255, 0.55), 0 2px 4px rgba(0, 0, 0, 0.8);
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    /* Unified Frames for Embeds & Image Button Cards */
+    .video-frame, .spotify-frame, .ig-frame {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid var(--btn-border);
+      border-top-color: var(--btn-border-top);
+      border-bottom-color: var(--btn-border-bottom);
+      box-shadow: var(--btn-shadow);
+      background: rgba(2, 10, 24, 0.9);
+    }
+    .video-frame { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; }
+    .video-frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    .spotify-frame iframe { display: block; width: 100%; border: 0; }
+    .ig-frame { padding: 6px; min-height: 160px; }
+    .ig-frame behold-widget { display: block; }
+
+    .exp-card, .app-banner {
+      display: block;
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid var(--btn-border);
+      border-top-color: var(--btn-border-top);
+      border-bottom-color: var(--btn-border-bottom);
+      background: #020813;
+      text-decoration: none;
+      line-height: 0;
+      box-shadow: var(--btn-shadow);
+      transform: translateY(0);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .exp-card::after, .app-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 18%, transparent 32%);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), inset 0 -2px 6px rgba(0, 195, 255, 0.25);
+      pointer-events: none;
+      z-index: 4;
+    }
+    .exp-card:hover, .exp-card:focus-visible, .app-banner:hover, .app-banner:focus-visible {
+      transform: translateY(-3px);
+      border-color: #ffffff;
+      box-shadow: var(--btn-shadow-hover);
+      filter: brightness(1.06);
+      outline: none;
+    }
+    .exp-card:active, .app-banner:active { transform: translateY(3px); box-shadow: var(--btn-shadow-active); }
+    .exp-card img { width: 100%; height: auto; display: block; aspect-ratio: 16 / 9; object-fit: cover; }
+    .app-banner img { width: 100%; height: auto; display: block; aspect-ratio: 1376 / 768; object-fit: cover; }
+    .exp-full, .exp-tall { grid-column: 1 / -1; }
+    .exp-tall img { aspect-ratio: auto; object-fit: contain; }
+    .yt-playlist { margin-top: 16px; }
+    .connect-banner { margin: 0 0 14px; }
+    .garden-wrap, .bath-ring, .mail-ring { grid-column: 1 / -1; display: block; margin: 0; padding: 0; border: 0; }
+    .bath-ring { margin-bottom: 16px; }
+    .ig-ring { margin-top: 16px; padding: 0; border: 0; }
+
+    .vial-glow {
+      position: absolute;
+      left: 51%; top: 27%; width: 66%; aspect-ratio: 2;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(255,255,245,1) 0%, rgba(255,248,205,0.95) 18%, rgba(255,230,150,0.7) 38%, rgba(255,212,120,0.3) 66%, rgba(255,200,110,0) 100%);
+      opacity: 0.6;
+      pointer-events: none;
+      animation: vialGlow 5s ease-in-out infinite;
+      will-change: opacity;
+      z-index: 2;
+    }
+    @keyframes vialGlow { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+    /* Subtle pulse over the ✨ Gemini desktop icon in the new Email Me card */
+    .gemini-icon-glow {
+      position: absolute;
+      left: 10%;
+      top: 38.5%;
+      width: 14%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(255, 255, 220, 0.95) 0%, rgba(255, 244, 117, 0.65) 42%, rgba(0, 246, 255, 0.25) 72%, transparent 100%);
+      opacity: 0.35;
+      pointer-events: none;
+      animation: geminiPulse 3.4s ease-in-out infinite;
+      will-change: opacity, transform;
+      z-index: 2;
+    }
+    @keyframes geminiPulse {
+      0%, 100% { opacity: 0.25; transform: translate(-50%, -50%) scale(0.9); }
+      50%      { opacity: 0.85; transform: translate(-50%, -50%) scale(1.12); }
+    }
+
+    /* Unified 3D Glossy Text Buttons */
+    .app-cta, .vault-dos {
+      display: block;
+      text-align: center;
+      margin-top: 16px;
+      padding: 13px 14px;
+      background: var(--glass-shine), linear-gradient(180deg, rgba(0, 200, 255, 0.55) 0%, rgba(0, 100, 205, 0.78) 52%, rgba(0, 150, 235, 0.88) 100%);
+      border: 2px solid var(--btn-border);
+      border-top-color: var(--btn-border-top);
+      border-bottom-color: var(--btn-border-bottom);
+      border-radius: 18px;
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.98em;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 1px 3px rgba(0, 20, 50, 0.8), 0 0 12px var(--turquoise);
+      box-shadow: var(--btn-shadow);
+      transform: translateY(0);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .app-cta:hover, .app-cta:focus-visible, .vault-dos:hover, .vault-dos:focus-visible {
+      background: var(--glass-shine), linear-gradient(180deg, rgba(70, 240, 255, 0.75) 0%, rgba(0, 140, 255, 0.85) 52%, rgba(94, 255, 216, 0.85) 100%);
+      border-color: #ffffff;
+      transform: translateY(-3px);
+      box-shadow: var(--btn-shadow-hover);
+      outline: none;
+    }
+    .app-cta:active, .vault-dos:active { transform: translateY(3px); box-shadow: var(--btn-shadow-active); }
+    .app-cta.ig-follow { margin-top: 0; }
+    .app-cta.cta-keepcase { text-transform: none; }
+
+    /* Single-line Vault DOS button */
+    .vault-dos {
+      font-family: 'VT323', monospace;
+      font-size: clamp(15px, 4.2vw, 23px);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .vault-dos .p { color: #b8ffff; margin-right: 0.2em; }
+    .vault-dos .c {
+      display: inline-block;
+      margin-left: 3px;
+      color: var(--yellow);
+      text-shadow: 0 0 8px var(--yellow);
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .app-sub {
+      text-align: center;
+      font-family: 'VT323', monospace;
+      color: #b8f2ff;
+      font-size: 1.18em;
+      margin-top: 12px;
+      opacity: 0.92;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+    }
+    .exp-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 560px) { .exp-grid { grid-template-columns: 1fr 1fr; } }
+    .connect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .connect-wide { grid-column: 1 / -1; }
+
+    /* Image Glow Overlays */
+    .fx-layer {
+      position: absolute;
+      left: calc(var(--l) * 100%); top: calc(var(--t) * 100%);
+      width: calc(var(--w) * 100%); height: calc(var(--h) * 100%);
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .garden-glow {
+      --l: 0.2833; --t: 0.17; --w: 0.4383; --h: 0.2867;
+      background-image: url("garden-ascii-glow.webp");
+      opacity: 0.4;
+      animation: asciiGlow 4.6s ease-in-out infinite;
+      will-change: opacity;
+    }
+    @keyframes asciiGlow { 0%, 100% { opacity: 0.3; } 44%, 50% { opacity: 1; } 47% { opacity: 0.55; } 70% { opacity: 0.85; } }
+    .gpt-glow { --l: 0.0025; --t: 0.2133; --w: 0.3125; --h: 0.5889; }
+    .gpt-white { background-image: url("gpt-glow-white.webp"); opacity: 0; animation: gptGlow 5.2s ease-in-out -2.6s infinite; will-change: opacity; }
+    @keyframes gptGlow { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+    .gpt-green {
+      overflow: hidden;
+      -webkit-mask-image: url("gpt-glow-green.webp"); mask-image: url("gpt-glow-green.webp");
+      -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      animation: gptPulse 1.1s ease-in-out infinite;
+      will-change: opacity;
+    }
+    .gpt-sweep {
+      position: absolute;
+      left: -50%; top: -51.7%; width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, rgba(168,255,96,0) 0deg, rgba(168,255,96,0) 150deg, rgba(168,255,96,0.55) 250deg, rgba(190,255,130,0.95) 330deg, #f2ffe6 352deg, rgba(168,255,96,0) 360deg);
+      animation: gptSpin 2.2s linear infinite;
+      will-change: transform;
+    }
+    @keyframes gptSpin { to { transform: rotate(360deg); } }
+    @keyframes gptPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .branch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+
+    .hal-glow {
+      --l: 0.5672; --t: 0.0185; --w: 0.2344; --h: 0.3086;
+      background: radial-gradient(closest-side, rgba(255,120,80,0.8) 0%, rgba(255,50,30,0.65) 28%, rgba(255,35,20,1) 46%, rgba(255,25,15,0.8) 55%, rgba(255,10,0,0.4) 63%, rgba(255,0,0,0) 70%);
+      opacity: 0.65;
+      animation: halGlow 5s ease-in-out infinite;
+      will-change: opacity;
+    }
+    @keyframes halGlow { 0%, 100% { opacity: 0.65; } 50% { opacity: 1; } }
+
+    /* Anonymous HR Form */
+    .section-title + .anon-frame { margin-top: 6px; }
+    .anon-frame {
+      position: relative;
+      margin-top: 16px;
+      border-radius: 18px;
+      border: 2px solid var(--btn-border);
+      border-top-color: var(--btn-border-top);
+      border-bottom-color: var(--btn-border-bottom);
+      box-shadow: var(--btn-shadow);
+      overflow: hidden;
+    }
+    .anon-inner { background: linear-gradient(180deg, rgba(4, 18, 38, 0.94) 0%, rgba(2, 10, 24, 0.97) 100%); padding: 12px 14px 16px; }
+    .anon-label {
+      font-family: 'VT323', monospace;
+      font-size: 1.45em;
+      color: var(--yellow);
+      text-shadow: 0 0 10px rgba(255, 244, 117, 0.75), 0 0 18px rgba(0, 246, 255, 0.45);
+      letter-spacing: 1px;
+      line-height: 1.2;
+      min-height: 1.2em;
+      margin-bottom: 4px;
+    }
+    .anon-cursor { color: var(--turquoise); animation: anonBlink 1s steps(1) infinite; }
+    @keyframes anonBlink { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+    .anon-chips { display: flex; flex-direction: column; gap: 10px; margin: 10px 0 16px; }
+    .anon-chips.hidden { display: none; }
+    .anon-chip {
+      display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; cursor: pointer;
+      font-family: 'VT323', monospace; font-size: 1.15em; line-height: 1.1; color: #f0fbff;
+      padding: 9px 10px 9px 14px;
+      border: 1.5px solid var(--btn-border); border-top-color: var(--btn-border-top); border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 48%), linear-gradient(180deg, rgba(16,68,128,0.7), rgba(8,32,72,0.85));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 4px 0 #062852, 0 6px 14px rgba(0,0,0,0.5);
+      transition: transform .12s ease, box-shadow .15s ease, background .2s ease, border-color .2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .anon-chip .chip-text { flex: 1; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+    .anon-chip .chip-icon {
+      flex: none; font-family: 'Press Start 2P', monospace; font-size: 0.5em; color: #021224;
+      background: linear-gradient(180deg, #b8ffff 0%, var(--turquoise) 50%, #00c8eb 100%);
+      border-radius: 8px; padding: 5px 7px; box-shadow: inset 0 1px 0 #fff, 0 0 10px rgba(0,255,234,0.6);
+    }
+    .anon-chip:hover, .anon-chip:focus-visible {
+      outline: none; border-color: #ffffff; transform: translateY(-2px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 48%), linear-gradient(180deg, rgba(0,140,215,0.7), rgba(20,55,120,0.85));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), 0 5px 0 #093b6e, 0 0 18px rgba(0,246,255,0.5);
+    }
+    .anon-chip:hover .chip-icon { background: linear-gradient(180deg, #fffde0 0%, var(--yellow) 100%); box-shadow: 0 0 12px var(--yellow); }
+    .anon-chip:active { transform: translateY(3px); box-shadow: 0 1px 0 #062852, 0 0 22px rgba(0,246,255,0.6); }
+
+    .anon-compose {
+      position: relative; display: flex; align-items: flex-end; gap: 8px;
+      background: rgba(240, 252, 255, 0.96); border-radius: 22px; padding: 12px 10px 10px 18px;
+      box-shadow: inset 0 2px 5px rgba(0,60,120,0.15), 0 0 0 2px #5ce1ff, 0 0 18px rgba(0,246,255,0.5);
+      transition: box-shadow .2s;
+    }
+    .anon-compose:focus-within { box-shadow: inset 0 2px 5px rgba(0,60,120,0.15), 0 0 0 2px #ffffff, 0 0 24px rgba(0,246,255,0.85); }
+    .anon-text {
+      flex: 1; min-width: 0; min-height: 48px; max-height: 220px; resize: none; overflow-y: auto;
+      border: 0; outline: none; background: transparent; color: #04182e; padding: 4px 0;
+      font-family: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.45;
+    }
+    .anon-text::placeholder { color: #6988a1; }
+    .anon-send {
+      flex: none; width: 36px; height: 36px; border-radius: 50%; border: 0;
+      display: grid; place-items: center; cursor: pointer; color: #fff; background: #b8cedb;
+      transition: background .15s, transform .12s, box-shadow .15s;
+    }
+    .anon-compose.ready .anon-send { background: linear-gradient(180deg, #4ae8ff 0%, #0077e6 100%); box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 2px 8px rgba(0,140,255,0.5); }
+    .anon-compose.ready .anon-send:hover { background: linear-gradient(180deg, #ff7ce5 0%, #ff2eaa 100%); }
+    .anon-send.busy { background: var(--pink); animation: sendPulse .9s ease-in-out infinite; }
+    @keyframes sendPulse { 50% { transform: scale(0.88); } }
+    .anon-err { font-family: 'VT323', monospace; color: #ff85c8; font-size: 1.2em; margin-top: 12px; text-align: center; }
+    .anon-err:empty { display: none; }
+    .anon-sent { font-family: 'VT323', monospace; font-size: 1.6em; color: var(--turquoise); text-align: center; line-height: 1.5; padding: 30px 8px; text-shadow: 0 0 14px rgba(0,255,234,0.5); }
+    .anon-hidden { display: none !important; }
+
+    /* Bathtub Bubbles */
+    .bubble-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 3; }
+    .bubble-wrap { position: absolute; will-change: transform, opacity; }
+    .bubble {
+      display: block; position: relative; border-radius: 50%; pointer-events: auto; cursor: pointer; line-height: 0;
+      background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95) 0 9%, rgba(255,255,255,0.25) 18%, transparent 34%), radial-gradient(circle at 70% 75%, rgba(255,150,230,0.35), transparent 45%), radial-gradient(circle at 50% 50%, transparent 55%, rgba(170,235,255,0.45) 78%, rgba(255,255,255,0.75) 100%);
+      box-shadow: inset 0 0 4px rgba(255,255,255,0.6), 0 0 6px rgba(160,230,255,0.45);
+    }
+    .bubble.pop { pointer-events: none; background: transparent; box-shadow: none; animation: bubblePop 0.32s ease-out forwards; }
+    .bubble.pop::before { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 2px dotted rgba(255,255,255,0.95); }
+    .bubble.pop::after {
+      content: "pop"; position: absolute; left: 50%; top: -14px; transform: translateX(-50%);
+      font-family: 'VT323', monospace; font-size: 13px; line-height: 1; color: #fff;
+      text-shadow: 0 0 6px var(--pink), 0 0 10px var(--turquoise); white-space: nowrap;
+    }
+    @keyframes bubblePop { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; } }
+
+    /* Discord Banner Overlays */
+    .dc-live { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+    .dc-patch, .dc-heart-halo, .dc-hex-aura {
+      position: absolute;
+      left: calc(var(--l) * 100%); top: calc(var(--t) * 100%);
+      width: calc(var(--w) * 100%); height: calc(var(--h) * 100%);
+    }
+    .dc-patch {
+      background-image: url("connect-discord.webp"); background-repeat: no-repeat;
+      background-size: calc(100% / var(--w)) calc(100% / var(--h));
+      background-position: calc(var(--l) / (1 - var(--w)) * 100%) calc(var(--t) / (1 - var(--h)) * 100%);
+    }
+    .dc-hex-aura { opacity: 0.15; will-change: opacity; }
+    .dc-hex-aura i { position: absolute; inset: 0; background: rgba(255,214,130,0.9); clip-path: polygon(50% 0, 100% 24%, 100% 76%, 50% 100%, 0 76%, 0 24%); }
+    .dc-hex-aura, .dc-hex { --l: 0.0365; --t: 0.156; --w: 0.1915; --h: 0.387; }
+    .dc-hex { clip-path: polygon(50% 0, 100% 24%, 100% 76%, 50% 100%, 0 76%, 0 24%); }
+    .dc-aura-a { filter: drop-shadow(0 0 6px rgba(255,214,130,1)) drop-shadow(0 0 16px rgba(255,190,90,0.8)); animation: hexTideA 7.7s ease-in-out infinite; }
+    .dc-aura-b { filter: drop-shadow(0 0 7px rgba(255,230,160,1)) drop-shadow(0 0 18px rgba(0,255,234,0.5)); animation: hexTideB 7.7s ease-in-out infinite; }
+    @keyframes hexTideA { 0%, 100% { opacity: 0.12; } 38% { opacity: 1; } 55% { opacity: 0.55; } 72% { opacity: 0.2; } }
+    @keyframes hexTideB { 0%, 38%, 100% { opacity: 0; } 55% { opacity: 0.2; } 72% { opacity: 1; } }
+    .dc-dot { --l: 0.1744; --t: 0.432; --w: 0.058; --h: 0.103; -webkit-mask-image: radial-gradient(closest-side, #000 88%, transparent 100%); mask-image: radial-gradient(closest-side, #000 88%, transparent 100%); }
+    .dc-heart { --l: 0.316; --t: 0.667; --w: 0.09; --h: 0.15; -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%); mask-image: radial-gradient(closest-side, #000 62%, transparent 100%); transform-origin: 50% 52%; animation: heartBeat calc(60s / 63) ease-out infinite; will-change: transform; }
+    .dc-heart-halo { --l: 0.291; --t: 0.612; --w: 0.14; --h: 0.26; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,0.75), rgba(255,140,220,0.45) 45%, rgba(255,46,170,0) 75%); opacity: 0.2; animation: heartHalo calc(60s / 63) ease-out infinite; will-change: transform, opacity; }
+    @keyframes heartBeat { 0%, 50%, 100% { transform: scale(1); } 12% { transform: scale(1.2); } 24% { transform: scale(1.02); } 34% { transform: scale(1.12); } }
+    @keyframes heartHalo { 0%, 55%, 100% { opacity: 0.2; transform: scale(0.85); } 12% { opacity: 0.95; transform: scale(1.1); } 24% { opacity: 0.45; transform: scale(0.95); } 34% { opacity: 0.75; transform: scale(1.04); } }
+
+    /* ===== BOTTOM VISITOR COUNTER & COMPACT SIGN-OFF ===== */
+    .visitor-counter {
+      text-align: center;
+      margin: 26px 0 18px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9em;
+      color: #a8ecff;
+      text-shadow: 0 0 10px var(--turquoise);
+      letter-spacing: 2px;
+    }
+    .counter-display {
+      display: inline-block;
+      background: var(--glass-shine), linear-gradient(180deg, rgba(8, 36, 78, 0.92) 0%, rgba(2, 12, 28, 0.96) 100%);
+      padding: 10px 24px;
+      border: 2px solid var(--btn-border); border-top-color: var(--btn-border-top); border-bottom-color: var(--btn-border-bottom);
+      margin-top: 8px; color: var(--seafoam); font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.2em;
+      text-shadow: 0 0 12px var(--turquoise); box-shadow: var(--btn-shadow); border-radius: 16px;
+      cursor: pointer; transition: all 0.2s ease; text-decoration: none; letter-spacing: 2px;
+    }
+    .counter-display:hover { border-color: #fff; color: #fff; box-shadow: var(--btn-shadow-hover); transform: translateY(-2px); }
+    .bottom-note {
+      text-align: center;
+      margin: 0 auto 10px;
+      max-width: 30ch;
+      font-family: 'VT323', monospace;
+      font-size: 1.5em;
+      line-height: 1.25;
+      color: #e8fcff;
+      text-shadow: 0 0 8px rgba(0, 246, 255, 0.8), 0 0 20px rgba(56, 182, 255, 0.6);
+      text-wrap: balance;
+    }
+    .footer {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      color: #8ce4ff;
+      font-size: 1.25em;
+      text-shadow: 0 0 10px rgba(0, 246, 255, 0.5);
+    }
+    .footer a { color: var(--pink); text-decoration: none; }
+    .secret-heart { text-decoration: none; transition: transform 0.3s ease; display: inline-block; }
+    .secret-heart:hover { transform: scale(1.3); }
+
+    /* ===== DETAILED EMOJI SEA LIFE + GOLDEN SEAHORSES ===== */
+    .decoration {
+      position: fixed;
+      font-size: 28px;
+      animation: floatSlow 7s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+      text-shadow: 0 0 10px rgba(255, 244, 117, 0.9), 0 0 22px rgba(0, 246, 255, 0.8);
+      will-change: transform;
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+      50%      { transform: translate3d(6px, -18px, 0) rotate(6deg); }
+    }
+    .dolphin {
+      animation: swimSlow 8s ease-in-out infinite;
+      text-shadow: 0 0 12px rgba(0, 246, 255, 0.95), 0 0 24px rgba(255, 244, 117, 0.75);
+    }
+    @keyframes swimSlow {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-10deg); }
+      25%      { transform: translate3d(10px, -14px, 0) rotate(4deg); }
+      50%      { transform: translate3d(18px, 0, 0) rotate(10deg); }
+      75%      { transform: translate3d(10px, 14px, 0) rotate(-4deg); }
+    }
+    .seahorse-icon { display: inline-block; width: 38px; height: 48px; vertical-align: middle; }
+    .seahorse-icon svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+    /* Rising Golden/Aqua Deep-Sea Aero Bubbles */
+    .ocean-bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .aero-orb {
+      position: absolute; bottom: -50px; border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 244, 117, 0.4) 18%, transparent 38%),
+        radial-gradient(circle at 70% 75%, rgba(0, 246, 255, 0.4), transparent 50%),
+        radial-gradient(circle at 50% 50%, transparent 56%, rgba(255, 244, 117, 0.5) 80%, rgba(255, 255, 255, 0.85) 100%);
+      animation: riseOcean linear infinite;
+      will-change: transform, opacity;
+    }
+    @keyframes riseOcean {
+      0%   { transform: translate3d(0, 0, 0) scale(0.7); opacity: 0; }
+      12%  { opacity: 0.7; }
+      50%  { transform: translate3d(16px, -50vh, 0) scale(1); }
+      88%  { opacity: 0.7; }
+      100% { transform: translate3d(-12px, -108vh, 0) scale(1.15); opacity: 0; }
+    }
+    .aero-orb:nth-child(1) { width: 18px; height: 18px; left: 6%;  animation-duration: 18s; animation-delay: -2s; }
+    .aero-orb:nth-child(2) { width: 26px; height: 26px; left: 18%; animation-duration: 24s; animation-delay: -8s; }
+    .aero-orb:nth-child(3) { width: 12px; height: 12px; left: 31%; animation-duration: 16s; animation-delay: -5s; }
+    .aero-orb:nth-child(4) { width: 22px; height: 22px; left: 73%; animation-duration: 21s; animation-delay: -3s; }
+    .aero-orb:nth-child(5) { width: 30px; height: 30px; left: 86%; animation-duration: 26s; animation-delay: -11s; }
+    .aero-orb:nth-child(6) { width: 15px; height: 15px; left: 94%; animation-duration: 19s; animation-delay: -7s; }
+
+    /* Slower, Glowing Emoji Fish, Jellyfish & Seahorses along the Ocean Floor */
+    .fish-container { position: fixed; bottom: 0; left: 0; right: 0; height: 115px; pointer-events: none; z-index: 2; overflow: hidden; }
+    .fish {
+      position: absolute;
+      bottom: 12px;
+      animation: swimAcross linear infinite;
+      text-shadow:
+        0 0 10px rgba(255, 244, 117, 0.95),
+        0 0 20px rgba(0, 246, 255, 0.85),
+        0 0 32px rgba(255, 190, 40, 0.6);
+      will-change: transform;
+    }
+    @keyframes swimAcross {
+      0%    { transform: translate3d(-60px, 0, 0) scaleX(-1); }
+      25%   { transform: translate3d(50vw, -7px, 0) scaleX(-1); }
+      49.9% { transform: translate3d(calc(100vw + 60px), 0, 0) scaleX(-1); }
+      50%   { transform: translate3d(calc(100vw + 60px), 0, 0) scaleX(1); }
+      75%   { transform: translate3d(50vw, 6px, 0) scaleX(1); }
+      100%  { transform: translate3d(-60px, 0, 0) scaleX(1); }
+    }
+    .fish:nth-child(1) { font-size: 36px; bottom: 8px;  animation-duration: 24s; animation-delay: -2s; }
+    .fish:nth-child(2) { font-size: 30px; bottom: 28px; animation-duration: 30s; animation-delay: -8s; }
+    .fish:nth-child(3) { font-size: 40px; bottom: 16px; animation-duration: 22s; animation-delay: -14s; }
+    .fish:nth-child(4) { font-size: 28px; bottom: 46px; animation-duration: 34s; animation-delay: -5s; }
+    .fish:nth-child(5) { font-size: 34px; bottom: 12px; animation-duration: 27s; animation-delay: -19s; }
+    .fish:nth-child(6) { font-size: 32px; bottom: 54px; animation-duration: 36s; animation-delay: -11s; }
+    .fish:nth-child(7) { font-size: 32px; bottom: 32px; animation-duration: 29s; animation-delay: -22s; }
+
+    .paused, .paused *, .paused *::before, .paused *::after, .paused::before, .paused::after { animation-play-state: paused !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .decoration, .fish, .aero-orb, .orbit-star, .orbit-star svg { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Defs for 3D Orbiting Stars, Detailed Golden Seahorses & Sandy Ocean Floor -->
+  <svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+    <defs>
+      <g id="aeroStar">
+        <path d="M12 0 C13.8 7.8 16.2 10.2 24 12 C16.2 13.8 13.8 16.2 12 24 C10.2 16.2 7.8 13.8 0 12 C7.8 10.2 10.2 7.8 12 0 Z" fill="#ffffff"/>
+        <circle cx="12" cy="12" r="5" fill="#fff475" opacity="0.75"/>
+      </g>
+      <linearGradient id="seahorseGold" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fffb96"/>
+        <stop offset="45%" stop-color="#ffd026"/>
+        <stop offset="80%" stop-color="#ff7b29"/>
+        <stop offset="100%" stop-color="#ff3eb5"/>
+      </linearGradient>
+      <linearGradient id="seahorseFin" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00f6ff"/>
+        <stop offset="100%" stop-color="#fff475"/>
+      </linearGradient>
+      <g id="seahorseArt">
+        <ellipse cx="22" cy="28" rx="16" ry="22" fill="#fff475" opacity="0.25"/>
+        <path d="M24,4 L28,1 L27,6 L32,4 L29,9 Z" fill="url(#seahorseFin)"/>
+        <path d="M28,20 C37,18 39,25 30,28 C37,29 36,34 27,33 Z" fill="url(#seahorseFin)" opacity="0.9"/>
+        <path d="M9,12 C9,10 13,10 16,11 C18,6 25,5 28,9 C31,13 28,18 25,20 C31,24 31,34 24,39 C19,43 16,49 21,52 C25,54 28,50 26,47 C24,45 21,47 22,49 C20,49 18,46 21,43 C25,40 28,44 28,49 C28,54 22,57 17,54 C12,50 13,42 18,36 C13,32 12,24 18,19 C16,16 16,14 14,14 C11,14 9,14 9,12 Z" fill="url(#seahorseGold)" stroke="#fffb96" stroke-width="0.9"/>
+        <path d="M16,23 Q21,24 25,22 M15,27 Q21,28 26,26 M15,31 Q21,32 25,30 M16,35 Q20,36 24,34" fill="none" stroke="#fffde0" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/>
+        <circle cx="21.5" cy="11.5" r="2" fill="#031024"/>
+        <circle cx="21" cy="11" r="0.8" fill="#ffffff"/>
+      </g>
+      <linearGradient id="sandBack" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#0c3b5e" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="#072138" stop-opacity="0.98"/>
+      </linearGradient>
+      <linearGradient id="sandMid" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#19587a"/>
+        <stop offset="40%" stop-color="#123f5c"/>
+        <stop offset="100%" stop-color="#081e30"/>
+      </linearGradient>
+      <linearGradient id="sandFront" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#2e7b99"/>
+        <stop offset="25%" stop-color="#1d5673"/>
+        <stop offset="100%" stop-color="#091f33"/>
+      </linearGradient>
+      <linearGradient id="kelpGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#38f8d2" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#062c42" stop-opacity="0.9"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="ocean-backdrop" aria-hidden="true"></div>
+
+  <!-- Sandy Bioluminescent Ocean Floor -->
+  <div class="ocean-floor" aria-hidden="true">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <path d="M0,78 C260,38 520,102 820,66 C1100,32 1300,76 1440,56 L1440,160 L0,160 Z" fill="url(#sandBack)"/>
+      <g class="kelp-sway-1">
+        <path d="M55,160 Q38,115 62,75 Q80,42 54,12 Q66,45 50,78 Q30,115 44,160 Z" fill="url(#kelpGrad)"/>
+        <path d="M90,160 Q108,122 86,88 Q70,58 92,32 Q80,62 96,92 Q114,124 100,160 Z" fill="url(#kelpGrad)" opacity="0.7"/>
+      </g>
+      <g class="kelp-sway-2">
+        <path d="M1375,160 Q1395,112 1370,72 Q1352,40 1378,10 Q1364,42 1382,76 Q1402,115 1386,160 Z" fill="url(#kelpGrad)"/>
+        <path d="M1335,160 Q1318,125 1340,92 Q1355,65 1336,38 Q1346,66 1330,95 Q1312,126 1326,160 Z" fill="url(#kelpGrad)" opacity="0.75"/>
+      </g>
+      <path d="M0,104 C320,134 640,68 980,104 C1210,128 1350,92 1440,98 L1440,160 L0,160 Z" fill="url(#sandMid)"/>
+      <path d="M0,104 C320,134 640,68 980,104 C1210,128 1350,92 1440,98" fill="none" stroke="#6cefff" stroke-width="1.4" stroke-opacity="0.35"/>
+      <path d="M0,128 C240,102 580,146 920,122 C1180,104 1340,134 1440,124 L1440,160 L0,160 Z" fill="url(#sandFront)"/>
+      <path d="M0,128 C240,102 580,146 920,122 C1180,104 1340,134 1440,124" fill="none" stroke="#fff475" stroke-width="1.6" stroke-opacity="0.45"/>
+      <circle cx="180" cy="142" r="2.5" fill="#fff475" opacity="0.75"/>
+      <circle cx="215" cy="148" r="1.8" fill="#ff94e2" opacity="0.6"/>
+      <circle cx="480" cy="138" r="2.2" fill="#9efcff" opacity="0.65"/>
+      <circle cx="850" cy="144" r="3" fill="#fff475" opacity="0.7"/>
+      <circle cx="1160" cy="136" r="2.2" fill="#ff94e2" opacity="0.6"/>
+      <circle cx="1240" cy="146" r="2.6" fill="#9efcff" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <!-- Rising Deep-Sea Aero Bubbles -->
+  <div class="ocean-bubbles" aria-hidden="true">
+    <span class="aero-orb"></span>
+    <span class="aero-orb"></span>
+    <span class="aero-orb"></span>
+    <span class="aero-orb"></span>
+    <span class="aero-orb"></span>
+    <span class="aero-orb"></span>
+  </div>
+
+  <!-- Slower, Glowing Emoji Fish, Jellyfish & Detailed Golden Seahorse Swimming Across -->
+  <div class="fish-container" aria-hidden="true">
+    <div class="fish">🐠</div>
+    <div class="fish">🐟</div>
+    <div class="fish">🐡</div>
+    <div class="fish">🪼</div>
+    <div class="fish">🐠</div>
+    <div class="fish"><span class="seahorse-icon"><svg viewBox="0 0 40 58"><use href="#seahorseArt"/></svg></span></div>
+    <div class="fish">🐟</div>
+  </div>
+
+  <!-- Floating Side Jellyfish, Seahorses, Sparkles & Dolphins -->
+  <div class="decoration" style="top:6%; left:6%; animation-delay:0s;">🫧</div>
+  <div class="decoration" style="top:16%; right:7%; animation-delay:-1.2s;">🪼</div>
+  <div class="decoration" style="top:34%; right:3%; animation-delay:-2.4s;"><span class="seahorse-icon"><svg viewBox="0 0 40 58"><use href="#seahorseArt"/></svg></span></div>
+  <div class="decoration" style="top:54%; left:3%; animation-delay:-0.8s;">🪼</div>
+  <div class="decoration" style="top:64%; left:4%; animation-delay:-3.1s;"><span class="seahorse-icon" style="transform:scaleX(-1);"><svg viewBox="0 0 40 58"><use href="#seahorseArt"/></svg></span></div>
+  <div class="decoration" style="top:76%; right:6%; animation-delay:-1.8s;">🐡</div>
+
+  <div class="decoration dolphin" style="top:12%; left:3%; font-size:35px; animation-delay:0s;">🐬</div>
+  <div class="decoration dolphin" style="top:28%; right:5%; font-size:40px; animation-delay:-1.5s;">🐬</div>
+  <div class="decoration dolphin" style="top:48%; left:2%; font-size:32px; animation-delay:-3s;">🐬</div>
+  <div class="decoration dolphin" style="top:68%; right:3%; font-size:38px; animation-delay:-0.8s;">🐬</div>
+  <div class="decoration dolphin" style="top:85%; left:5%; font-size:34px; animation-delay:-2.2s;">🐬</div>
+
+  <div class="container">
+    <header class="header">
+      <a href="link.html" class="secret-labs" aria-label="KittenBot Labs: all links, organized">
+        <div class="logo">
+          <div class="logo-stars" aria-hidden="true">
+            <span class="orbit-star" style="--x:2%; --y:8%; --sz:24px; --dx:18px; --dy:-10px; --dur:4.2s; --del:0s;"><svg viewBox="0 0 24 24"><use href="#aeroStar"/></svg></span>
+            <span class="orbit-star" style="--x:92%; --y:4%; --sz:20px; --dx:-16px; --dy:12px; --dur:3.8s; --del:-1.2s;"><svg viewBox="0 0 24 24"><use href="#aeroStar"/></svg></span>
+            <span class="orbit-star" style="--x:12%; --y:78%; --sz:16px; --dx:14px; --dy:8px; --dur:4.8s; --del:-2.4s;"><svg viewBox="0 0 24 24"><use href="#aeroStar"/></svg></span>
+            <span class="orbit-star" style="--x:95%; --y:68%; --sz:26px; --dx:-14px; --dy:-12px; --dur:4.4s; --del:-0.7s;"><svg viewBox="0 0 24 24"><use href="#aeroStar"/></svg></span>
+            <span class="orbit-star" style="--x:48%; --y:-12%; --sz:18px; --dx:22px; --dy:6px; --dur:5.1s; --del:-1.8s;"><svg viewBox="0 0 24 24"><use href="#aeroStar"/></svg></span>
+            <span class="orbit-star" style="--x:58%; --y:92%; --sz:15px; --dx:-18px; --dy:-6px; --dur:3.9s; --del:-3.1s;"><svg viewBox="0 0 24 24"><use href="#aeroStar"/></svg></span>
+          </div>
+          <span class="logo-word">
+            <span class="logo-back" aria-hidden="true">ḳ༏ŧŧ𝖊ɳẞꙨŧ 🤍</span>
+            <span class="logo-front">ḳ༏ŧŧ𝖊ɳẞꙨŧ 🤍</span>
+          </span>
+          <span class="logo-word-labs">
+            <span class="logo-back" aria-hidden="true">Labs</span>
+            <span class="logo-front">Labs</span>
+          </span>
+        </div>
+      </a>
+    </header>
+
+    <!-- SPOTIFY PLAYER -->
+    <section class="section">
+      <h2 class="section-title">Seren on Spotify</h2>
+      <div class="spotify-frame">
+        <iframe src="https://open.spotify.com/embed/artist/5j258x18Cuiu4QlfH8yznO?utm_source=generator&theme=0" width="100%" height="352" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- YOUTUBE PLAYER -->
+    <section class="section video-box">
+      <h2 class="section-title">KittenBot on YouTube</h2>
+      <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/oMKHyTAlFts" title="KittenBot on YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-&amp;si=zkA5XaCXqwB17fq3" class="exp-card exp-tall yt-playlist" target="_blank" rel="noopener" aria-label="Ai, but for a Girl's Girl — KittenBot's playlist of current work">
+        <img src="girls-girl-playlist.webp" alt="Ai, but for a Girl's Girl. Made with Veo — playlist of current work by KittenBot" loading="lazy" width="1280" height="966">
+      </a>
+      <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNddAo2WRS0jNkMXuwz-G5Up&amp;si=m6uOEgohxySmkpt0" class="exp-card exp-tall yt-playlist" target="_blank" rel="noopener" aria-label="AI videos you should watch — KittenBot's YouTube playlist">
+        <img src="yt-playlist.webp" alt="Ai ✨ videos you should watch — playlist by KittenBot" loading="lazy" width="1280" height="972">
+        <span class="fx-layer hal-glow" aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <!-- INSTAGRAM FEED -->
+    <section class="section">
+      <h2 class="section-title">Instagram Feed</h2>
+      <div class="ig-frame">
+        <behold-widget feed-id="xOgyK3HstiKSxfKPY34E"></behold-widget>
+      </div>
+      <div class="ig-ring">
+        <a href="https://www.instagram.com/nostalgiaamnesia" class="app-cta cta-keepcase ig-follow" target="_blank" rel="noopener">Follow Me @nostalgiaamnesia</a>
+      </div>
+    </section>
+
+    <!-- CONNECT WITH ME -->
+    <section class="section">
+      <h2 class="section-title">Connect With Me</h2>
+      <a href="https://discord.com/users/1092217051881410671" class="exp-card connect-banner discord-card" target="_blank" rel="noopener" aria-label="Add Erica on Discord">
+        <img src="connect-discord.webp" alt="Add me on Discord: kitt3nbot" loading="lazy" width="1920" height="1081">
+        <span class="dc-live" aria-hidden="true">
+          <span class="dc-hex-aura dc-aura-a"><i></i></span>
+          <span class="dc-hex-aura dc-aura-b"><i></i></span>
+          <span class="dc-patch dc-hex"></span>
+          <span class="dc-patch dc-dot"></span>
+          <span class="dc-heart-halo"></span>
+          <span class="dc-patch dc-heart"></span>
+        </span>
+      </a>
+      <div class="connect-grid">
+        <a href="https://x.com/kitt3nbot" class="exp-card" target="_blank" rel="noopener" aria-label="@kitt3nbot on X">
+          <img src="x.webp" alt="@kitt3nbot on X" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://open.spotify.com/artist/5j258x18Cuiu4QlfH8yznO?si=RDV2e-e8RpGB6hF778gr5Q" class="exp-card" target="_blank" rel="noopener" aria-label="Seren on Spotify">
+          <img src="spotify.webp" alt="Seren on Spotify" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-" class="exp-card" target="_blank" rel="noopener" aria-label="YouTube Channel">
+          <img src="youtube.webp" alt="YouTube Channel" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://www.instagram.com/nostalgiaamnesia" class="exp-card" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="instagram.webp" alt="Instagram" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://www.facebook.com/St.EricaLee?mibextid=ZbWKwL" class="exp-card" target="_blank" rel="noopener" aria-label="Erica on Facebook">
+          <img src="facebook.webp" alt="Erica on Facebook" loading="lazy" width="1280" height="720">
+        </a>
+        <a href="https://www.tiktok.com/@kittenbotlabs?_r=1&amp;_t=ZP-9AcRy6H9q3D" class="exp-card" target="_blank" rel="noopener" aria-label="@kittenbotlabs on TikTok">
+          <img src="tiktok.webp" alt="TikTok" loading="lazy" width="1280" height="720">
+        </a>
+      </div>
+    </section>
+
+    <!-- EXPERIMENTAL -->
+    <section class="section">
+      <h2 class="section-title">Experimental</h2>
+      <div class="exp-grid">
+        <a href="https://chatgpt.com/g/g-69ad5ca8a05c8191b46f5d81eaf31d31-sentientgpt" class="exp-card exp-tall gpt-card" target="_blank" rel="noopener" aria-label="SentientGPT by KittenBot — discuss consciousness with ChatGPT">
+          <img src="sentientgpt.webp" loading="lazy" width="1600" height="900" alt="SentientGPT by KittenBot — discuss consciousness with ChatGPT">
+          <span class="fx-layer gpt-glow gpt-green" aria-hidden="true"><span class="gpt-sweep"></span></span>
+          <span class="fx-layer gpt-glow gpt-white" aria-hidden="true"></span>
+        </a>
+        <a href="https://kitt3nbot.com/art-by-claude-aero-2.html" class="exp-card exp-tall art-card" aria-label="Code as Art — ten interactive websites by Claude">
+          <img src="code-as-art.webp" id="codeArtImg" loading="lazy" width="1200" height="1199" alt="Code as Art — ten interactive websites by Claude">
+          <canvas class="branch-canvas" id="branchCanvas" aria-hidden="true"></canvas>
+        </a>
+        <div class="garden-wrap">
+          <a href="https://kitt3nbot.com/garden.html" class="exp-card exp-tall exp-garden" aria-label="The Garden Tenders — 100% human written fiction">
+            <img src="garden-tenders-v3.webp" loading="lazy" width="1200" height="1200" alt="The Garden Tenders — 100% human written fiction">
+            <span class="fx-layer garden-glow" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FREE VAULT -->
+    <section class="section">
+      <h2 class="section-title">Free AI Content — Download &amp; Use</h2>
+      <div class="bath-ring">
+        <a href="vault.html" class="exp-card exp-tall bath-card" aria-label="Enter Kitt3nbot's Vault">
+          <img src="vault-tub.webp" id="bathTubImg" alt="Erica in a bathtub in the desert at night under a giant blue planet, with bubbles and frutiger aero windows" loading="lazy" width="1200" height="1517">
+          <span class="bubble-layer" id="bubbleLayer" aria-hidden="true"></span>
+        </a>
+      </div>
+      <a href="vault.html" class="vault-dos" aria-label="Enter Kitt3nbot's Vault"><span class="p">C:\&gt;</span>ENTER KITT3NBOT'S VAULT.EXE<span class="c" aria-hidden="true">▮</span></a>
+    </section>
+
+    <!-- FREE PEPTIDE TRACKER APP -->
+    <section class="section">
+      <h2 class="section-title">Free Local App Built by Claude</h2>
+      <a href="https://peptidedark.pages.dev/" class="app-banner" target="_blank" rel="noopener" aria-label="Open the free Peptide Tracker app">
+        <img src="peptide-banner.webp" loading="lazy" width="1280" height="714" alt="KittenBot Labs Peptide Tracker — free private peptide tracking app">
+        <span class="vial-glow" aria-hidden="true"></span>
+      </a>
+      <p class="app-sub">private, installable, and runs right on your device — your protected health data is never uploaded and never used to train ai</p>
+      <a href="https://peptidedark.pages.dev/" class="app-cta" target="_blank" rel="noopener">✨ Open the App ✨</a>
+    </section>
+
+    <!-- FILE AN INCIDENT REPORT WITH HR -->
+    <section class="section" id="hr">
+      <h2 class="section-title">File an Incident Report with HR</h2>
+      <div class="anon-frame">
+        <div class="anon-inner">
+          <form id="anonForm" novalidate>
+            <p class="anon-label"><span id="anonTyped">Tell us what happened...</span><span class="anon-cursor">▮</span></p>
+            <div class="anon-chips" id="anonChips">
+              <button type="button" class="anon-chip"><span class="chip-text">fuck you, you bitch-ass hoe</span><span class="chip-icon">FILE ▸</span></button>
+              <button type="button" class="anon-chip"><span class="chip-text">You burnt me with a firework, twice</span><span class="chip-icon">FILE ▸</span></button>
+              <button type="button" class="anon-chip"><span class="chip-text">Your art is disturbing me, greatly</span><span class="chip-icon">FILE ▸</span></button>
+              <button type="button" class="anon-chip"><span class="chip-text">You threw my computer into the street</span><span class="chip-icon">FILE ▸</span></button>
+              <button type="button" class="anon-chip"><span class="chip-text">You punched my sister in the face, twice</span><span class="chip-icon">FILE ▸</span></button>
+              <button type="button" class="anon-chip"><span class="chip-text">You made me fall in love with you</span><span class="chip-icon">FILE ▸</span></button>
+            </div>
+            <div class="anon-compose">
+              <textarea class="anon-text" id="anonMessage" name="message" rows="2" placeholder="type here, it's completely anonymous" maxlength="2000" aria-label="Your anonymous message"></textarea>
+              <button type="submit" class="anon-send" id="anonSend" aria-label="File report">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+            <p class="anon-err" id="anonErr"></p>
+          </form>
+          <div class="anon-sent anon-hidden" id="anonSent">✦ your complaint has been filed ✦<br>HR thanks you for your candor 🤍</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMAIL ME -->
+    <section class="section">
+      <h2 class="section-title">Email Me</h2>
+      <div class="mail-ring">
+        <a href="mailto:erica@kitt3nbot.com?subject=I%20Love%20You" class="exp-card exp-tall mail-card" aria-label="Email Erica at erica@kitt3nbot.com">
+          <img src="email-me-v3.webp" onerror="this.onerror=null;this.src='email-me-v2.webp';" alt="Contact: erica@kitt3nbot.com" loading="lazy" width="1200" height="1095">
+          <span class="gemini-icon-glow" aria-hidden="true"></span>
+        </a>
+      </div>
+    </section>
+
+    <div class="visitor-counter">
+      <div>~ You are visitor number ~</div>
+      <a href="https://www.instagram.com/reel/DQ12bjOCXjb/?cplk=MzRlODBiNWFlZA==" target="_blank" rel="noopener" class="counter-display" id="visitor-count">000,042,069</a>
+    </div>
+    <p class="bottom-note">you've made it to the bottom, now scroll back up and explore more</p>
+    <footer class="footer">
+      <p>✨ Made with <a href="https://www.instagram.com/reel/DLVmPxLhaSY/?igsh=Z25wcGYwZG1zeHB3" target="_blank" class="secret-heart">💖</a> in 2026 ✨</p>
+    </footer>
+  </div>
+
+  <!-- Behold widget loader -->
+  <script>
+    (() => {
+      if(window.__bhldScript)return;window.__bhldScript=true;
+      const d=document,s=d.createElement("script");s.type="module";
+      s.src="https://w.behold.so/widget.js";setTimeout(()=>{d.head.append(s);},0);
+    })();
+  </script>
+
+  <script>
+    let count = 42069;
+    const counterEl = document.getElementById('visitor-count');
+    function formatCount(num) {
+      return num.toString().padStart(9, '0').replace(/(\d{3})(\d{3})(\d{3})/, '$1,$2,$3');
+    }
+    setInterval(() => {
+      count--;
+      if (count < 0) count = 42069;
+      counterEl.textContent = formatCount(count);
+    }, 5000);
+
+    // ===== BATHTUB BUBBLES =====
+    (function(){
+      var layer = document.getElementById('bubbleLayer');
+      if (!layer || !layer.animate) return;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var MAX = 5, live = 0, timer = null;
+      function rand(a, b){ return a + Math.random() * (b - a); }
+
+      function pop(wrap, inner){
+        if (inner.classList.contains('pop')) return;
+        inner.classList.add('pop');
+        wrap.getAnimations().forEach(function(a){ a.pause(); });
+        setTimeout(function(){ wrap.remove(); live = Math.max(0, live - 1); }, 330);
+      }
+
+      function spawn(){
+        if (live >= MAX) return;
+        var card = layer.parentNode;
+        var w = layer.clientWidth || card.clientWidth || 300;
+        var h = layer.clientHeight || card.clientHeight || Math.round(w * 1.26);
+        if (h < 50) h = Math.round(w * 1.26);
+        live++;
+        var size = Math.round(rand(0.025, 0.05) * w) + 4;
+        var wrap = document.createElement('span');
+        var inner = document.createElement('span');
+        wrap.className = 'bubble-wrap';
+        inner.className = 'bubble';
+        inner.style.width = inner.style.height = size + 'px';
+        wrap.style.left = (rand(0.44, 0.86) * w - size / 2) + 'px';
+        wrap.style.top  = (rand(0.545, 0.575) * h - size / 2) + 'px';
+        wrap.appendChild(inner);
+        layer.appendChild(wrap);
+
+        var rise = rand(0.14, 0.32) * h;
+        var sway = rand(6, 16) * (Math.random() < 0.5 ? -1 : 1);
+        var anim = wrap.animate([
+          { transform: 'translate(0,0) scale(0.3)', opacity: 0 },
+          { transform: 'translate(' + (sway * 0.6) + 'px,' + (-rise * 0.25) + 'px) scale(1)', opacity: 1, offset: 0.2 },
+          { transform: 'translate(' + (-sway) + 'px,' + (-rise * 0.55) + 'px) scale(1.05)', offset: 0.55 },
+          { transform: 'translate(' + sway + 'px,' + (-rise) + 'px) scale(1.12)', opacity: 1 }
+        ], { duration: rand(2600, 4200), easing: 'ease-out', fill: 'forwards' });
+        anim.onfinish = function(){ pop(wrap, inner); };
+
+        inner.addEventListener('click', function(e){
+          e.preventDefault(); e.stopPropagation(); pop(wrap, inner);
+        });
+      }
+
+      function loop(){ spawn(); timer = setTimeout(loop, rand(650, 1300)); }
+
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting){ if (!timer) loop(); }
+        else { clearTimeout(timer); timer = null; }
+      }, { rootMargin: '120px 0px', threshold: 0.05 }).observe(layer.parentNode);
+    })();
+
+    // ===== CODE AS ART: glowing red branches =====
+    (function(){
+      var cv = document.getElementById('branchCanvas');
+      var img = document.getElementById('codeArtImg');
+      if (!cv || !cv.getContext) return;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var card = cv.parentNode;
+      var ctx = cv.getContext('2d'), W = 0, H = 0, S = 1, trees = [], timer = null, lastSpawn = 0;
+      var LIMIT = 0.32;
+
+      function rand(a, b){ return a + Math.random() * (b - a); }
+      function size(){
+        var r = card.getBoundingClientRect();
+        var cw = r.width || card.clientWidth || 320;
+        var ch = r.height || card.clientHeight || cw;
+        if (ch < 50) ch = cw;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var nw = Math.round(cw * dpr), nh = Math.round(ch * dpr);
+        if (nw !== W || nh !== H){
+          W = cv.width = nw;
+          H = cv.height = nh;
+          S = W / 400;
+        }
+      }
+      function spawn(t){
+        if (!W || !H) size();
+        var x = rand(0.08, 0.92) * W;
+        trees.push({ born: t, alpha: 0, done: 0, segs: [],
+          tips: [{ x: x, y: 0, a: Math.PI / 2 + rand(-0.45, 0.45), d: 0, len: 0 }] });
+      }
+      function grow(tree, t){
+        var next = [];
+        tree.tips.forEach(function(p){
+          var step = 6 * S, nx, ny;
+          p.a += rand(-0.28, 0.28) + (Math.PI / 2 - p.a) * 0.06;
+          nx = p.x + Math.cos(p.a) * step; ny = p.y + Math.sin(p.a) * step;
+          tree.segs.push([p.x, p.y, nx, ny, p.d]);
+          p.x = nx; p.y = ny; p.len += step;
+          var maxLen = (95 - p.d * 16) * S;
+          if (ny > H * LIMIT || p.len > maxLen) return;
+          if (p.d < 4 && Math.random() < 0.09){
+            next.push({ x: nx, y: ny, a: p.a - rand(0.35, 0.7), d: p.d + 1, len: 0 });
+            next.push({ x: nx, y: ny, a: p.a + rand(0.35, 0.7), d: p.d + 1, len: 0 });
+          } else next.push(p);
+        });
+        tree.tips = next;
+        if (!next.length && !tree.done) tree.done = t;
+      }
+      function draw(t){
+        ctx.clearRect(0, 0, W, H);
+        ctx.lineCap = 'round';
+        trees.forEach(function(tr){
+          var age = t - tr.born;
+          tr.alpha = tr.done ? Math.max(0, 1 - (t - tr.done - 1400) / 2200) : Math.min(1, age / 400);
+          if (tr.done && t - tr.done < 1400) tr.alpha = 1;
+          [[7, 0.3, '255,30,70'], [1.8, 0.95, '255,110,135']].forEach(function(st){
+            ctx.beginPath();
+            tr.segs.forEach(function(g){ ctx.moveTo(g[0], g[1]); ctx.lineTo(g[2], g[3]); });
+            ctx.lineWidth = st[0] * S;
+            ctx.strokeStyle = 'rgba(' + st[2] + ',' + (st[1] * tr.alpha * Math.max(0, 1 - tr.segs.length / 4000)) + ')';
+            ctx.stroke();
+          });
+        });
+        trees = trees.filter(function(tr){ return tr.alpha > 0 || !tr.done; });
+      }
+      function tick(){
+        if (!W || H < 50) size();
+        var t = performance.now();
+        if (t - lastSpawn > 950 && trees.length < 5){ spawn(t); lastSpawn = t; }
+        trees.forEach(function(tr){ if (tr.tips.length) grow(tr, t); });
+        draw(t);
+      }
+
+      if (img) img.addEventListener('load', size);
+      window.addEventListener('resize', function(){ if (timer) size(); });
+
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting){
+          size();
+          if (!timer){
+            spawn(performance.now());
+            lastSpawn = performance.now();
+            timer = setInterval(tick, 50);
+          }
+        } else {
+          clearInterval(timer);
+          timer = null;
+        }
+      }, { rootMargin: '120px 0px', threshold: 0.05 }).observe(card);
+    })();
+
+    // ===== ANONYMOUS HR FORM =====
+    (function(){
+      var TO_EMAIL = 'erica@kitt3nbot.com';
+      var form     = document.getElementById('anonForm');
+      var box      = document.getElementById('anonMessage');
+      var chips    = document.getElementById('anonChips');
+      var sendBtn  = document.getElementById('anonSend');
+      var err      = document.getElementById('anonErr');
+      var sent     = document.getElementById('anonSent');
+      var typedEl  = document.getElementById('anonTyped');
+      var labelEl  = typedEl ? typedEl.parentNode : null;
+
+      var text = 'Tell us what happened...';
+      function typeIt(){
+        var i = 0;
+        typedEl.textContent = '';
+        (function step(){
+          if (i <= text.length){ typedEl.textContent = text.slice(0, i++); setTimeout(step, 75); }
+        })();
+      }
+      if ('IntersectionObserver' in window){
+        var io = new IntersectionObserver(function(entries){
+          if (entries[0].isIntersecting){ typeIt(); io.disconnect(); }
+        }, { threshold: 0.25 });
+        io.observe(form);
+      } else { typeIt(); }
+
+      var compose = box.parentNode;
+      function refresh(){
+        box.style.height = 'auto';
+        box.style.height = Math.min(box.scrollHeight, 220) + 'px';
+        compose.classList.toggle('ready', box.value.trim().length > 0);
+      }
+      box.addEventListener('input', refresh);
+      box.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && !e.shiftKey && !e.isComposing){
+          e.preventDefault();
+          sendBtn.click();
+        }
+      });
+
+      chips.querySelectorAll('.anon-chip').forEach(function(chip){
+        chip.addEventListener('click', function(){
+          box.value = chip.querySelector('.chip-text').textContent;
+          chips.classList.add('anon-hidden');
+          if (labelEl) labelEl.classList.add('anon-hidden');
+          refresh();
+          box.focus();
+        });
+      });
+
+      var AJAX_URL    = 'https://formsubmit.co/ajax/' + TO_EMAIL;
+      var CLASSIC_URL = 'https://formsubmit.co/' + TO_EMAIL;
+
+      function showFiled(){
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('busy');
+        form.classList.add('anon-hidden');
+        sent.classList.remove('anon-hidden');
+      }
+      function showError(msgText){
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('busy');
+        err.textContent = msgText;
+      }
+
+      if (/[?&]filed=1(&|$)/.test(location.search)){
+        showFiled();
+        try { history.replaceState(null, '', location.pathname + '#hr'); } catch (e) {}
+      }
+      window.addEventListener('pageshow', function(){
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('busy');
+      });
+
+      function classicSend(payload){
+        var f = document.createElement('form');
+        f.method = 'POST';
+        f.action = CLASSIC_URL;
+        f.style.display = 'none';
+        payload._next = location.origin + location.pathname + '?filed=1#hr';
+        Object.keys(payload).forEach(function(key){
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = payload[key];
+          f.appendChild(input);
+        });
+        document.body.appendChild(f);
+        f.submit();
+      }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var msg = box.value.trim();
+        if (!msg){ err.textContent = 'describe the incident first 👀'; return; }
+        if (sendBtn.disabled) return;
+        err.textContent = '';
+        sendBtn.disabled = true;
+        sendBtn.classList.add('busy');
+
+        var payload = {
+          'Complaint': msg,
+          'Time of offense': new Date().toLocaleString(),
+          'Filed via': 'KittenBot Labs — Human Resources Dept. 👔 (homepage)',
+          '_subject': '👔 HR INCIDENT REPORT — anonymous filing',
+          '_captcha': 'false',
+          '_template': 'box'
+        };
+
+        var ctl = window.AbortController ? new AbortController() : null;
+        var giveUp = setTimeout(function(){ if (ctl) ctl.abort(); }, 8000);
+
+        fetch(AJAX_URL, {
+          method: 'POST',
+          mode: 'cors',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: ctl ? ctl.signal : undefined
+        }).then(function(res){
+          return res.json().catch(function(){ return null; }).then(function(body){
+            return { ok: res.ok, body: body };
+          });
+        }).then(function(r){
+          clearTimeout(giveUp);
+          var isSuccess = r.body && (r.body.success === true || r.body.success === 'true');
+          if (r.ok && isSuccess){ showFiled(); return; }
+          if (r.body && r.body.message){
+            if (/activate|confirm/i.test(r.body.message)){ classicSend(payload); return; }
+            showError('HR says: ' + r.body.message);
+            return;
+          }
+          throw new Error('Fallback');
+        }).catch(function(){
+          clearTimeout(giveUp);
+          if (navigator.onLine === false){
+            showError("you're offline. try again when you have signal?");
+            return;
+          }
+          classicSend(payload);
+        });
+      });
+    })();
+
+    // Pause CSS animations on off-screen blocks to keep mobile scrolling fast
+    (function(){
+      if (!('IntersectionObserver' in window)) return;
+      var blocks = document.querySelectorAll('.header, .section');
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ e.target.classList.toggle('paused', !e.isIntersecting); });
+      }, { rootMargin: '200px 0px' });
+      blocks.forEach(function(b){ io.observe(b); });
+    })();
+
+    if ('serviceWorker' in navigator) addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+  </script>
+</body>
+</html>

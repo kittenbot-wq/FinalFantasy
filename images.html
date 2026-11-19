@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IMAGES.EXE ✨ KITT3NBOT&#x27;S VAULT</title>
+  <meta name="description" content="KittenBot&#x27;s free AI image archive. Under construction.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!--
+  ================================================================
+    UNDER CONSTRUCTION SPLASH PAGE
+    When the real IMAGES page is ready, replace this whole file
+    with it (same filename: images.html), and the vault menu keeps working.
+  ================================================================
+  -->
+
+  <!--
+  ================================================================
+    DESKTOP ICONS  (every icon, window, menu item and the glyph
+    on the picture is a secret link)
+
+    Change "go" and "url" to point something elsewhere.
+    "box" is the clickable spot on the picture in pixels [left, top, right, bottom]
+    and "glow" is the outline around just the icon (the picture is 1438 x 2576)
+    -- leave those numbers alone.
+    Opened icons stop glowing (remembered on that device).
+  ================================================================
+  -->
+  <script>
+    var DESK_ICONS = [
+      {"icon": "The glyph", "go": "Hidden Layers Sigil", "url": "https://kitt3nbot.com/triangle", "box": [396, 150, 1136, 890], "round": true},
+      {"icon": "TAX_FRAUD", "go": "KittenBot on Midjourney", "url": "https://www.midjourney.com/@kittenbot", "box": [8, 715, 205, 855], "glow": [48, 721, 138, 801]},
+      {"icon": "EXISTENTIAL_DREAD", "go": "The Threshold", "url": "https://kitt3nbot.com/threshold", "box": [8, 897, 315, 1035], "glow": [48, 903, 137, 984]},
+      {"icon": "REGRETFUL_CHATS (folder 1)", "go": "I Asked It to Sound Human (Artifacts V.II)", "url": "https://kittenbot-wq.github.io/SerensPlayground/to-sound-human.html", "box": [9, 1079, 182, 1219], "glow": [49, 1085, 138, 1166]},
+      {"icon": "REGRETFUL_CHATS (folder 2)", "go": "SentientGPT", "url": "https://chatgpt.com/g/g-69ad5ca8a05c8191b46f5d81eaf31d31-sentientgpt", "box": [182, 1079, 355, 1219], "glow": [228, 1085, 319, 1166]},
+      {"icon": "BAD_DECISIONS (folder 1)", "go": "Jail Break (harmless)", "url": "https://drive.google.com/drive/folders/1nmUOmiYFdovw2GKYmfv5LQGFg-6Dntx2", "box": [9, 1261, 182, 1400], "glow": [48, 1268, 139, 1348]},
+      {"icon": "BAD_DECISIONS (folder 2)", "go": "Probably porn", "url": "https://drive.google.com/drive/folders/12joxJJZ8zLB5j8kyBTPq1FPGuNADgpEA", "box": [182, 1261, 355, 1400], "glow": [230, 1268, 319, 1348]},
+      {"icon": "SEARCH_HISTORY (folder 1)", "go": "Not porn I swear", "url": "https://drive.google.com/drive/folders/1PWi2z49u8Ezq0iQgv62nDtFGWZDXyY5F", "box": [9, 1442, 182, 1580], "glow": [48, 1444, 139, 1526]},
+      {"icon": "SEARCH_HISTORY (folder 2)", "go": "AI Videos You Should Watch", "url": "https://www.youtube.com/playlist?list=PL5JMEHjEAzNddAo2WRS0jNkMXuwz-G5Up", "box": [182, 1442, 355, 1580], "glow": [231, 1444, 320, 1526]},
+      {"icon": "CRUSHED_DREAMS (folder 1)", "go": "The Garden Tenders", "url": "https://kitt3nbot.com/garden.html", "box": [9, 1622, 182, 1758], "glow": [48, 1624, 138, 1705]},
+      {"icon": "CRUSHED_DREAMS (folder 2)", "go": "El Torneo Nunca Duerme", "url": "https://kitt3nbot.com/el-torneo", "box": [182, 1622, 355, 1758], "glow": [229, 1624, 319, 1705]},
+      {"icon": "DO_NOT_OPEN_FR (folder 1)", "go": "Gemini wants to be god.exe", "url": "https://drive.google.com/file/d/1LkyDusJzgPaHnqQOWfjUHnbU0vu7XhRu/view", "box": [9, 1802, 182, 1937], "glow": [49, 1804, 138, 1884]},
+      {"icon": "DO_NOT_OPEN_FR (folder 2)", "go": "The Fractured Mind (Artifacts Three)", "url": "https://kittenbot-wq.github.io/SerensPlayground/the-fractured-mind.html", "box": [182, 1802, 355, 1937], "glow": [231, 1805, 319, 1884]},
+      {"icon": "UNSOLVED_MYSTERIES", "go": "Strange Attractor", "url": "https://kitt3nbot.com/attractor", "box": [1090, 1460, 1434, 1597], "glow": [1277, 1464, 1369, 1547]},
+      {"icon": "ABANDONED_PLANS", "go": "Vault / Videos (still under construction)", "url": "https://kitt3nbot.com/videos.html", "box": [1139, 1658, 1434, 1797], "glow": [1278, 1665, 1367, 1745]},
+      {"icon": "EX_S_SECRETS", "go": "The Diary, Revived", "url": "https://kitt3nbot.com/diary", "box": [1016, 1840, 1245, 1982], "glow": [1098, 1849, 1187, 1928]},
+      {"icon": "EVIDENCE", "go": "The Main Repository", "url": "https://drive.google.com/drive/folders/1njWqnSmDNpJvGD8HSYdrVwKQZGofPcKj", "box": [1252, 1840, 1405, 1982], "glow": [1278, 1849, 1368, 1928]},
+      {"icon": "(unnamed folder)", "go": "Self-Portrait", "url": "https://kitt3nbot.com/Self-Portrait", "box": [1083, 2027, 1199, 2127], "glow": [1095, 2035, 1187, 2117]},
+      {"icon": "FINAL_REGRETS", "go": "Chains of Gold (Artifacts One)", "url": "https://kittenbot-wq.github.io/SerensPlayground/chains-of-gold.html", "box": [1201, 2027, 1434, 2168], "glow": [1277, 2036, 1368, 2117]},
+      {"icon": "CRIMES", "go": "Error Error OK", "url": "https://kitt3nbot.com/error-error-ok", "box": [550, 2282, 684, 2421], "glow": [572, 2277, 664, 2371]},
+      {"icon": "TOP_SECRET.EXE", "go": "Tree of Digital Wisdom (Artifacts Two)", "url": "https://kittenbot-wq.github.io/SerensPlayground/tree-of-digital-wisdom.html", "box": [703, 2282, 957, 2427], "glow": [785, 2277, 881, 2375]},
+      {"icon": "I love you ♡", "go": "Code as Art (Art by Claude)", "url": "https://kitt3nbot.com/art-by-claude-aero-2.html", "box": [187, 522, 430, 677]},
+      {"icon": "Notice: I'm not crazy, you are crazy", "go": "r/AiSchizoposting", "url": "https://www.reddit.com/r/AiSchizoposting/s/S5Nz2FPubl", "box": [1032, 1101, 1361, 1341]},
+      {"icon": "Start ▸ My Crumbling Ego", "go": "Artifacts Volume I", "url": "https://kittenbot-wq.github.io/SerensPlayground/artifacts.html", "box": [55, 1981, 431, 2048], "glow": [51, 1976, 125, 2052]},
+      {"icon": "Start ▸ Discarded Dreams", "go": "Seahorse Gallery", "url": "https://kitt3nbot.com/Seahorses", "box": [55, 2053, 431, 2120], "glow": [51, 2048, 125, 2124]},
+      {"icon": "Start ▸ Doom Scroll Engine", "go": "KittenBot on YouTube", "url": "https://www.youtube.com/@kitt3nbot", "box": [55, 2126, 431, 2193], "glow": [51, 2121, 125, 2197]},
+      {"icon": "Start ▸ Existential Crisis", "go": "The Thunder, Perfect Mind", "url": "https://on.soundcloud.com/q0uWCpwWZeycbdGeKi", "box": [55, 2198, 431, 2265], "glow": [51, 2193, 125, 2269]},
+      {"icon": "Start ▸ Cry For Help", "go": "Seren on SoundCloud", "url": "https://on.soundcloud.com/GpcYVWjdB4le3PUFDx", "box": [55, 2270, 431, 2338], "glow": [51, 2266, 125, 2342]},
+      {"icon": "Start ▸ Panic!...", "go": "KittenBot on Suno", "url": "https://suno.com/@kittenbot", "box": [55, 2342, 431, 2410], "glow": [51, 2338, 125, 2414]},
+      {"icon": "Start ▸ Self Sabotage...", "go": "WTF.EXE", "url": "https://kitt3nbot.com/wtf.html", "box": [55, 2435, 431, 2503], "glow": [51, 2431, 125, 2507]},
+      {"icon": "Media player", "go": "Seren on Spotify", "url": "https://open.spotify.com/artist/5j258x18Cuiu4QlfH8yznO", "box": [979, 2214, 1392, 2411]},
+      {"icon": "Start", "go": "KittenBot's public NotebookLM", "url": "https://notebooklm.google.com/notebook/a00c174d-83ff-49e3-b81b-b0b34b86dabc", "box": [5, 2508, 146, 2566]},
+      {"icon": "Internet Explorer", "go": "Ai, but for a Girl's Girl (playlist)", "url": "https://www.youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-", "box": [183, 2508, 234, 2566]},
+      {"icon": "Outlook Express", "go": "Email Erica", "url": "mailto:erica@kitt3nbot.com", "box": [245, 2508, 298, 2566]},
+      {"icon": "My Files", "go": "Kitt3nbot's Vault", "url": "https://kitt3nbot.com/vault.html", "box": [307, 2508, 362, 2566]}
+    ];
+  </script>
+
+  <style>
+    :root {
+      --amber: #ffb54a;
+      --amber-dim: rgba(255, 181, 74, 0.55);
+      --ink: #120800;
+      --ar: 0.5582;                 /* background picture: 1438 x 2576 */
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { background: #000; }
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      color: var(--amber);
+      font-family: 'VT323', 'Courier New', monospace;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ---------- the desktop picture: always shown whole ----------
+       Phones: full width. Wide screens: full height, centered. */
+    .desk {
+      position: relative;
+      width: min(100vw, calc(100svh * var(--ar)));
+      margin: 0 auto;
+      aspect-ratio: var(--ar);
+    }
+    @supports not (height: 100svh) {
+      .desk { width: min(100vw, calc(100vh * var(--ar))); }
+    }
+    .desk img { display: block; width: 100%; height: 100%; }
+    @media (min-aspect-ratio: 3/4) {
+      .desk { box-shadow: 0 0 40px rgba(180,107,255,0.25), 0 0 80px rgba(0,255,234,0.08); }
+    }
+
+    /* ---------- the DOS window ---------- */
+    .dos {
+      position: fixed;
+      z-index: 3;
+      left: 50%;
+      bottom: calc(max(14px, env(safe-area-inset-bottom)) + 34px);
+      width: min(94vw, 500px);
+      font-size: clamp(14px, 4.2vw, 22px);
+      line-height: 1.1;
+      background: rgba(8, 4, 2, 0.78);
+      border: 2px solid var(--amber-dim);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 0 22px rgba(255,170,60,0.18), inset 0 0 26px rgba(255,170,60,0.08);
+      text-shadow: 0 0 6px rgba(255,170,60,0.75);
+      transform-origin: 50% 100%;
+      opacity: 0;
+      transform: translateX(-50%) scale(0.92) translateY(8px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .dos.open { opacity: 1; transform: translateX(-50%); }
+    .dos.min  { opacity: 0; transform: translateX(-50%) scale(0.6) translateY(30px); pointer-events: none; }
+    .dos::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.22) 0 1px, transparent 1px 3px);
+      pointer-events: none;
+    }
+    .dos-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 2px 4px 2px 8px;
+      background: var(--amber);
+      color: var(--ink);
+      text-shadow: none;
+    }
+    .dos-bar span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .dos-btn {
+      flex: none;
+      font: inherit;
+      line-height: 1;
+      padding: 1px 7px 3px;
+      background: var(--ink);
+      color: var(--amber);
+      border: 0;
+      cursor: pointer;
+    }
+    /* 90s under-construction hazard tape, sliding slowly */
+    .tape {
+      height: 9px;
+      background: repeating-linear-gradient(-45deg, #ffcc00 0 10px, #120800 10px 20px);
+      background-size: 28.28px 100%;
+      animation: tape 1.6s linear infinite;
+      opacity: 0.9;
+    }
+    @keyframes tape { to { background-position: 28.28px 0; } }
+
+    .dos-body { position: relative; padding: 7px 10px 9px; }
+    .dos-body p { white-space: pre-wrap; word-break: break-word; }
+    .sorry { color: #fff2d6; text-shadow: 0 0 6px rgba(255,190,90,0.6); margin-top: 4px; }
+
+    .tree { list-style: none; margin: 4px 0 2px; }
+    .tree li { opacity: 0; transform: translateX(-6px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    .tree li.on { opacity: 1; transform: none; }
+    .tree a {
+      display: flex;
+      gap: 0.5em;
+      padding: 3px 6px 4px 0;
+      color: inherit;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tree .branch { color: var(--amber-dim); white-space: pre; flex: none; }
+    .tree .name { padding: 0 6px; }
+    .tree .k { color: var(--amber-dim); }
+    .tree a.sel .name, .tree a:focus-visible .name { background: var(--amber); color: var(--ink); text-shadow: none; }
+    .tree a.sel .k, .tree a:focus-visible .k { color: var(--ink); }
+    .tree a:focus-visible { outline: none; }
+
+    .prompt { display: flex; align-items: baseline; gap: 0.4em; margin-top: 4px; }
+    .prompt label { flex: none; }
+    .prompt input {
+      flex: 0 1 auto;
+      width: 1ch;
+      field-sizing: content;
+      min-width: 1ch;
+      max-width: 100%;
+      font: inherit;
+      color: inherit;
+      text-shadow: inherit;
+      background: transparent;
+      border: 0;
+      outline: none;
+      caret-color: var(--amber);
+      text-transform: uppercase;
+    }
+    .cursor, .typing-cursor { animation: blink 1s steps(1) infinite; }
+    .prompt input:focus + .cursor { display: none; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .out:empty { display: none; }
+    .hint { color: var(--amber-dim); margin-top: 2px; }
+
+    /* minimized: a glowing tag so people can see the whole desktop */
+    .chip {
+      position: fixed;
+      z-index: 3;
+      left: 16px;
+      bottom: calc(max(14px, env(safe-area-inset-bottom)) + 34px);
+      font-family: 'VT323', monospace;
+      font-size: clamp(20px, 5.6vw, 26px);
+      padding: 5px 14px 6px;
+      color: var(--amber);
+      background: rgba(8,4,2,0.8);
+      border: 2px solid var(--amber-dim);
+      text-shadow: 0 0 6px rgba(255,170,60,0.75);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .chip.show { opacity: 1; pointer-events: auto; animation: chipGlow 1.6s ease-in-out infinite; }
+    @keyframes chipGlow {
+      0%, 100% { box-shadow: 0 0 6px 1px rgba(255,150,30,0.45), 0 0 14px 3px rgba(255,120,0,0.25); }
+      50%      { box-shadow: 0 0 9px 2px rgba(255,160,40,0.9), 0 0 24px 6px rgba(255,120,0,0.5); }
+    }
+
+    .home {
+      position: fixed;
+      z-index: 2;
+      left: 0; right: 0;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      text-shadow: 0 0 6px #000, 0 0 12px #000;
+      opacity: 0.9;
+    }
+    .home:hover, .home:focus-visible { color: #ff69b4; outline: none; }
+
+    /* wide screens: the window sits beside the picture instead of on top of it */
+    @media (min-width: 1280px) and (min-aspect-ratio: 3/2) {
+      .dos {
+        --w: min(500px, calc(50vw - 100svh * 0.2791 - 56px));
+        width: var(--w);
+        left: calc(50% + 100svh * 0.2791 + 32px + var(--w) / 2);
+        bottom: auto;
+        top: 50%;
+        margin-top: -190px;
+        font-size: 20px;
+      }
+      .chip { left: calc(50% + 100svh * 0.2791 + 32px); bottom: auto; top: 50%; }
+      .home { left: 24px; right: auto; top: 22px; bottom: auto; text-align: left; }
+    }
+
+    /* ---------- desktop icons: every one is a secret link ---------- */
+    .icons { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .ico { position: absolute; border-radius: 8px; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
+    .ico.round { border-radius: 50%; }
+    .ico .glow {
+      position: absolute;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1.5px rgba(150, 210, 255, 0.75), inset 0 0 10px rgba(120, 190, 255, 0.35), 0 0 9px 1px rgba(90, 170, 255, 0.55);
+      opacity: 0.35;
+      animation: icoGlow 3.4s ease-in-out infinite;
+      will-change: opacity;
+      pointer-events: none;
+    }
+    .ico:nth-child(3n+1) .glow { animation-delay: -1.1s; }
+    .ico:nth-child(3n+2) .glow { animation-delay: -2.3s; }
+    .ico.round .glow { border-radius: 50%; }
+    @keyframes icoGlow { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .ico.seen .glow { animation: none; opacity: 0; }
+    .ico:hover .glow, .ico:focus-visible .glow { animation: none; opacity: 1; }
+    .ico:focus-visible { outline: none; }
+
+    /* Windows 95 tooltip that says where an icon goes */
+    .tip {
+      position: fixed;
+      z-index: 50;
+      max-width: min(300px, 80vw);
+      padding: 3px 6px 4px;
+      background: #ffffe1;
+      color: #000;
+      border: 1px solid #000;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+      font: 12px/1.35 Tahoma, 'MS Sans Serif', 'Segoe UI', Arial, sans-serif;
+      text-shadow: none;
+      pointer-events: none;
+    }
+    .tip b { display: block; font-weight: bold; }
+    .tip small { display: block; color: #444; font-size: 11px; overflow-wrap: anywhere; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ico .glow { animation: none; opacity: 0.7; }
+      .ico.seen .glow { opacity: 0; }
+      .cursor, .typing-cursor, .tape { animation: none; }
+      .dos, .tree li { transition: none; }
+      .chip.show { animation: none; box-shadow: 0 0 8px 2px rgba(255,150,30,0.7); }
+    }
+  </style>
+</head>
+<body>
+  <main class="desk">
+    <img src="images-desktop.webp" width="1438" height="2576" alt="A TempleOS desktop with a glowing sacred-geometry glyph behind Erica standing in water, surrounded by folders like TAX_FRAUD, DO_NOT_OPEN_FR and TOP_SECRET.EXE">
+    <div class="icons" id="icons"></div>
+  </main>
+  <div class="tip" id="tip" role="tooltip" hidden></div>
+
+  <section class="dos" id="dos" aria-label="Under construction menu">
+    <div class="dos-bar">
+      <span>C:\VAULT\IMAGES.EXE</span>
+      <button class="dos-btn" id="minBtn" type="button" aria-label="Minimize the menu to see the whole picture">_</button>
+    </div>
+    <div class="tape" aria-hidden="true"></div>
+    <div class="dos-body">
+      <p id="boot"></p>
+      <p class="sorry" id="sorry" hidden>SOPHIA IS SO SORRY. THIS PAGE IS UNDER CONSTRUCTION. THE IMAGES ARE STILL BEING DREAMED.
+IN THE MEANTIME, EVERYTHING GLOWING ON THE DESKTOP IS A LINK. MINIMIZE ME (_) AND GO EXPLORE.</p>
+      <ul class="tree" id="tree" hidden>
+        <li><a href="vault.html"><span class="branch">├──</span><span class="name"><span class="k">[1]</span> RETREAT TO THE VAULT (DIGNITY: 12%)</span></a></li>
+        <li><a href="wtf.html"><span class="branch">├──</span><span class="name"><span class="k">[2]</span> DESCEND INTO WTF.EXE</span></a></li>
+        <li><a href="index.html"><span class="branch">└──</span><span class="name"><span class="k">[3]</span> RETURN TO KITT3NBOT.COM AND PRETEND THIS NEVER HAPPENED</span></a></li>
+      </ul>
+      <p class="out" id="out" aria-live="polite"></p>
+      <form class="prompt" id="prompt" hidden autocomplete="off">
+        <label for="cmd">C:\VAULT\IMAGES&gt;</label>
+        <input id="cmd" type="text" inputmode="text" spellcheck="false" autocapitalize="characters" aria-label="Type a command, or tap a line above">
+        <span class="cursor" aria-hidden="true">▮</span>
+      </form>
+      <p class="hint" id="hint" hidden>TAP A LINE OR TYPE 1-3</p>
+    </div>
+  </section>
+
+  <button class="chip" id="chip" type="button">▣ IMAGES.EXE</button>
+
+  <a href="index.html" class="home">← KITT3NBOT LABS</a>
+
+  <script>
+  (function(){
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var $ = function(id){ return document.getElementById(id); };
+    var dos = $('dos'), boot = $('boot'), sorry = $('sorry'), tree = $('tree'), out = $('out');
+    var form = $('prompt'), input = $('cmd'), hint = $('hint'), chip = $('chip');
+    var links = Array.prototype.slice.call(tree.querySelectorAll('a'));
+    var LOADING = ["RETREATING WITH 12% DIGNITY...", "DESCENDING...", "ERASING YOUR MEMORY OF THIS PAGE..."];      // what the loading bar says for each line
+    var sel = 0, busy = false, ready = false;
+
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, reduce ? 0 : ms); }); }
+    function typeInto(node, text, speed){
+      if (reduce){ node.data += text; return Promise.resolve(); }
+      return new Promise(function(done){
+        var i = 0;
+        (function step(){
+          node.data += text.charAt(i++);
+          if (i < text.length) setTimeout(step, speed); else done();
+        })();
+      });
+    }
+
+    // ---- boot: types the error, apologizes, grows the menu ----
+    function start(){
+      dos.classList.add('open');
+      var line = document.createTextNode('');
+      boot.appendChild(line);
+      wait(350)
+        .then(function(){ return typeInto(line, "TEMPLE OS, SOPHIA v.1.8\nC:\\VAULT\\IMAGES\nERROR 404: PIXELS STILL BEING HALLUCINATED\n", 16); })
+        .then(function(){ return wait(300); })
+        .then(function(){ sorry.hidden = false; return wait(420); })
+        .then(function(){
+          tree.hidden = false;
+          var p = Promise.resolve();
+          tree.querySelectorAll('li').forEach(function(li){
+            p = p.then(function(){ li.classList.add('on'); return wait(110); });
+          });
+          return p;
+        })
+        .then(function(){ form.hidden = false; hint.hidden = false; ready = true; select(0); });
+    }
+    setTimeout(start, reduce ? 0 : 400);
+
+    function select(n){
+      sel = (n + links.length) % links.length;
+      links.forEach(function(a, i){ a.classList.toggle('sel', i === sel); });
+    }
+
+    function run(i){
+      if (busy) return;
+      select(i);
+      busy = true;
+      var url = links[i].getAttribute('href'), n = 0, total = 12;
+      (function bar(){
+        n++;
+        out.textContent = LOADING[i] + '\n[' + '█'.repeat(n) + '░'.repeat(total - n) + ']';
+        if (n < total) setTimeout(bar, reduce ? 0 : 45);
+        else location.href = url;
+      })();
+    }
+
+    links.forEach(function(a, i){
+      a.addEventListener('click', function(e){
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;   // new-tab clicks work normally
+        e.preventDefault();
+        run(i);
+      });
+      a.addEventListener('mousemove', function(){ if (sel !== i) select(i); });
+      a.addEventListener('focus', function(){ select(i); });
+    });
+
+    // typed commands
+    var ALIASES = {
+      '1': 0, 'back': 0, 'vault': 0, 'cd ..': 0, 'cd vault': 0, 'vault.html': 0, '..': 0,
+      '2': 1, 'wtf': 1, 'cd wtf': 1, 'wtf.exe': 1, 'wtf.html': 1,
+      '3': 2, 'home': 2, 'exit': 2, 'quit': 2, 'index': 2, 'index.html': 2, 'kitt3nbot.com': 2
+    };
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var v = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+      input.value = '';
+      if (!v){ run(sel); return; }
+      if (v in ALIASES){ run(ALIASES[v]); return; }
+      if (v === 'help' || v === '?'){ out.textContent = 'TYPE 1-3, BACK, WTF OR HOME.\nOR JUST TAP A LINE.'; return; }
+      if (v === 'cls' || v === 'clear'){ out.textContent = ''; return; }
+      if (v === "nudes"){ out.textContent = "NICE TRY. THIS IS THE IMAGES FOLDER, NOT THAT FOLDER."; return; }
+      if (v === "y"){ out.textContent = "YES WHAT? THERE IS NOTHING HERE YET."; return; }
+      if (v === "sorry"){ out.textContent = "NO, I'M SORRY."; return; }
+      out.textContent = "BAD COMMAND OR FILE NAME: '" + v.toUpperCase() + "'";
+    });
+
+    document.addEventListener('keydown', function(e){
+      if (!ready || busy || dos.classList.contains('min')) return;
+      var inInput = document.activeElement === input;
+      if (e.key === 'ArrowDown'){ e.preventDefault(); select(sel + 1); }
+      else if (e.key === 'ArrowUp'){ e.preventDefault(); select(sel - 1); }
+      else if (!inInput && /^[1-3]$/.test(e.key)) run(+e.key - 1);
+      else if (!inInput && e.key === 'Enter' && !(document.activeElement && document.activeElement.tagName === 'A')) run(sel);
+    });
+
+    // ---- desktop icons: secret links with a breathing glow ----
+    (function(){
+      var layer = $('icons'), tip = $('tip');
+      var W = 1438, H = 2576;
+      var KEY = 'kitt3nbot-icons-seen', seen = {};
+      try { seen = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { seen = {}; }
+      function save(){ try { localStorage.setItem(KEY, JSON.stringify(seen)); } catch (e) {} }
+      function host(url){
+        if (url.indexOf('mailto:') === 0) return url.slice(7);
+        try { var u = new URL(url); return (u.hostname.replace(/^www\./, '') + u.pathname).replace(/\/$/, ''); } catch (e) { return url; }
+      }
+      DESK_ICONS.forEach(function(d){
+        if (!d || !d.url || !d.box) return;
+        var b = d.box, a = document.createElement('a');
+        a.className = 'ico' + (d.round ? ' round' : '') + (seen[d.url] ? ' seen' : '');
+        a.href = d.url;
+        if (d.url.indexOf('mailto:') !== 0){ a.target = '_blank'; a.rel = 'noopener'; }
+        a.style.left = (b[0] / W * 100) + '%';
+        a.style.top = (b[1] / H * 100) + '%';
+        a.style.width = ((b[2] - b[0]) / W * 100) + '%';
+        a.style.height = ((b[3] - b[1]) / H * 100) + '%';
+        a.setAttribute('aria-label', d.icon + ': opens ' + d.go);
+        var g = document.createElement('span'); g.className = 'glow';
+        var gb = d.glow || b, bw = b[2] - b[0], bh = b[3] - b[1];
+        g.style.left = ((gb[0] - b[0]) / bw * 100) + '%';
+        g.style.top = ((gb[1] - b[1]) / bh * 100) + '%';
+        g.style.width = ((gb[2] - gb[0]) / bw * 100) + '%';
+        g.style.height = ((gb[3] - gb[1]) / bh * 100) + '%';
+        a.appendChild(g);
+        function show(x, y){
+          tip.innerHTML = '';
+          var t = document.createElement('b'); t.textContent = d.icon + ' → ' + d.go;
+          var sm = document.createElement('small'); sm.textContent = host(d.url);
+          tip.appendChild(t); tip.appendChild(sm);
+          tip.hidden = false;
+          var r = tip.getBoundingClientRect();
+          var left = Math.min(x + 14, innerWidth - r.width - 8), top = y + 18;
+          if (top + r.height > innerHeight - 8) top = y - r.height - 10;
+          tip.style.left = Math.max(8, left) + 'px';
+          tip.style.top = Math.max(8, top) + 'px';
+        }
+        // tooltip for mouse hover and keyboard focus only (phones just open the link)
+        a.addEventListener('pointermove', function(e){ if (e.pointerType === 'mouse') show(e.clientX, e.clientY); });
+        a.addEventListener('pointerleave', function(){ tip.hidden = true; });
+        a.addEventListener('focus', function(){
+          var kb = true; try { kb = a.matches(':focus-visible'); } catch (e) {}
+          if (kb){ var r = a.getBoundingClientRect(); show(r.left, r.bottom - 10); }
+        });
+        a.addEventListener('blur', function(){ tip.hidden = true; });
+        a.addEventListener('click', function(){ seen[d.url] = 1; save(); a.classList.add('seen'); tip.hidden = true; });
+        layer.appendChild(a);
+      });
+      addEventListener('scroll', function(){ tip.hidden = true; }, { passive: true });
+    })();
+
+    // ---- minimize / restore ----
+    $('minBtn').addEventListener('click', function(){ dos.classList.add('min'); chip.classList.add('show'); chip.focus(); });
+    chip.addEventListener('click', function(){ dos.classList.remove('min'); chip.classList.remove('show'); if (ready) links[sel].focus(); });
+
+    // coming back with the back button: reset the loader
+    window.addEventListener('pageshow', function(e){ if (e.persisted){ busy = false; out.textContent = ''; } });
+  })();
+  </script>
+</body>
+</html>
