@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ATTRACTOR — kitt3nbot labs</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:#050308;touch-action:none}
+  canvas{display:block;width:100vw;height:100vh}
+  .hud{
+    position:fixed;left:0;right:0;bottom:0;padding:14px 18px;
+    font-family:"Courier New",ui-monospace,monospace;color:#e8e3da;
+    display:flex;justify-content:space-between;align-items:flex-end;
+    pointer-events:none;
+  }
+  .hud .name{font-size:11px;letter-spacing:.3em;text-transform:uppercase;opacity:.8}
+  .hud .name b{font-weight:normal;color:#ffb3e6}
+  .hud .tip{font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.45;text-align:right;line-height:1.7}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud">
+  <div class="name">strange attractor · <b id="aname">thomas</b></div>
+  <div class="tip">drag to orbit · tap to switch species<br>it never repeats. it never leaves.</div>
+</div>
+<script>
+(() => {
+const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+const nameEl=document.getElementById('aname');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W,H,DPR;
+function resize(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);ctx.fillStyle='#050308';ctx.fillRect(0,0,W,H);}
+addEventListener('resize',resize);resize();
+
+// ---- attractor species ----
+const SPECIES=[
+ {name:'thomas', dt:0.06, scale:60, hueBase:315,
+  f:(p)=>{const b=0.208;return[Math.sin(p[1])-b*p[0],Math.sin(p[2])-b*p[1],Math.sin(p[0])-b*p[2]]}},
+ {name:'aizawa', dt:0.012, scale:150, hueBase:190,
+  f:(p)=>{const a=0.95,b=0.7,c=0.6,d=3.5,e=0.25,f2=0.1,[x,y,z]=p;
+   return[(z-b)*x-d*y, d*x+(z-b)*y, c+a*z-(z*z*z)/3-(x*x+y*y)*(1+e*z)+f2*z*x*x*x]}},
+ {name:'halvorsen', dt:0.008, scale:34, hueBase:265,
+  f:(p)=>{const a=1.89,[x,y,z]=p;
+   return[-a*x-4*y-4*z-y*y, -a*y-4*z-4*x-z*z, -a*z-4*x-4*y-x*x]}},
+ {name:'lorenz', dt:0.006, scale:11, hueBase:20,
+  f:(p)=>{const s=10,r=28,b=8/3,[x,y,z]=p;return[s*(y-x), x*(r-z)-y, x*y-b*z]}},
+];
+let si=0, S=SPECIES[0];
+
+// ---- particles: points advected through the flow ----
+const N = Math.min(2600, (W*H)>500000?2600:1600);
+let pts=[];
+function seed(){
+  pts=[];
+  for(let i=0;i<N;i++){
+    pts.push({p:[(Math.random()-.5)*2,(Math.random()-.5)*2,(Math.random()-.5)*2+ (S.name==='lorenz'?25:0)], age:Math.random()});
+  }
+  ctx.fillStyle='#050308';ctx.fillRect(0,0,W,H);
+}
+seed();
+
+// ---- camera ----
+let rotX=-0.4, rotY=0.6, targetRX=rotX, targetRY=rotY, autoSpin=true;
+let dragging=false,lx=0,ly=0, moved=0;
+function project(p){
+  // rotate
+  let [x,y,z]=p;
+  if(S.name==='lorenz') z-=25; // recentre
+  const cy=Math.cos(rotY),sy=Math.sin(rotY),cx=Math.cos(rotX),sx=Math.sin(rotX);
+  let X=x*cy - z*sy, Z=x*sy + z*cy;
+  let Y=y*cx - Z*sx; Z=y*sx + Z*cx;
+  const persp = 900/(900+Z*S.scale*0.4);
+  return [W/2 + X*S.scale*persp, H/2 + Y*S.scale*persp, persp];
+}
+
+cv.addEventListener('pointerdown',e=>{dragging=true;moved=0;lx=e.clientX;ly=e.clientY;autoSpin=false;});
+addEventListener('pointermove',e=>{
+  if(!dragging)return;
+  const dx=e.clientX-lx, dy=e.clientY-ly; moved+=Math.abs(dx)+Math.abs(dy);
+  targetRY+=dx*0.005; targetRX+=dy*0.005; lx=e.clientX; ly=e.clientY;
+});
+addEventListener('pointerup',()=>{
+  dragging=false;
+  if(moved<6){ // tap = next species
+    si=(si+1)%SPECIES.length; S=SPECIES[si]; nameEl.textContent=S.name; seed();
+  }
+  setTimeout(()=>autoSpin=true, 2500);
+});
+
+let t=0;
+function frame(){
+  t++;
+  // trail fade — this is what makes it silk
+  ctx.fillStyle='rgba(5,3,8,0.08)';
+  ctx.fillRect(0,0,W,H);
+
+  if(autoSpin && !reduced){ targetRY+=0.0016; targetRX+=0.0004; }
+  rotX+=(targetRX-rotX)*0.08; rotY+=(targetRY-rotY)*0.08;
+
+  const hueDrift = reduced ? 0 : Math.sin(t*0.002)*30;
+  ctx.globalCompositeOperation='lighter';
+  for(const q of pts){
+    // integrate the flow (rk-lite: two half steps)
+    for(let k=0;k<2;k++){
+      const d=S.f(q.p);
+      q.p[0]+=d[0]*S.dt*0.5; q.p[1]+=d[1]*S.dt*0.5; q.p[2]+=d[2]*S.dt*0.5;
+    }
+    q.age+=0.002;
+    if(q.age>1 || !isFinite(q.p[0])){
+      q.p=[(Math.random()-.5)*2,(Math.random()-.5)*2,(Math.random()-.5)*2+(S.name==='lorenz'?25:0)];
+      q.age=0; continue;
+    }
+    const [sx,sy,persp]=project(q.p);
+    if(sx<-20||sx>W+20||sy<-20||sy>H+20) continue;
+    const speed=Math.hypot(...S.f(q.p));
+    const hue=(S.hueBase + hueDrift + speed*6)%360;
+    const a=0.25*persp;
+    ctx.fillStyle=`hsla(${hue}, 90%, ${55+persp*15}%, ${a})`;
+    const r=Math.max(0.6, 1.6*persp);
+    ctx.fillRect(sx, sy, r, r);
+  }
+  ctx.globalCompositeOperation='source-over';
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

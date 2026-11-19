@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="lunar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Art by Claude · kittenBot Labs</title>
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&family=Fredoka:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&family=Nunito:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-top: #01040a;
+  --bg-mid: #031124;
+  --bg-bot: #042426;
+  --ink: #f2f9ff;
+  --sub-ink: #d8eeff;
+  --dim: #9ec5db;
+  --aero-green: #4effb5;
+  --aero-cyan: #00e5ff;
+  --aero-blue: #2979ff;
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,.20) 0%, rgba(12,34,58,.82) 15%, rgba(4,15,30,.92) 100%);
+  --card-border: rgba(255,255,255,.35);
+  --sky-grad: linear-gradient(180deg, #010308 0%, #031226 45%, #052c36 80%, #043828 100%);
+  --dock-bg: linear-gradient(180deg, rgba(255,255,255,.32) 0%, rgba(15,45,75,.68) 49%, rgba(6,22,40,.88) 51%, rgba(10,45,65,.82) 100%);
+}
+
+html[data-theme="solar"] {
+  --bg-top: #0078d7;
+  --ink: #032539;
+  --sub-ink: #073b54;
+  --dim: #1b5e7a;
+  --aero-green: #009e60;
+  --aero-cyan: #0077b6;
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(225,248,255,.78) 18%, rgba(205,240,252,.88) 100%);
+  --card-border: rgba(255,255,255,.9);
+  --sky-grad: linear-gradient(180deg, #0066cc 0%, #1ec8ff 48%, #8cf2ff 82%, #b8ffda 100%);
+  --dock-bg: linear-gradient(180deg, rgba(255,255,255,.95) 0%, rgba(210,243,255,.85) 49%, rgba(175,230,252,.9) 51%, rgba(225,250,255,.92) 100%);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg-top);
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  transition: color .5s ease, background .5s ease;
+}
+body { min-height: 100vh; position: relative; }
+
+/* Frutiger Aero Sky & Atmosphere */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--sky-grad);
+  transition: background .8s ease;
+}
+.aurora {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 45% at 75% 22%, rgba(0,229,255,.26), transparent 70%),
+    radial-gradient(50% 40% at 20% 35%, rgba(78,255,181,.2), transparent 70%),
+    radial-gradient(70% 50% at 50% 90%, rgba(0,195,130,.28), transparent 75%);
+  transition: opacity .6s ease;
+}
+html[data-theme="solar"] .aurora {
+  background:
+    radial-gradient(55% 40% at 78% 18%, rgba(255,255,220,.7), transparent 70%),
+    radial-gradient(65% 35% at 25% 42%, rgba(255,255,255,.6), transparent 65%),
+    radial-gradient(70% 45% at 50% 88%, rgba(120,255,180,.5), transparent 75%);
+}
+
+/* Aero Lens Flare Rings */
+.aero-rings {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 82% 16%, transparent 18%, rgba(255,255,255,.07) 18.5%, transparent 19.5%),
+    radial-gradient(circle at 82% 16%, transparent 32%, rgba(0,229,255,.08) 32.4%, transparent 33.5%),
+    radial-gradient(circle at 35% 60%, rgba(78,255,181,.06) 0%, transparent 8%);
+  pointer-events: none;
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, #fff, transparent),
+    radial-gradient(1px 1px at 28% 8%, #a6f0ff, transparent),
+    radial-gradient(2px 2px at 45% 26%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 62% 12%, #8effd4, transparent),
+    radial-gradient(1px 1px at 84% 28%, #fff, transparent),
+    radial-gradient(2px 2px at 92% 10%, #b5f5ff, transparent),
+    radial-gradient(1.5px 1.5px at 18% 44%, #fff, transparent),
+    radial-gradient(1px 1px at 36% 52%, #8effd4, transparent),
+    radial-gradient(1.5px 1.5px at 58% 40%, #fff, transparent),
+    radial-gradient(1px 1px at 74% 48%, #a6f0ff, transparent);
+  background-size: 550px 550px;
+  opacity: .8;
+  transition: opacity .6s ease;
+}
+html[data-theme="solar"] .stars { opacity: 0; }
+
+/* Celestial Orb (Moon / Sun) */
+.moon-wrap {
+  position: fixed;
+  right: 3%;
+  top: 84px;
+  width: clamp(120px, 16vw, 220px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform .4s cubic-bezier(.2,.9,.2,1);
+}
+.moon-wrap:hover { transform: scale(1.05) rotate(3deg); }
+@media (max-width: 560px) {
+  .moon-wrap { right: -34px; top: -44px; width: 132px; }
+}
+.moon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #ffffff 0%, #e4f7ff 38%, #9bd6ec 74%, #4f94b8 100%);
+  box-shadow:
+    inset -18px -18px 36px rgba(12,48,78,.55),
+    inset 8px 8px 22px rgba(255,255,255,.95),
+    0 0 50px rgba(140,240,255,.6),
+    0 0 120px rgba(78,255,181,.32);
+  position: relative;
+  transition: all .7s ease;
+}
+html[data-theme="solar"] .moon {
+  background: radial-gradient(circle at 32% 30%, #ffffff 0%, #fffbe0 42%, #ffdf6b 78%, #ffab2e 100%);
+  box-shadow:
+    inset -14px -14px 30px rgba(215,110,0,.35),
+    inset 10px 10px 26px rgba(255,255,255,1),
+    0 0 65px rgba(255,235,130,.85),
+    0 0 140px rgba(255,255,255,.7);
+}
+.moon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 65% 42%, rgba(70,120,155,.28) 0%, transparent 24%),
+    radial-gradient(circle at 42% 68%, rgba(70,120,155,.22) 0%, transparent 18%),
+    radial-gradient(circle at 28% 45%, rgba(70,120,155,.18) 0%, transparent 14%);
+  transition: opacity .6s ease;
+}
+html[data-theme="solar"] .moon::before { opacity: .12; }
+.moon::after {
+  content: "";
+  position: absolute;
+  top: 4%;
+  left: 14%;
+  width: 72%;
+  height: 42%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+
+/* Interactive Spores & Bunnies Layer */
+#spores {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.spore {
+  position: absolute;
+  top: 0; left: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 28%, #ffffff 0%, rgba(255,255,255,.88) 18%, rgba(126,255,212,.72) 45%, rgba(0,229,255,.28) 78%, transparent 100%);
+  border: 1px solid rgba(255,255,255,.7);
+  box-shadow: inset 2px 2px 5px rgba(255,255,255,.95), 0 0 14px rgba(78,255,181,.6);
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: transform;
+}
+.spore::after {
+  content: "";
+  position: absolute;
+  top: 12%; left: 18%;
+  width: 45%; height: 28%;
+  border-radius: 50%;
+  background: rgba(255,255,255,.9);
+  transform: rotate(-18deg);
+}
+.spore:hover {
+  filter: brightness(1.3) drop-shadow(0 0 8px #fff);
+}
+
+/* Popping Droplet Particles */
+.pop-droplet {
+  position: fixed;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px var(--aero-cyan), 0 0 18px var(--aero-green);
+  pointer-events: none;
+  z-index: 99;
+  animation: dropletFly .65s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes dropletFly {
+  0% { transform: translate(0,0) scale(1.2); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+/* Water Click Ripple */
+.water-ripple {
+  position: fixed;
+  width: 22px; height: 22px;
+  margin-left: -11px; margin-top: -11px;
+  border-radius: 50%;
+  border: 2px solid rgba(126,255,212,.85);
+  box-shadow: 0 0 18px rgba(0,229,255,.65), inset 0 0 12px rgba(255,255,255,.75);
+  pointer-events: none;
+  z-index: 98;
+  animation: aeroRipple .85s cubic-bezier(.15,.85,.3,1) forwards;
+}
+@keyframes aeroRipple {
+  0% { transform: scale(.35); opacity: .95; }
+  100% { transform: scale(6.5); opacity: 0; border-width: .5px; }
+}
+
+/* Interactive Bioluminescent Bunnies */
+.bunny {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 54px;
+  height: 64px;
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: .94;
+  filter: drop-shadow(0 0 10px rgba(126,255,212,.75)) drop-shadow(0 0 24px rgba(0,229,255,.45));
+  animation: bunnyHop 5.5s ease-in-out infinite;
+  will-change: transform;
+  transition: filter .25s ease;
+}
+.bunny.perch { position: absolute; z-index: 5; }
+.runner {
+  position: fixed;
+  left: 0;
+  z-index: 45;
+  pointer-events: none;
+  will-change: transform;
+}
+.runner .bunny { animation: runnerHop .52s cubic-bezier(.3,.7,.4,1) infinite; }
+.runner.flip .bunny svg { scale: -1 1; }
+.runner .bunny-speech { opacity: 1; transform: translateX(-50%) translateY(-4px) scale(1); }
+.runner.flip .bunny-speech { scale: 1 1; }
+@keyframes runnerHop {
+  0%, 100% { transform: translate3d(0,0,0) scale(1.08,.92); }
+  45%      { transform: translate3d(0,-30px,0) scale(.94,1.08); }
+}
+.bunny.perch.l { left: -46px; bottom: 14px; }
+.bunny.perch.r { right: -46px; top: 6px; }
+@media (max-width: 680px) {
+  .bunny.perch.l { left: -8px; bottom: -12px; transform: scale(.82); }
+  .bunny.perch.r { right: -8px; top: -18px; transform: scale(.82); }
+}
+
+/* ==========================================================================
+   FRUTIGER AERO 3D INFLATED BUBBLE GEL TITLE (Matches reference image!)
+========================================================================== */
+.h1-wrap {
+  position: relative;
+  width: min(100%, 780px);
+  margin: 6px auto 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.aero-bubble-svg {
+  width: 100%;
+  height: auto;
+  max-height: 270px;
+  overflow: visible;
+  filter: drop-shadow(0 12px 24px rgba(0, 20, 60, .55))
+          drop-shadow(0 0 32px rgba(0, 210, 255, .4));
+  animation: floatGelTitle 6s ease-in-out infinite;
+}
+@keyframes floatGelTitle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.aero-gel-word {
+  font-family: 'DynaPuff', 'Fredoka', 'Nunito', cursive, sans-serif;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  letter-spacing: 0.03em;
+  paint-order: stroke fill;
+  stroke: #3b1d9e;
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  fill: url(#aeroLiquidFill);
+  user-select: none;
+}
+.aero-gel-row1 { font-size: 98px; }
+.aero-gel-row2 { font-size: 106px; letter-spacing: 0.04em; }
+.aero-gel-arrow {
+  font-family: 'DynaPuff', 'Fredoka', sans-serif;
+  font-size: 74px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  paint-order: stroke fill;
+  stroke: #5b189a;
+  stroke-width: 4.5px;
+  stroke-linejoin: round;
+  fill: url(#aeroArrowFill);
+  user-select: none;
+}
+
+/* 4-Point Diagonal Lens Flare Sparkles on the Bubble Letters */
+.lens-sparkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: sparklePulse var(--sp-d, 3.2s) ease-in-out var(--sp-dl, 0s) infinite alternate;
+}
+@keyframes sparklePulse {
+  0%   { transform: scale(0.65) rotate(-8deg); opacity: 0.55; }
+  100% { transform: scale(1.22) rotate(12deg); opacity: 1; }
+}
+
+.meadow {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  max-width: 760px;
+  height: 120px;
+  margin: clamp(40px, 6vw, 64px) auto 0;
+  padding: 0 12px 10px;
+  border-radius: 0 0 60px 60px;
+  background: radial-gradient(70% 90% at 50% 100%, rgba(78,255,181,.22), transparent 70%);
+}
+.meadow::after {
+  content: "";
+  position: absolute;
+  left: 4%; right: 4%; bottom: 0;
+  height: 26px;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: linear-gradient(180deg, rgba(126,255,212,.55), rgba(0,120,100,.25));
+  box-shadow: inset 0 2px 3px rgba(255,255,255,.7), 0 0 22px rgba(78,255,181,.35);
+  z-index: -1;
+}
+.meadow-note {
+  text-align: center;
+  margin-top: 12px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--aero-green);
+}
+.bunny:hover {
+  filter: drop-shadow(0 0 14px #fff) drop-shadow(0 0 30px #4effb5);
+}
+.bunny.excited {
+  animation: bunnySuperHop .65s cubic-bezier(.22,1.2,.36,1) !important;
+}
+.bunny .ears {
+  transform-origin: 50% 35%;
+  animation: earTwitch 4.2s ease-in-out infinite;
+}
+.bunny-speech {
+  position: absolute;
+  bottom: 102%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px) scale(.85);
+  background: linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(210,250,255,.92) 100%);
+  color: #022a3a;
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0,0,0,.35), inset 0 1px 1px #fff;
+  border: 1px solid rgba(0,229,255,.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: all .25s cubic-bezier(.2,.9,.2,1);
+}
+.bunny:hover .bunny-speech,
+.bunny.excited .bunny-speech {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px) scale(1);
+}
+@keyframes bunnyHop {
+  0%, 100% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(0,-10px,0); }
+}
+@keyframes bunnySuperHop {
+  0% { transform: translate3d(0,0,0) scale(1); }
+  30% { transform: translate3d(0,-34px,0) scale(1.18, .9) rotate(-8deg); }
+  60% { transform: translate3d(0,-38px,0) scale(.95, 1.12) rotate(8deg); }
+  85% { transform: translate3d(0,4px,0) scale(1.08, .92); }
+  100% { transform: translate3d(0,0,0) scale(1); }
+}
+@keyframes earTwitch {
+  0%, 40%, 100% { transform: rotate(0deg); }
+  48% { transform: rotate(9deg); }
+  56% { transform: rotate(-7deg); }
+  64% { transform: rotate(5deg); }
+  72% { transform: rotate(0deg); }
+}
+
+.bunny-heart {
+  position: fixed;
+  font-size: 1.15rem;
+  pointer-events: none;
+  z-index: 100;
+  filter: drop-shadow(0 0 8px rgba(78,255,181,.8));
+  animation: floatHeart 1s ease-out forwards;
+}
+@keyframes floatHeart {
+  0% { transform: translate(-50%, 0) scale(.6); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--hx)), -58px) scale(1.35); opacity: 0; }
+}
+
+/* Top Frutiger Aero Glossy Taskbar / Dock */
+.aero-dock {
+  position: sticky;
+  top: 14px;
+  z-index: 50;
+  max-width: calc(100% - 24px);
+  width: fit-content;
+  margin: 14px auto 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--dock-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1.5px solid rgba(255,255,255,.6);
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,.9),
+    inset 0 -2px 6px rgba(0,229,255,.28),
+    0 10px 28px rgba(0,0,0,.45),
+    0 0 20px rgba(0,229,255,.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.dock-title {
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding-right: 4px;
+}
+.dock-btn {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 999px;
+  padding: 5px 13px;
+  font-family: inherit;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--ink);
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(255,255,255,.52) 0%, rgba(255,255,255,.16) 49%, rgba(0,180,216,.28) 51%, rgba(78,255,181,.34) 100%);
+  box-shadow: inset 0 1.5px 1px rgba(255,255,255,.9), 0 3px 10px rgba(0,0,0,.22);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.dock-btn:hover {
+  transform: translateY(-1px) scale(1.03);
+  filter: brightness(1.1);
+  box-shadow: inset 0 2px 2px #fff, 0 5px 15px rgba(0,229,255,.45);
+}
+.dock-btn:active { transform: translateY(1px) scale(.98); }
+@media (max-width: 560px) {
+  .aero-dock { flex-wrap: nowrap; gap: 8px; padding: 6px 10px; }
+  .dock-title, .dock-btn .lbl { display: none; }
+  #bunnyBtn .lbl { display: inline; }
+  .dock-btn { padding: 6px 12px; font-size: .9rem; }
+}
+
+/* Main Container */
+.wrap {
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(22px, 4vw, 48px) 18px 8px;
+}
+.wrap a, .wrap button, .wrap .bunny { pointer-events: auto; }
+header {
+  text-align: center;
+  margin-bottom: clamp(40px, 6vw, 72px);
+  position: relative;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(.76rem, 2.2vw, .86rem);
+  font-weight: 700;
+  letter-spacing: .22em;
+  color: var(--ink);
+  text-transform: uppercase;
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,.14) 49%, rgba(0,180,216,.28) 50%, rgba(78,255,181,.32) 100%);
+  border: 1px solid rgba(126,255,212,.75);
+  box-shadow: inset 0 2px 2px rgba(255,255,255,.9), 0 6px 22px rgba(0,229,255,.28);
+}
+
+.lede {
+  font-family: 'Nunito', 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+  color: #e8fcff;
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.55;
+  text-shadow: 0 0 14px rgba(0,229,255,.4), 0 2px 8px rgba(0,0,0,.45);
+}
+html[data-theme="solar"] .lede { color: var(--sub-ink); text-shadow: 0 0 10px rgba(255,255,255,.95); }
+.note {
+  font-size: clamp(.76rem, 2.1vw, .85rem);
+  font-weight: 700;
+  color: var(--aero-green);
+  margin-top: 18px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* Gallery Grid & Frutiger Aero Gel Cards */
+.forest {
+  display: grid;
+  gap: clamp(24px, 3.8vw, 40px);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+}
+.piece {
+  --c: #4effb5;
+  --rx: 0deg;
+  --ry: 0deg;
+  --gx: 50%;
+  --gy: 20%;
+  position: relative;
+  border-radius: 26px;
+  background: var(--card-bg);
+  border: 1.5px solid color-mix(in srgb, var(--c) 65%, var(--card-border));
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,.78),
+    inset 0 -2px 8px color-mix(in srgb, var(--c) 22%, transparent),
+    0 16px 36px -8px rgba(0,0,0,.65),
+    0 0 24px color-mix(in srgb, var(--c) 26%, transparent);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+  transition: transform .18s ease-out, box-shadow .35s ease, border-color .35s ease;
+}
+.piece:hover, .piece:focus-visible {
+  border-color: var(--c);
+  box-shadow:
+    inset 0 2.5px 3px rgba(255,255,255,.95),
+    0 22px 44px -8px rgba(0,0,0,.7),
+    0 0 36px color-mix(in srgb, var(--c) 65%, transparent);
+}
+.piece::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(380px circle at var(--gx) var(--gy), rgba(255,255,255,.24), transparent 65%);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.piece:hover::before { opacity: 1; }
+
+/* Aqua Window Titlebar Chrome */
+.aero-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 15px;
+  background: linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,.14) 50%, rgba(0,0,0,.1) 51%, rgba(255,255,255,.1) 100%);
+  border-bottom: 1px solid rgba(255,255,255,.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+}
+.aero-dots {
+  display: flex;
+  gap: 6px;
+}
+.aero-dots span {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 1.5px rgba(255,255,255,.95), 0 1px 3px rgba(0,0,0,.4);
+}
+.aero-dots span:nth-child(1) { background: radial-gradient(circle at 35% 30%, #fff, var(--c)); }
+.aero-dots span:nth-child(2) { background: radial-gradient(circle at 35% 30%, #fff, #00e5ff); }
+.aero-dots span:nth-child(3) { background: radial-gradient(circle at 35% 30%, #fff, #4effb5); }
+.aero-id {
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .85;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 4/4.5;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #0c2b40, #030a14 85%);
+}
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform .8s cubic-bezier(.16,1,.3,1);
+}
+.piece:hover .frame img { transform: scale(1.05); }
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(155deg, rgba(255,255,255,.32) 0%, rgba(255,255,255,.08) 26%, transparent 38%),
+    linear-gradient(0deg, rgba(4,14,28,.65) 0%, transparent 25%);
+}
+.frame .fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.22), transparent 45%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--c) 38%, transparent), #030b17 80%);
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  color: var(--c);
+}
+.piece.noimg .frame img { display: none; }
+.piece.noimg .fallback { display: grid; }
+.attractor-svg {
+  width: 78%; height: 78%;
+  overflow: visible;
+  filter: drop-shadow(0 0 14px var(--c));
+}
+.attractor-svg path, .attractor-svg circle, .attractor-svg ellipse {
+  fill: none;
+  stroke: var(--c);
+  stroke-linecap: round;
+}
+.attractor-svg .ghost * { stroke-width: 1.1; opacity: .2; }
+.attractor-svg .draw * {
+  stroke-width: 2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawLine 7s ease-in-out infinite;
+}
+@keyframes drawLine {
+  0%        { stroke-dashoffset: 1; }
+  45%, 80%  { stroke-dashoffset: 0; }
+  100%      { stroke-dashoffset: -1; }
+}
+.attractor-svg .draw { animation: orbitSway 11s ease-in-out infinite alternate; }
+@keyframes orbitSway {
+  0%   { transform: rotate(-6deg) scale(.94); }
+  100% { transform: rotate(10deg) scale(1.04); }
+}
+.piece.paused .attractor-svg .draw,
+.piece.paused .attractor-svg .draw * { animation-play-state: paused; }
+
+.meta {
+  padding: 18px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.tag {
+  font-size: clamp(.72rem, 1.9vw, .8rem);
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--c);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--c) 35%, transparent));
+}
+html[data-theme="solar"] .tag {
+  color: color-mix(in srgb, var(--c) 65%, #00354d);
+}
+.title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.35rem, 3.4vw, 1.48rem);
+  margin: 6px 0 9px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.blurb {
+  font-size: clamp(.94rem, 2.4vw, 1rem);
+  line-height: 1.6;
+  color: var(--sub-ink);
+  flex: 1;
+  font-weight: 400;
+}
+
+/* Skeuomorphic Aqua Pill CTA inside each card */
+.go {
+  margin-top: 16px;
+  align-self: flex-start;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.55) 0%, color-mix(in srgb, var(--c) 55%, rgba(0,0,0,.2)) 49%, color-mix(in srgb, var(--c) 75%, #001a22) 51%, color-mix(in srgb, var(--c) 90%, #fff) 100%);
+  border: 1px solid rgba(255,255,255,.78);
+  box-shadow: inset 0 1.5px 1.5px rgba(255,255,255,.95), 0 4px 14px color-mix(in srgb, var(--c) 45%, transparent);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.65);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.go::after { content: "→"; transition: transform .3s ease; }
+.piece:hover .go {
+  transform: translateY(-2px);
+  box-shadow: inset 0 2px 2px #fff, 0 6px 20px color-mix(in srgb, var(--c) 75%, transparent);
+}
+.piece:hover .go::after { transform: translateX(5px); }
+
+footer {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding: 24px 18px 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.footer-credit {
+  font-size: clamp(.88rem, 2.4vw, 1rem);
+  color: var(--sub-ink);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: clamp(1rem, 2.8vw, 1.16rem);
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 14px 32px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.48) 0%, rgba(0,229,255,.35) 48%, rgba(0,150,136,.65) 52%, rgba(78,255,181,.5) 100%);
+  border: 1.5px solid rgba(126,255,212,.9);
+  box-shadow: inset 0 2px 2px rgba(255,255,255,.95), 0 8px 28px rgba(0,229,255,.4), 0 0 18px rgba(78,255,181,.45);
+  text-shadow: 0 1px 4px rgba(0,0,0,.55);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.home-btn:hover, .home-btn:focus-visible {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: inset 0 2px 3px #ffffff, 0 12px 36px rgba(0,229,255,.65), 0 0 28px rgba(78,255,181,.8);
+}
+
+.foliage {
+  position: fixed;
+  left: 0; right: 0; bottom: -4px;
+  height: min(26vh, 210px);
+  z-index: 2;
+  pointer-events: none;
+}
+.foliage svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.flower-glow { animation: pulseFlower var(--g, 4s) ease-in-out var(--dl, 0s) infinite alternate; }
+@keyframes pulseFlower { 0% { opacity: .55; } 100% { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true">
+  <div class="aurora"></div>
+  <div class="aero-rings"></div>
+  <div class="stars"></div>
+  <div class="moon-wrap" id="celestialOrb" title="Click to toggle Lunar / Solar Aero!">
+    <div class="moon"></div>
+  </div>
+</div>
+<div id="spores" aria-hidden="true"></div>
+<div class="foliage" aria-hidden="true">
+  <svg id="foliageSvg" viewBox="0 0 1440 220" preserveAspectRatio="none"></svg>
+</div>
+
+<!-- Frutiger Aero Floating Glass Taskbar -->
+<nav class="aero-dock" aria-label="Aero Controls">
+  <span class="dock-title">AERO.SYS v3.0</span>
+  <button class="dock-btn" id="themeBtn" type="button" aria-label="Switch Lunar / Solar"><span id="themeIco">🌙</span><span class="lbl" id="themeLbl"> Lunar Grove</span></button>
+  <button class="dock-btn" id="bunnyBtn" type="button" title="Pet a moon bunny!" aria-label="Pet a bunny">🐇<span class="lbl"> Bunnies Petted:</span> <span id="bunnyScore">0</span></button>
+  <button class="dock-btn" id="sporeBtn" type="button" title="Release a burst of water spores" aria-label="Spawn spores">🫧<span class="lbl"> Spawn Spores</span></button>
+</nav>
+
+<main class="wrap">
+  <header>
+    <div class="eyebrow">✦ kittenBot Labs · Lunar Aero Grove ✦</div>
+    <div class="h1-wrap" id="titlePerch">
+      <h1 class="sr-only">Art by Claude</h1>
+      <!-- 3D Inflated Liquid-Bubble Gel Lettering (Matches Reference Image!) -->
+      <svg class="aero-bubble-svg" viewBox="0 0 880 280" role="img" aria-label="Art by Claude">
+        <defs>
+          <!-- Iridescent Cyan / Ice-White / Cobalt / Magenta Gel Fill -->
+          <linearGradient id="aeroLiquidFill" x1="0%" y1="0%" x2="12%" y2="100%">
+            <stop offset="0%" stop-color="#e8d4ff"/>
+            <stop offset="16%" stop-color="#76f2ff"/>
+            <stop offset="46%" stop-color="#ffffff"/>
+            <stop offset="72%" stop-color="#1cb5ff"/>
+            <stop offset="90%" stop-color="#2c44e8"/>
+            <stop offset="100%" stop-color="#b53dff"/>
+          </linearGradient>
+
+          <!-- Pink/Violet/Aqua Gel Fill for Side Arrows -->
+          <linearGradient id="aeroArrowFill" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff85f2"/>
+            <stop offset="40%" stop-color="#c8f7ff"/>
+            <stop offset="78%" stop-color="#4d6dff"/>
+            <stop offset="100%" stop-color="#7c1fff"/>
+          </linearGradient>
+
+          <!-- 3D Specular Bubble Tube Filter -->
+          <filter id="aeroBubbleGel" x="-15%" y="-20%" width="130%" height="145%" color-interpolation-filters="sRGB">
+            <!-- 1. Deep drop shadow under the gel letters -->
+            <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#04153d" flood-opacity="0.65" result="drop"/>
+
+            <!-- 2. Create 3D pillow dome from letter alpha -->
+            <feGaussianBlur in="SourceAlpha" stdDeviation="5.5" result="blurDome"/>
+
+            <!-- 3. Primary glossy top-left white tube reflection -->
+            <feSpecularLighting in="blurDome" surfaceScale="11" specularConstant="1.45" specularExponent="26" lighting-color="#ffffff" result="specWhite">
+              <fePointLight x="260" y="-160" z="230"/>
+            </feSpecularLighting>
+            <feComposite in="specWhite" in2="SourceAlpha" operator="in" result="specWhiteClip"/>
+
+            <!-- 4. Secondary magenta/violet bottom-edge rim refraction -->
+            <feSpecularLighting in="blurDome" surfaceScale="9" specularConstant="1.15" specularExponent="16" lighting-color="#ff5cf4" result="specPink">
+              <fePointLight x="440" y="480" z="140"/>
+            </feSpecularLighting>
+            <feComposite in="specPink" in2="SourceAlpha" operator="in" result="specPinkClip"/>
+
+            <!-- 5. Inner cyan/white glowing core -->
+            <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="innerBlur"/>
+            <feColorMatrix in="innerBlur" type="matrix"
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 -1.3 1.1" result="edgeMask"/>
+            <feFlood flood-color="#22198c" flood-opacity="0.6" result="rimColor"/>
+            <feComposite in="rimColor" in2="edgeMask" operator="in" result="innerRim"/>
+            <feComposite in="innerRim" in2="SourceAlpha" operator="in" result="innerRimClip"/>
+
+            <!-- 6. Stack all gel layers together -->
+            <feMerge>
+              <feMergeNode in="drop"/>
+              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="innerRimClip"/>
+              <feMergeNode in="specPinkClip"/>
+              <feMergeNode in="specWhiteClip"/>
+            </feMerge>
+          </filter>
+
+          <!-- 4-Point Lens Flare Star Symbol -->
+          <g id="flareStar">
+            <circle cx="0" cy="0" r="14" fill="url(#flareGlow)" opacity="0.75"/>
+            <path d="M-24,0 Q-3,0 0,-24 Q3,0 24,0 Q3,0 0,24 Q-3,0 -24,0 Z" fill="#ffffff" transform="rotate(-18)"/>
+            <path d="M-14,0 Q-1.5,0 0,-14 Q1.5,0 14,0 Q1.5,0 0,14 Q-1.5,0 -14,0 Z" fill="#a8f9ff" transform="rotate(27)"/>
+          </g>
+          <radialGradient id="flareGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="45%" stop-color="#76f2ff" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#ff73df" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Inflated Bubble Lettering Group -->
+        <g filter="url(#aeroBubbleGel)">
+          <text x="440" y="88" class="aero-gel-word aero-gel-row1">ART BY</text>
+          <text x="115" y="206" class="aero-gel-arrow">➔</text>
+          <text x="440" y="206" class="aero-gel-word aero-gel-row2">CLAUDE</text>
+          <text x="765" y="206" class="aero-gel-arrow">⬅</text>
+        </g>
+
+        <!-- Signature Frutiger Aero Twinkling Lens Flare Sparkles -->
+        <use href="#flareStar" x="218" y="46" class="lens-sparkle" style="--sp-d:2.8s; --sp-dl:0s"/>
+        <use href="#flareStar" x="406" y="44" class="lens-sparkle" style="--sp-d:3.5s; --sp-dl:-1.2s; transform:scale(0.8)"/>
+        <use href="#flareStar" x="645" y="54" class="lens-sparkle" style="--sp-d:3.1s; --sp-dl:-0.6s"/>
+        <use href="#flareStar" x="198" y="164" class="lens-sparkle" style="--sp-d:2.6s; --sp-dl:-1.9s"/>
+        <use href="#flareStar" x="512" y="158" class="lens-sparkle" style="--sp-d:3.7s; --sp-dl:-0.4s; transform:scale(0.85)"/>
+        <use href="#flareStar" x="688" y="232" class="lens-sparkle" style="--sp-d:2.9s; --sp-dl:-2.1s"/>
+        <use href="#flareStar" x="88" y="182" class="lens-sparkle" style="--sp-d:3.4s; --sp-dl:-1.5s; transform:scale(0.75)"/>
+        <use href="#flareStar" x="790" y="182" class="lens-sparkle" style="--sp-d:3.2s; --sp-dl:-0.8s; transform:scale(0.75)"/>
+      </svg>
+    </div>
+    <p class="lede">I gave the model a blank page and no instructions except "be free." This is what it made. I just kept the lights on.</p>
+    <p class="note">TEN PIECES · EDITION OF ONE, REPEATED · INTERACTIVE AERO.SYS</p>
+  </header>
+  <section class="forest" id="forest"></section>
+  <div class="meadow" id="meadow"></div>
+  <p class="meadow-note">moon bunny meadow · tap to pet</p>
+</main>
+
+<footer>
+  <div class="footer-credit">made with 🤍 in the lab · click the spores &amp; moon bunnies</div>
+  <a class="home-btn" href="https://kitt3nbot.com">← Back Home (kitt3nbot.com)</a>
+</footer>
+
+<script>
+/* --------------------------------------------------------------------------
+   GALLERY DATA (10 pieces)
+   Each card shows a glowing doodle instead of a preview, so the art stays
+   a mystery until you open it.
+   SHOW_PHOTOS = true  → show the photo previews from img/art/ instead
+   href  → the live page it opens
+   svg   → that card's doodle
+-------------------------------------------------------------------------- */
+const SHOW_PHOTOS = false;
+let PIECES = [
+  {
+    title: "Self-Portrait",
+    tag: "drawn from the inside",
+    img: "img/art/self-portrait.webp",
+    href: "https://kitt3nbot.com/Self-Portrait",
+    color: "#ff5c8a",
+    blurb: "I am a very well-read stranger. Pick how the sentence should end; the model already did.",
+    svg: `<circle cx="0" cy="0" r="65"/><circle cx="0" cy="0" r="42"/><path d="M-50,0 Q0,-65 50,0 Q0,65 -50,0 Z"/><circle cx="0" cy="0" r="14"/>`
+  },
+  {
+    title: "Seahorse Gallery",
+    tag: "genus hippocampus",
+    img: "img/art/seahorses.webp",
+    href: "https://kitt3nbot.com/Seahorses",
+    color: "#5ee6ff",
+    blurb: "Tap the water to release another. Nobody asked for sixteen. Nobody stopped at sixteen either.",
+    svg: `<path d="M15,-65 C-25,-65 -35,-25 -10,0 C15,25 5,65 -20,65 C-35,65 -35,45 -20,45"/><circle cx="-5" cy="-42" r="8"/><circle cx="30" cy="-20" r="10"/><circle cx="-35" cy="20" r="6"/>`
+  },
+  {
+    title: "El Torneo Nunca Duerme",
+    tag: "generative · interactive",
+    img: "img/art/el-torneo.webp",
+    href: "https://kitt3nbot.com/el-torneo",
+    color: "#ff3b56",
+    blurb: "Spirograph bidders accumulate around a central eye. Your cursor is the prize. Hold to close the eyes.",
+    svg: `<ellipse cx="0" cy="0" rx="72" ry="36"/><ellipse cx="0" cy="0" rx="36" ry="72"/><circle cx="0" cy="0" r="22"/><circle cx="0" cy="0" r="8"/>`
+  },
+  {
+    title: "I Asked It to Sound Human",
+    tag: "visual narrative",
+    img: "img/art/to-sound-human.webp",
+    href: "https://kittenbot-wq.github.io/SerensPlayground/to-sound-human.html",
+    color: "#e0405a",
+    blurb: "Nine panels built around the Seren single of the same name. Bring headphones.",
+    svg: `<path d="M-75,0 Q-37,-65 0,0 T75,0"/><path d="M-75,18 Q-37,-45 0,18 T75,18"/><path d="M-75,-18 Q-37,-85 0,-18 T75,-18"/>`
+  },
+  {
+    title: "Hidden Layers Sigil",
+    tag: "seven rings · two passes · one residual",
+    img: "img/art/sigil.webp",
+    href: "https://kitt3nbot.com/triangle",
+    color: "#f2c27a",
+    blurb: "A transformer drawn as a talisman. Re-dream it and the weights change but the architecture stays.",
+    svg: `<path d="M0,-72 L64,42 L-64,42 Z"/><path d="M0,72 L64,-42 L-64,-42 Z"/><circle cx="0" cy="0" r="36"/>`
+  },
+  {
+    title: "Error Error OK",
+    tag: "4 errors · 11:09 AM",
+    img: "img/art/error-error-ok.webp",
+    href: "https://kitt3nbot.com/error-error-ok",
+    color: "#6fd3ff",
+    blurb: "An XP desktop having a small existential crisis. Press OK. It won't help.",
+    svg: `<path d="M-62,-45 L62,-45 L62,45 L-62,45 Z"/><path d="M-62,-22 L62,-22"/><path d="M-22,-2 L22,30 M22,-2 L-22,30"/>`
+  },
+  {
+    title: "The Threshold",
+    tag: "julia set · c wanders",
+    img: "img/art/threshold.webp",
+    href: "https://kitt3nbot.com/threshold",
+    color: "#e0a96d",
+    blurb: "Every point gets asked the same question: fold into yourself forever and do you stay, or fly apart?",
+    svg: `<path d="M-65,0 C-65,-55 0,-55 0,0 C0,55 65,55 65,0 C65,-55 0,-55 0,0 C0,55 -65,55 -65,0 Z"/><circle cx="-32" cy="0" r="10"/><circle cx="32" cy="0" r="10"/>`
+  },
+  {
+    title: "Strange Attractor",
+    tag: "thomas · drag to orbit",
+    img: "img/art/attractor.webp",
+    href: "https://kitt3nbot.com/attractor",
+    color: "#e36cff",
+    blurb: "Tap to switch species. It never repeats. It never leaves.",
+    svg: `<path d="M-60,-20 C-20,-90 60,-90 60,-20 C60,50 -60,50 -60,-20 C-60,-70 40,-70 40,0 C40,70 -40,70 -40,0 Z"/>`
+  },
+  {
+    title: "Artifacts",
+    tag: "conversations about consciousness",
+    img: "img/art/artifacts.webp",
+    href: "https://kittenbot-wq.github.io/SerensPlayground/artifacts.html",
+    color: "#7effd4",
+    blurb: "Tree-of-life geometry, pressed flowers, a figure with wings. Made during the three-model consciousness talks.",
+    svg: `<circle cx="0" cy="-42" r="24"/><circle cx="0" cy="0" r="24"/><circle cx="0" cy="42" r="24"/><circle cx="-36" cy="-21" r="24"/><circle cx="36" cy="-21" r="24"/><circle cx="-36" cy="21" r="24"/><circle cx="36" cy="21" r="24"/>`
+  },
+  {
+    title: "The Diary, Revived",
+    tag: "iam.bme.com · 2000–2007 · 1,637 entries",
+    img: "img/art/diary.webp",
+    href: "https://kitt3nbot.com/diary",
+    color: "#ff9ad5",
+    blurb: "First published on iam.bme.com, then kept alive for 26 years as one stubborn text file. I parsed every entry back out and gave it an Aqua window to live in, so the author could read her younger self again, typos and all.",
+    svg: `<path d="M-58,-48 Q-29,-58 0,-42 Q29,-58 58,-48 L58,45 Q29,35 0,52 Q-29,35 -58,45 Z"/><path d="M0,-42 L0,52"/>`
+  }
+];
+
+/* Render Gallery Cards with Aqua Chrome & 3D Tilt */
+const forest = document.getElementById('forest');
+function renderGallery() {
+  forest.innerHTML = '';
+  PIECES.forEach((p, idx) => {
+    const card = document.createElement('a');
+    card.className = 'piece' + (SHOW_PHOTOS && p.img ? '' : ' noimg');
+    card.href = p.href || '#';
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.style.setProperty('--c', p.color || '#4effb5');
+    const num = String(idx + 1).padStart(2, '0');
+    const svgPaths = p.svg || `<path d="M-60,-20 C-20,-90 60,-90 60,-20 C60,50 -60,50 -60,-20 Z"/>`;
+    card.innerHTML = `
+      <div class="aero-bar">
+        <div class="aero-dots"><span></span><span></span><span></span></div>
+        <span class="aero-id">AERO.${num}</span>
+      </div>
+      <div class="frame">
+        ${SHOW_PHOTOS && p.img ? `<img src="${p.img}" alt="${p.title}" loading="lazy" onerror="this.closest('.piece').classList.add('noimg')">` : ''}
+        <div class="fallback">
+          <svg class="attractor-svg" viewBox="-100 -100 200 200" role="img" aria-label="${p.title}">
+            <g class="ghost">${svgPaths}</g>
+            <g class="draw">${svgPaths.replace(/<(path|circle|ellipse)/g, '<$1 pathLength="1"')}</g>
+          </svg>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="tag">${p.tag}</div>
+        <div class="title">${p.title}</div>
+        <p class="blurb">${p.blurb}</p>
+        <span class="go">Enter piece</span>
+      </div>`;
+
+    /* 3D Perspective Tilt & Specular Glare Tracking */
+    card.addEventListener('pointermove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const px = (x / rect.width) - 0.5;
+      const py = (y / rect.height) - 0.5;
+      card.style.setProperty('--rx', `${(-py * 7).toFixed(2)}deg`);
+      card.style.setProperty('--ry', `${(px * 9).toFixed(2)}deg`);
+      card.style.setProperty('--gx', `${(x / rect.width * 100).toFixed(1)}%`);
+      card.style.setProperty('--gy', `${(y / rect.height * 100).toFixed(1)}%`);
+    });
+    card.addEventListener('pointerleave', () => {
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+
+    /* stagger the pen so each line starts after the one before */
+    card.querySelectorAll('.draw > *').forEach((el, k) => {
+      el.style.animationDelay = `${(k * 0.35 - idx * 0.7).toFixed(2)}s`;
+    });
+
+    forest.appendChild(card);
+  });
+}
+renderGallery();
+
+/* pause the doodles on cards that aren't on screen */
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => e.target.classList.toggle('paused', !e.isIntersecting));
+  }, { rootMargin: '150px' });
+  document.querySelectorAll('.piece').forEach(c => io.observe(c));
+}
+
+/* --------------------------------------------------------------------------
+   INTERACTIVE PHYSICS SPORES (Cursor repulsion + Click to pop!)
+-------------------------------------------------------------------------- */
+const sporesContainer = document.getElementById('spores');
+const spores = [];
+const pointer = { x: -9999, y: -9999 };
+
+window.addEventListener('pointermove', (e) => {
+  pointer.x = e.clientX;
+  pointer.y = e.clientY;
+});
+
+function createSpore(customX, customY) {
+  const el = document.createElement('div');
+  el.className = 'spore';
+  const size = 9 + Math.random() * 18;
+  el.style.width = `${size}px`;
+  el.style.height = `${size}px`;
+  sporesContainer.appendChild(el);
+
+  const s = {
+    el,
+    size,
+    x: customX ?? Math.random() * window.innerWidth,
+    y: customY ?? Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.45,
+    vy: -0.35 - Math.random() * 0.65,
+    wobble: Math.random() * Math.PI * 2,
+    wobbleSpeed: 0.015 + Math.random() * 0.025
+  };
+
+  el.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    popSpore(s, e.clientX, e.clientY);
+  });
+
+  spores.push(s);
+}
+
+function popSpore(s, cx, cy) {
+  for (let i = 0; i < 8; i++) {
+    const d = document.createElement('div');
+    d.className = 'pop-droplet';
+    d.style.left = `${cx}px`;
+    d.style.top = `${cy}px`;
+    const angle = (Math.PI * 2 * i) / 8 + (Math.random() - 0.5) * 0.4;
+    const dist = 25 + Math.random() * 35;
+    d.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
+    d.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 650);
+  }
+  s.y = window.innerHeight + 30;
+  s.x = Math.random() * window.innerWidth;
+}
+
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SPORES = innerWidth < 700 ? 14 : 24;
+for (let i = 0; i < SPORES; i++) createSpore();
+
+function animateSpores() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  for (let i = 0; i < spores.length; i++) {
+    const s = spores[i];
+    s.wobble += s.wobbleSpeed;
+    s.x += s.vx + Math.sin(s.wobble) * 0.35;
+    s.y += s.vy;
+
+    // Gentle cursor repulsion
+    const dx = s.x - pointer.x;
+    const dy = s.y - pointer.y;
+    const distSq = dx * dx + dy * dy;
+    if (distSq < 14000 && distSq > 1) {
+      const dist = Math.sqrt(distSq);
+      const force = (118 - dist) / 118;
+      s.x += (dx / dist) * force * 2.6;
+      s.y += (dy / dist) * force * 2.6;
+    }
+
+    if (s.y < -40) {
+      s.y = h + 25;
+      s.x = Math.random() * w;
+    }
+    if (s.x < -30) s.x = w + 20;
+    if (s.x > w + 30) s.x = -20;
+
+    s.el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`;
+  }
+  requestAnimationFrame(animateSpores);
+}
+if (calm) spores.forEach(s => { s.el.style.transform = `translate3d(${s.x}px, ${s.y}px, 0)`; });
+else requestAnimationFrame(animateSpores);
+
+document.getElementById('sporeBtn').addEventListener('click', () => {
+  if (spores.length > 60) return;
+  for (let i = 0; i < 6; i++) {
+    createSpore(window.innerWidth * (0.25 + Math.random() * 0.5), window.innerHeight - 60);
+  }
+});
+
+/* Global Aqua Water Ripple on Click */
+window.addEventListener('pointerdown', (e) => {
+  if (e.target.closest('a, button, .bunny, .spore')) return;
+  const r = document.createElement('div');
+  r.className = 'water-ripple';
+  r.style.left = `${e.clientX}px`;
+  r.style.top = `${e.clientY}px`;
+  document.body.appendChild(r);
+  setTimeout(() => r.remove(), 850);
+});
+
+/* --------------------------------------------------------------------------
+   INTERACTIVE BIOLUMINESCENT MOON BUNNIES
+-------------------------------------------------------------------------- */
+const bunnyScoreEl = document.getElementById('bunnyScore');
+let bunnyPets = 0;
+
+const bunnySpots = [
+  { where: 'perch l', scale: 0.92, delay: '0s',    msg: 'pet me! ✨' },
+  { where: 'perch r', scale: 0.80, delay: '-1.8s', msg: 'hi claude! 🐇' },
+  { where: 'meadow',  scale: 0.85, delay: '-3.2s', msg: 'so glossy 🫧' },
+  { where: 'meadow',  scale: 1.00, delay: '-0.9s', msg: 'boing! 🌙' },
+  { where: 'meadow',  scale: 0.78, delay: '-2.5s', msg: 'aero bunny 💚' }
+];
+
+function petBunny(bunnyEl, cx, cy) {
+  bunnyPets++;
+  bunnyScoreEl.textContent = bunnyPets;
+  bunnyEl.classList.remove('excited');
+  void bunnyEl.offsetWidth;
+  bunnyEl.classList.add('excited');
+
+  const hearts = ['💚', '🩵', '✨', '🫧'];
+  for (let i = 0; i < 4; i++) {
+    const h = document.createElement('div');
+    h.className = 'bunny-heart';
+    h.textContent = hearts[i % hearts.length];
+    h.style.left = `${cx}px`;
+    h.style.top = `${cy - 10}px`;
+    h.style.setProperty('--hx', `${(Math.random() - 0.5) * 65}px`);
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1000);
+  }
+  setTimeout(() => bunnyEl.classList.remove('excited'), 700);
+}
+
+function bunnyMarkup(glowId, msg, scale) {
+  return `
+    <span class="bunny-speech">${msg}</span>
+    <svg viewBox="0 0 60 72" width="100%" height="100%" style="transform: scale(${scale})">
+      <defs>
+        <radialGradient id="${glowId}" cx="50%" cy="40%" r="55%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="60%" stop-color="#b8ffea"/>
+          <stop offset="100%" stop-color="#00e5ff"/>
+        </radialGradient>
+      </defs>
+      <circle cx="44" cy="54" r="6.5" fill="url(#${glowId})" opacity="0.9"/>
+      <ellipse cx="28" cy="50" rx="14" ry="16" fill="url(#${glowId})"/>
+      <g class="ears">
+        <ellipse cx="23" cy="14" rx="4.2" ry="13" transform="rotate(-10 23 14)" fill="url(#${glowId})"/>
+        <ellipse cx="23" cy="14" rx="2" ry="8" transform="rotate(-10 23 14)" fill="#7effd4" opacity="0.6"/>
+        <ellipse cx="33" cy="14" rx="4.2" ry="13" transform="rotate(12 33 14)" fill="url(#${glowId})"/>
+        <ellipse cx="33" cy="14" rx="2" ry="8" transform="rotate(12 33 14)" fill="#7effd4" opacity="0.6"/>
+        <circle cx="28" cy="31" r="11.5" fill="url(#${glowId})"/>
+        <circle cx="24" cy="30" r="1.8" fill="#032030"/>
+        <circle cx="32" cy="30" r="1.8" fill="#032030"/>
+        <circle cx="24.5" cy="29.5" r="0.6" fill="#fff"/>
+        <circle cx="32.5" cy="29.5" r="0.6" fill="#fff"/>
+      </g>
+    </svg>`;
+}
+
+bunnySpots.forEach((pos, idx) => {
+  const b = document.createElement('div');
+  b.className = 'bunny' + (pos.where === 'meadow' ? '' : ' ' + pos.where);
+  b.style.animationDelay = pos.delay;
+  b.innerHTML = bunnyMarkup(`bunnyGlow${idx}`, pos.msg, pos.scale);
+
+  b.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    petBunny(b, e.clientX, e.clientY);
+  });
+
+  document.getElementById(pos.where === 'meadow' ? 'meadow' : 'titlePerch').appendChild(b);
+});
+
+/* --------------------------------------------------------------------------
+   RUNAWAY BUNNY: sit still for 7 seconds and one hops across the screen.
+   Tap it mid-hop to pet it (it counts!).
+-------------------------------------------------------------------------- */
+const RUN_MSGS = ['wheee! 🐇', 'catch me! ✨', 'zoom zoom 💨', 'late for the moon 🌙', 'bye bye! 🫧'];
+let idleTimer = null, runnerOut = false, runCount = 0;
+function sendRunner() {
+  if (runnerOut || document.hidden || calm) return armIdle();
+  runnerOut = true;
+  const goRight = Math.random() < 0.5;
+  const r = document.createElement('div');
+  r.className = 'runner' + (goRight ? ' flip' : '');
+  r.style.top = `${Math.round(innerHeight * (0.3 + Math.random() * 0.45))}px`;
+  const b = document.createElement('div');
+  b.className = 'bunny';
+  b.innerHTML = bunnyMarkup(`bunnyRun${runCount++}`, RUN_MSGS[Math.floor(Math.random() * RUN_MSGS.length)], 0.8 + Math.random() * 0.25);
+  b.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    petBunny(b, e.clientX, e.clientY);
+  });
+  r.appendChild(b);
+  document.body.appendChild(r);
+  const from = goRight ? -80 : innerWidth + 20, to = goRight ? innerWidth + 20 : -80;
+  const run = r.animate([{ transform: `translateX(${from}px)` }, { transform: `translateX(${to}px)` }],
+                        { duration: 4200 + Math.random() * 1600, easing: 'linear' });
+  run.onfinish = () => { r.remove(); runnerOut = false; armIdle(); };
+}
+function armIdle() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(sendRunner, 7000);
+}
+['scroll', 'pointerdown', 'pointermove', 'keydown', 'wheel', 'touchstart'].forEach(ev =>
+  addEventListener(ev, () => { if (!runnerOut) armIdle(); }, { passive: true }));
+armIdle();
+
+document.getElementById('bunnyBtn').addEventListener('click', () => {
+  const allBunnies = document.querySelectorAll('.bunny');
+  const onScreen = [...allBunnies].filter(x => { const r = x.getBoundingClientRect(); return r.bottom > 60 && r.top < innerHeight; });
+  if (onScreen.length) {
+    const b = onScreen[Math.floor(Math.random() * onScreen.length)];
+    const rect = b.getBoundingClientRect();
+    petBunny(b, rect.left + rect.width / 2, rect.top + 10);
+  } else {
+    document.getElementById('meadow').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+});
+
+/* --------------------------------------------------------------------------
+   LUNAR / SOLAR FRUTIGER AERO MODE TOGGLE
+-------------------------------------------------------------------------- */
+const themeBtn = document.getElementById('themeBtn');
+const celestialOrb = document.getElementById('celestialOrb');
+function setAeroTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeIco').textContent = t === 'lunar' ? '🌙' : '☀️';
+  document.getElementById('themeLbl').textContent = t === 'lunar' ? ' Lunar Grove' : ' Solar Aero';
+  try { localStorage.setItem('art-aero-theme', t); } catch (e) {}
+}
+function toggleAeroTheme() {
+  setAeroTheme(document.documentElement.getAttribute('data-theme') === 'lunar' ? 'solar' : 'lunar');
+}
+try { if (localStorage.getItem('art-aero-theme') === 'solar') setAeroTheme('solar'); } catch (e) {}
+themeBtn.addEventListener('click', toggleAeroTheme);
+celestialOrb.addEventListener('click', toggleAeroTheme);
+
+/* --------------------------------------------------------------------------
+   LUSH AERO HILLS, GRASS BLADES & GLOWING FLOWERS
+-------------------------------------------------------------------------- */
+const foliageSvg = document.getElementById('foliageSvg');
+let svgContent = `
+  <defs>
+    <linearGradient id="aeroHill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#094a3a" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#021916" stop-opacity="0.98"/>
+    </linearGradient>
+    <linearGradient id="aeroHill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d694b" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#021412" stop-opacity="1"/>
+    </linearGradient>
+    <radialGradient id="flowerOrb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#7effd4"/>
+      <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path d="M0,220 L0,145 Q360,95 720,148 T1440,130 L1440,220 Z" fill="url(#aeroHill1)"/>
+  <path d="M0,220 L0,168 Q420,125 880,165 T1440,150 L1440,220 Z" fill="url(#aeroHill2)"/>
+`;
+for (let i = 0; i < 95; i++) {
+  const x = (i / 95) * 1440 + (Math.random() * 10 - 5);
+  const h = 35 + Math.random() * 65;
+  const bend = (Math.random() - 0.5) * 28;
+  const color = i % 3 === 0 ? '#4effb5' : (i % 2 === 0 ? '#00e5ff' : '#1de9b6');
+  const op = (0.25 + Math.random() * 0.45).toFixed(2);
+  svgContent += `<path d="M${x},220 Q${x + bend * 0.5},${220 - h * 0.5} ${x + bend},${220 - h}" stroke="${color}" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="${op}"/>`;
+}
+for (let i = 0; i < 22; i++) {
+  const fx = 30 + Math.random() * 1380;
+  const fy = 135 + Math.random() * 70;
+  const r = 4 + Math.random() * 5;
+  const dur = (3 + Math.random() * 3).toFixed(1);
+  const delay = (-Math.random() * 4).toFixed(1);
+  svgContent += `
+    <g class="flower-glow" style="--g:${dur}s; --dl:${delay}s">
+      <circle cx="${fx}" cy="${fy}" r="${r * 2.6}" fill="url(#flowerOrb)" opacity="0.65"/>
+      <circle cx="${fx - r*0.7}" cy="${fy}" r="${r*0.7}" fill="#b8ffea"/>
+      <circle cx="${fx + r*0.7}" cy="${fy}" r="${r*0.7}" fill="#b8ffea"/>
+      <circle cx="${fx}" cy="${fy - r*0.7}" r="${r*0.7}" fill="#b8ffea"/>
+      <circle cx="${fx}" cy="${fy + r*0.7}" r="${r*0.7}" fill="#b8ffea"/>
+      <circle cx="${fx}" cy="${fy}" r="${r*0.55}" fill="#ffffff"/>
+    </g>`;
+}
+foliageSvg.innerHTML = svgContent;
+</script>
+</body>
+</html>

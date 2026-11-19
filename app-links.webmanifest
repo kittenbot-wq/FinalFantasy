@@ -1,0 +1,20 @@
+{
+  "id": "/?app=kitt3nbot-links",
+  "name": "LINKS.EXE · KittenBot Labs",
+  "short_name": "LINKS.EXE",
+  "description": "Every KittenBot account and link, organized.",
+  "start_url": "/link.html?app=1",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e1020",
+  "theme_color": "#0e1020",
+  "icons": [
+    { "src": "icon-links-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-links-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-links-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "KITT3NBOT LABS homepage", "short_name": "Homepage", "url": "/index.html", "icons": [{ "src": "icon-home-192.png", "sizes": "192x192" }] }
+  ]
+}

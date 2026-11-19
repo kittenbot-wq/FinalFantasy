@@ -1,0 +1,22 @@
+{
+  "id": "/?app=kitt3nbot-home",
+  "name": "KITT3NBOT LABS",
+  "short_name": "KITT3NBOT",
+  "description": "KittenBot Labs: music, AI art, the vault and everything else.",
+  "start_url": "/index.html?app=1",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0221",
+  "theme_color": "#14042e",
+  "icons": [
+    { "src": "icon-home-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-home-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-home-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "LINKS.EXE", "short_name": "Links", "url": "/link.html", "icons": [{ "src": "icon-links-192.png", "sizes": "192x192" }] },
+    { "name": "Kitt3nbot's Vault", "short_name": "Vault", "url": "/vault.html" },
+    { "name": "WTF.EXE", "short_name": "WTF", "url": "/wtf.html" }
+  ]
+}
