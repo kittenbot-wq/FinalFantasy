@@ -1,0 +1,403 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Herd of Seahorses</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;800&family=Instrument+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap">
+<style>
+/* Layout: one living canvas tank up top with the title floating in it, controls on its lower lip, field notes as a loose specimen-label grid below. Single deep-water world, dark by choice. */
+:root {
+  color-scheme: dark;
+  --abyss: #051c26;
+  --trench: #0c3a47;
+  --kelp: #2b8a7c;
+  --pearl: #f1e7d6;
+  --pearl-dim: #9fb7b6;
+  --coral: #ff8f70;
+  --gold: #f0c35a;
+  --display: "Syne", "Trebuchet MS", sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--abyss);
+  color: var(--pearl);
+  font-family: var(--body);
+  font-size: 1rem;
+  line-height: 1.55;
+  padding-inline: 16px;
+  padding-block: 16px 56px;
+}
+.wrap { max-width: 1180px; margin-inline: auto; display: grid; gap: 20px; }
+.tank {
+  position: relative;
+  height: clamp(440px, 72vh, 760px);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--trench);
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+.tank canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.tank header {
+  position: absolute; left: clamp(16px, 4vw, 44px); top: clamp(16px, 4vw, 40px);
+  right: 16px; pointer-events: none;
+}
+.genus {
+  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold); margin: 0 0 10px;
+}
+h1 {
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(2.6rem, 9vw, 6.4rem); line-height: 0.9;
+  letter-spacing: -0.03em; margin: 0; text-wrap: balance; max-width: 9ch;
+  color: var(--pearl); mix-blend-mode: soft-light;
+}
+h1 em { font-style: normal; color: var(--coral); mix-blend-mode: normal; }
+.bar {
+  display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center;
+  justify-content: space-between;
+}
+.count { font-family: var(--mono); font-size: 0.85rem; color: var(--pearl-dim); margin: 0; }
+.count b { color: var(--gold); font-weight: 400; font-variant-numeric: tabular-nums; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+button {
+  font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--pearl); background: transparent;
+  border: 1px solid var(--kelp); border-radius: 999px;
+  padding: 10px 18px; cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+button:hover { background: var(--kelp); color: var(--abyss); }
+button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+button.primary { border-color: var(--coral); color: var(--coral); }
+button.primary:hover { background: var(--coral); color: var(--abyss); }
+.notes { margin-top: 28px; display: grid; gap: 24px; }
+.notes h2 {
+  font-family: var(--display); font-weight: 500; font-size: 1.5rem;
+  letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+}
+.grid {
+  display: grid; gap: 28px 36px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  margin: 0; padding: 0; list-style: none;
+}
+.grid li { min-width: 0; border-top: 1px solid var(--trench); padding-top: 14px; }
+.grid .fig {
+  font-family: var(--display); font-weight: 800; font-size: 2rem; line-height: 1;
+  color: var(--coral); display: block; margin-bottom: 8px; font-variant-numeric: tabular-nums;
+}
+.grid li:nth-child(even) .fig { color: var(--gold); }
+.grid p { margin: 0; color: var(--pearl-dim); max-width: 38ch; }
+.grid i { font-style: italic; color: var(--pearl); }
+@media (prefers-reduced-motion: reduce) { button { transition: none; } }
+</style>
+
+<div class="wrap">
+  <div class="tank" id="tank" role="img" aria-label="Animated drawing of glowing seahorses drifting through seagrass. Click or tap to add another.">
+    <canvas id="sea"></canvas>
+    <header>
+      <p class="genus">Genus Hippocampus</p>
+      <h1>A herd of <em>seahorses</em></h1>
+    </header>
+  </div>
+
+  <div class="bar">
+    <p class="count"><b id="n">0</b> in the herd. Tap the water to release another.</p>
+    <div class="btns">
+      <button id="stir" class="primary" type="button">Stir the water</button>
+      <button id="pause" type="button" aria-pressed="false">Hold still</button>
+    </div>
+  </div>
+
+  <section class="notes">
+    <h2>Field notes on a very strange fish</h2>
+    <ul class="grid">
+      <li><span class="fig">Dad</span><p>The male carries the eggs in a brood pouch and gives birth, sometimes to more than a thousand young at once.</p></li>
+      <li><span class="fig">35 Hz</span><p>The dorsal fin on the back flutters dozens of times a second. It is the only engine they have.</p></li>
+      <li><span class="fig">1.5 m/h</span><p>Top speed of the dwarf seahorse, <i>H. zosterae</i>, often cited as the slowest fish in the sea.</p></li>
+      <li><span class="fig">0</span><p>Stomachs. No teeth either. Food passes straight through, so they eat almost constantly.</p></li>
+      <li><span class="fig">Square</span><p>The tail is square in cross-section, built from bony plates, and grips seagrass like a hand.</p></li>
+      <li><span class="fig">Daily</span><p>Bonded pairs greet each other every morning with a slow dance, sometimes changing color as they go.</p></li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(function () {
+  var tank = document.getElementById('tank');
+  var cv = document.getElementById('sea');
+  var ctx = cv.getContext('2d');
+  var nEl = document.getElementById('n');
+  var css = getComputedStyle(document.documentElement);
+  var C = {
+    abyss: css.getPropertyValue('--abyss').trim() || '#051c26',
+    trench: css.getPropertyValue('--trench').trim() || '#0c3a47',
+    kelp: css.getPropertyValue('--kelp').trim() || '#2b8a7c',
+    pearl: css.getPropertyValue('--pearl').trim() || '#f1e7d6'
+  };
+  var HUES = [14, 42, 330, 165, 265, 195, 350, 28];
+  var MAX = 16;
+  var W = 0, H = 0, dpr = 1;
+  var herd = [], plankton = [], grass = [], rays = [];
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var paused = reduce;
+  var T = 0, last = 0, raf = 0;
+
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  function makeHorse(x, y) {
+    var scale = 0.6 + 0.4 * Math.min(1, W / 1100);
+    var vx = rnd(6, 16) * (Math.random() < 0.5 ? -1 : 1);
+    return {
+      x: x, y: y, vx: vx, vy: 0,
+      size: rnd(95, 250) * scale,
+      hue: HUES[Math.floor(Math.random() * HUES.length)] + rnd(-8, 8),
+      ph: rnd(0, 6.28), bobSp: rnd(0.5, 1.0), curlSp: rnd(0.4, 0.9),
+      lean: rnd(-0.12, 0.12), born: T
+    };
+  }
+
+  function seed() {
+    herd = [];
+    for (var i = 0; i < 7; i++) herd.push(makeHorse(rnd(W * 0.12, W * 0.92), rnd(H * 0.3, H * 0.8)));
+    count();
+  }
+  function count() { nEl.textContent = herd.length; }
+
+  function scenery() {
+    plankton = [];
+    var np = Math.round(W * H / 6500);
+    for (var i = 0; i < np; i++) plankton.push({ x: rnd(0, W), y: rnd(0, H), r: rnd(0.5, 1.8), sp: rnd(4, 16), ph: rnd(0, 6.28) });
+    grass = [];
+    var ng = Math.round(W / 22);
+    for (var j = 0; j < ng; j++) grass.push({ x: rnd(-10, W + 10), h: rnd(H * 0.1, H * 0.34), w: rnd(3, 8), ph: rnd(0, 6.28), a: rnd(0.25, 0.8) });
+    rays = [];
+    for (var k = 0; k < 5; k++) rays.push({ x: rnd(0.05, 0.95), w: rnd(0.05, 0.14), ph: rnd(0, 6.28) });
+  }
+
+  function resize() {
+    var r = tank.getBoundingClientRect();
+    var first = W === 0;
+    var oldW = W || r.width, oldH = H || r.height;
+    W = Math.max(200, r.width); H = Math.max(200, r.height);
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    herd.forEach(function (h) { h.x *= W / oldW; h.y *= H / oldH; });
+    scenery();
+    if (first) seed();
+    if (paused) draw();
+  }
+
+  function background() {
+    var g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, C.trench); g.addColorStop(1, C.abyss);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    rays.forEach(function (r) {
+      var x = (r.x + Math.sin(T * 0.12 + r.ph) * 0.04) * W;
+      var w = r.w * W;
+      var rg = ctx.createLinearGradient(0, 0, 0, H * 0.9);
+      rg.addColorStop(0, 'rgba(160,230,220,0.10)'); rg.addColorStop(1, 'rgba(160,230,220,0)');
+      ctx.fillStyle = rg;
+      ctx.beginPath();
+      ctx.moveTo(x, 0); ctx.lineTo(x + w, 0);
+      ctx.lineTo(x + w * 2.4 - W * 0.12, H); ctx.lineTo(x - w - W * 0.12, H);
+      ctx.closePath(); ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  function drawPlankton(dt) {
+    ctx.fillStyle = C.pearl;
+    plankton.forEach(function (p) {
+      p.y -= p.sp * dt; p.x += Math.sin(T * 0.6 + p.ph) * 4 * dt;
+      if (p.y < -4) { p.y = H + 4; p.x = rnd(0, W); }
+      ctx.globalAlpha = 0.18 + 0.3 * (0.5 + 0.5 * Math.sin(T * 1.3 + p.ph));
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function drawGrass() {
+    ctx.strokeStyle = C.kelp; ctx.lineCap = 'round';
+    grass.forEach(function (b) {
+      var sway = Math.sin(T * 0.7 + b.ph) * b.h * 0.22;
+      ctx.globalAlpha = b.a; ctx.lineWidth = b.w;
+      ctx.beginPath(); ctx.moveTo(b.x, H + 4);
+      ctx.quadraticCurveTo(b.x - sway * 0.3, H - b.h * 0.55, b.x + sway, H - b.h);
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function drawHorse(h) {
+    var S = h.size, N = 64;
+    var bob = Math.sin(T * h.bobSp + h.ph) * S * 0.05;
+    var tilt = Math.sin(T * h.bobSp * 0.7 + h.ph * 1.7) * 0.07 + h.lean;
+    var curl = 55 * (1 + 0.14 * Math.sin(T * h.curlSp + h.ph));
+    var line = 'hsl(' + h.hue + ',88%,72%)';
+    var soft = 'hsla(' + h.hue + ',85%,70%,0.55)';
+    var fill = 'hsl(' + h.hue + ',48%,15%)';
+    var grow = Math.min(1, (T - h.born) / 0.6);
+    var depth = Math.min(1, 0.55 + S / 400);
+
+    ctx.save();
+    ctx.translate(h.x, h.y + bob);
+    ctx.rotate(tilt);
+    ctx.scale((h.vx > 0 ? -1 : 1) * grow, grow);
+    ctx.globalAlpha = depth * grow;
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    var lw = Math.max(1.2, S * 0.011);
+
+    // spine: integrate heading; tail curvature climbs into a spiral
+    var th = Math.PI / 2 - 0.55, x = 0, y = -S * 0.32, ds = S / N;
+    var F = [], B = [], P = [];
+    for (var i = 0; i <= N; i++) {
+      var t = i / N;
+      var u = Math.max(0, (t - 0.55) / 0.45);
+      var k = 1.1 + curl * Math.pow(u, 2.2);
+      var base = S * (0.058 * Math.pow(1 - t, 1.15) + 0.006);
+      var belly = S * 0.088 * Math.exp(-Math.pow((t - 0.3) / 0.13, 2));
+      var nx = -Math.sin(th), ny = Math.cos(th);
+      P.push([x, y, nx, ny]);
+      F.push([x + nx * (base + belly), y + ny * (base + belly)]);
+      B.push([x - nx * base, y - ny * base]);
+      x += Math.cos(th) * ds; y += Math.sin(th) * ds; th += k / N;
+    }
+
+    // dorsal fin, fluttering fast
+    ctx.strokeStyle = soft; ctx.lineWidth = lw * 0.8;
+    ctx.beginPath();
+    for (var d = 17; d <= 27; d++) {
+      var fl = S * 0.085 * Math.sin((d - 16) / 12 * Math.PI) * (1 + 0.25 * Math.sin(T * 34 + d * 1.3));
+      ctx.moveTo(B[d][0], B[d][1]);
+      ctx.lineTo(B[d][0] - P[d][2] * fl + Math.cos(th) * 0, B[d][1] - P[d][3] * fl + S * 0.012);
+    }
+    ctx.stroke();
+
+    // head geometry
+    var hx = P[0][0] - S * 0.035, hy = P[0][1] - S * 0.055, hr = S * 0.098;
+    var sdx = -0.93, sdy = 0.36, sl = S * 0.25;
+    var px = -sdy, py = sdx;
+
+    // snout
+    ctx.fillStyle = fill; ctx.strokeStyle = line; ctx.lineWidth = lw;
+    ctx.shadowColor = line; ctx.shadowBlur = S * 0.06;
+    ctx.beginPath();
+    ctx.moveTo(hx + px * S * 0.04, hy + py * S * 0.04);
+    ctx.lineTo(hx + sdx * sl * 0.86 + px * S * 0.02, hy + sdy * sl * 0.86 + py * S * 0.02);
+    ctx.lineTo(hx + sdx * sl + px * S * 0.03, hy + sdy * sl + py * S * 0.03);
+    ctx.lineTo(hx + sdx * sl - px * S * 0.03, hy + sdy * sl - py * S * 0.03);
+    ctx.lineTo(hx + sdx * sl * 0.86 - px * S * 0.02, hy + sdy * sl * 0.86 - py * S * 0.02);
+    ctx.lineTo(hx - px * S * 0.04, hy - py * S * 0.04);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+
+    // coronet
+    ctx.beginPath();
+    for (var c = 0; c < 4; c++) {
+      var a = -1.95 + c * 0.42;
+      var r2 = hr * (1.45 + (c % 2) * 0.22);
+      ctx.moveTo(hx + Math.cos(a) * hr * 0.9, hy + Math.sin(a) * hr * 0.9);
+      ctx.lineTo(hx + Math.cos(a) * r2, hy + Math.sin(a) * r2);
+    }
+    ctx.stroke();
+
+    // body
+    ctx.beginPath();
+    ctx.moveTo(F[0][0], F[0][1]);
+    for (var f = 1; f <= N; f++) ctx.lineTo(F[f][0], F[f][1]);
+    for (var b = N; b >= 0; b--) ctx.lineTo(B[b][0], B[b][1]);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // bony rings
+    ctx.strokeStyle = soft; ctx.lineWidth = lw * 0.7;
+    ctx.beginPath();
+    for (var g = 3; g < N - 1; g += 2) {
+      ctx.moveTo(F[g][0], F[g][1]); ctx.lineTo(B[g][0], B[g][1]);
+    }
+    ctx.stroke();
+    // back spines
+    ctx.fillStyle = line;
+    for (var q = 3; q < N * 0.6; q += 4) {
+      ctx.beginPath();
+      ctx.arc(B[q][0] - P[q][2] * lw * 1.4, B[q][1] - P[q][3] * lw * 1.4, lw * 0.9, 0, 6.2832);
+      ctx.fill();
+    }
+
+    // head on top
+    ctx.fillStyle = fill; ctx.strokeStyle = line; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.arc(hx, hy, hr, 0, 6.2832); ctx.fill(); ctx.stroke();
+    // eye
+    var ex = hx + sdx * hr * 0.3, ey = hy + sdy * hr * 0.3 - hr * 0.18;
+    ctx.fillStyle = C.pearl;
+    ctx.beginPath(); ctx.arc(ex, ey, hr * 0.3, 0, 6.2832); ctx.fill();
+    ctx.fillStyle = C.abyss;
+    ctx.beginPath(); ctx.arc(ex + Math.sin(T * 0.9 + h.ph) * hr * 0.08, ey + Math.cos(T * 0.7 + h.ph) * hr * 0.06, hr * 0.15, 0, 6.2832); ctx.fill();
+
+    ctx.restore();
+  }
+
+  function step(dt) {
+    herd.forEach(function (h) {
+      h.x += h.vx * dt; h.y += h.vy * dt; h.vy *= 0.97;
+      var limit = Math.abs(h.vx) > 16 ? 0.985 : 1;
+      h.vx *= limit;
+      var m = h.size * 0.6;
+      if (h.x < -m) h.x = W + m; else if (h.x > W + m) h.x = -m;
+      if (h.y < H * 0.18) h.vy += 20 * dt; else if (h.y > H * 0.86) h.vy -= 20 * dt;
+    });
+  }
+
+  function draw(dt) {
+    dt = dt || 0;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    background();
+    drawPlankton(dt);
+    herd.slice().sort(function (a, b) { return a.size - b.size; }).forEach(drawHorse);
+    drawGrass();
+  }
+
+  function frame(now) {
+    var dt = Math.min(0.05, (now - last) / 1000 || 0);
+    last = now; T += dt;
+    step(dt); draw(dt);
+    if (!paused) raf = requestAnimationFrame(frame);
+  }
+  function play() { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(frame); }
+
+  tank.addEventListener('pointerdown', function (e) {
+    var r = tank.getBoundingClientRect();
+    var h = makeHorse(e.clientX - r.left, e.clientY - r.top);
+    if (paused) h.born = T - 1;
+    herd.push(h);
+    if (herd.length > MAX) herd.shift();
+    count();
+    if (paused) draw();
+  });
+
+  document.getElementById('stir').addEventListener('click', function () {
+    herd.forEach(function (h) {
+      h.hue = HUES[Math.floor(Math.random() * HUES.length)] + rnd(-8, 8);
+      h.vx = rnd(60, 160) * (Math.random() < 0.5 ? -1 : 1);
+      h.vy = rnd(-70, 70);
+      if (paused) { h.x = rnd(W * 0.1, W * 0.9); h.y = rnd(H * 0.3, H * 0.8); h.vx = rnd(6, 16) * Math.sign(h.vx); h.vy = 0; }
+    });
+    if (paused) draw();
+  });
+
+  var pb = document.getElementById('pause');
+  function label() { pb.textContent = paused ? 'Let them drift' : 'Hold still'; pb.setAttribute('aria-pressed', String(paused)); }
+  pb.addEventListener('click', function () {
+    paused = !paused; label();
+    if (paused) cancelAnimationFrame(raf); else play();
+  });
+
+  label();
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(tank); else window.addEventListener('resize', resize);
+  resize();
+  if (paused) { T = 2; herd.forEach(function (h) { h.born = 0; }); draw(); } else play();
+})();
+</script>
+
+</body></html>
