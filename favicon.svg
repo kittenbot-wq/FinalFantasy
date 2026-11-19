@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0" stop-color="#2a0c55"/>
+      <stop offset="1" stop-color="#14042e"/>
+    </radialGradient>
+    <radialGradient id="eye" cx="50%" cy="72%" r="70%">
+      <stop offset="0" stop-color="#00ffea"/>
+      <stop offset="0.55" stop-color="#1fa5d6"/>
+      <stop offset="1" stop-color="#22114a"/>
+    </radialGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- tile -->
+  <rect width="180" height="180" rx="38" fill="url(#bg)"/>
+
+  <!-- whiskers -->
+  <g stroke="#00ffea" stroke-width="2.4" stroke-linecap="round" opacity="0.85" filter="url(#glow)">
+    <path d="M36 113 L13 107"/><path d="M36 121 L12 123"/>
+    <path d="M144 113 L167 107"/><path d="M144 121 L168 123"/>
+  </g>
+
+  <!-- ears -->
+  <g stroke="#00ffea" stroke-width="3" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M37 84 L43 22 L88 54 Z" fill="#fbf7ff"/>
+    <path d="M143 84 L137 22 L92 54 Z" fill="#fbf7ff"/>
+  </g>
+  <path d="M48 70 L51 38 L74 56 Z" fill="#ff3fae"/>
+  <path d="M132 70 L129 38 L106 56 Z" fill="#ff3fae"/>
+
+  <!-- head -->
+  <ellipse cx="90" cy="100" rx="58" ry="52" fill="#fbf7ff" stroke="#00ffea" stroke-width="3" filter="url(#glow)"/>
+
+  <!-- forehead mark: blue rounded square + glyph, little arc and dot below -->
+  <g stroke="#14b8e8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="80" y="55" width="20" height="20" rx="5" fill="#c9f4ff"/>
+    <path d="M85 61 H94 Q95 61 95 62 V69"/>
+    <path d="M85 66 H90 V69"/>
+    <path d="M86.5 84 A3.5 3.5 0 0 1 93.5 84"/>
+  </g>
+  <circle cx="90" cy="89" r="1.8" fill="#14b8e8"/>
+
+  <!-- blush -->
+  <ellipse cx="50" cy="122" rx="10" ry="5.5" fill="#ff5fb8" opacity="0.45"/>
+  <ellipse cx="130" cy="122" rx="10" ry="5.5" fill="#ff5fb8" opacity="0.45"/>
+
+  <!-- big eyes -->
+  <g>
+    <ellipse cx="64" cy="106" rx="16" ry="18" fill="#1a0b3d"/>
+    <ellipse cx="64" cy="108" rx="13" ry="14.5" fill="url(#eye)"/>
+    <ellipse cx="64" cy="105" rx="8" ry="9.5" fill="#1a0b3d"/>
+    <circle cx="58.5" cy="98.5" r="5" fill="#fff"/>
+    <circle cx="69" cy="113" r="2.3" fill="#fff"/>
+
+    <ellipse cx="116" cy="106" rx="16" ry="18" fill="#1a0b3d"/>
+    <ellipse cx="116" cy="108" rx="13" ry="14.5" fill="url(#eye)"/>
+    <ellipse cx="116" cy="105" rx="8" ry="9.5" fill="#1a0b3d"/>
+    <circle cx="110.5" cy="98.5" r="5" fill="#fff"/>
+    <circle cx="121" cy="113" r="2.3" fill="#fff"/>
+  </g>
+
+  <!-- nose + :3 smile -->
+  <path d="M85.5 121 Q90 119.5 94.5 121 L90 126.5 Z" fill="#ff3fae" stroke="#ff3fae" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M90 126.5 V129 M80 128 Q85 135 90 129 Q95 135 100 128" fill="none" stroke="#2a1747" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

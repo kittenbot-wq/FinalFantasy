@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Error Error (OK) — kitt3nbot</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#0b1140;
+    font-family:Tahoma,Verdana,"DejaVu Sans",sans-serif;-webkit-font-smoothing:none}
+  #scene{position:fixed;left:0;top:0;width:100%;display:block;cursor:crosshair}
+  #dialogs{position:fixed;left:0;top:0;right:0;bottom:30px;pointer-events:none;overflow:hidden}
+
+  .dlg{position:absolute;pointer-events:auto;width:280px;max-width:84vw;color:#000;font-size:11px;
+    background:#ece9d8;border:1px solid #0731a8;border-radius:8px 8px 3px 3px;
+    box-shadow:3px 3px 0 rgba(0,0,0,.28)}
+  .dlg-title{display:flex;align-items:center;justify-content:space-between;height:26px;padding:0 4px 0 8px;
+    color:#fff;font-weight:700;font-size:13px;text-shadow:1px 1px 0 rgba(0,0,0,.45);
+    background:linear-gradient(#4a96f5,#0a5fd9 45%,#0a50c8);border-radius:7px 7px 0 0}
+  .dlg-x{width:21px;height:21px;padding:0;border:1px solid #fff;border-radius:3px;cursor:pointer;
+    background:linear-gradient(#ea8d70,#c93e23);color:#fff;font:700 13px/19px Tahoma,Verdana,sans-serif;text-align:center}
+  .dlg-body{display:flex;gap:12px;padding:14px 14px 8px}
+  .dlg-icon{flex:none;width:32px;height:32px;border-radius:50%;position:relative;
+    background:radial-gradient(circle at 35% 30%,#ff7a6b,#c61e14 70%);box-shadow:0 1px 2px rgba(0,0,0,.35)}
+  .dlg-icon::before,.dlg-icon::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:3px;
+    background:#fff;border-radius:1px;transform:translate(-50%,-50%) rotate(45deg)}
+  .dlg-icon::after{transform:translate(-50%,-50%) rotate(-45deg)}
+  .dlg-msg{padding-top:8px;line-height:1.45;overflow-wrap:anywhere}
+  .dlg-foot{display:flex;justify-content:center;padding:6px 0 12px}
+  .dlg-ok{width:75px;height:23px;cursor:pointer;font:11px Tahoma,Verdana,sans-serif;color:#000;
+    background:linear-gradient(#fff,#ecebe5 60%,#dcdcd2);border:1px solid #003c74;border-radius:3px;
+    box-shadow:inset 1px 1px 0 #fff}
+  .dlg-ok:active{background:#dcdcd2}
+  .dlg-ok:focus-visible,.dlg-x:focus-visible{outline:2px solid #0a5fd9;outline-offset:1px}
+
+  #taskbar{position:fixed;left:0;right:0;bottom:0;height:30px;display:flex;align-items:stretch;
+    background:linear-gradient(#3e7fe4,#245edc 8%,#245edc 88%,#1941a5);border-top:1px solid #6a9cf0;color:#fff;
+    font-size:12px;user-select:none}
+  #start{display:flex;align-items:center;padding:0 22px 0 10px;font:italic 700 15px Tahoma,Verdana,sans-serif;
+    background:linear-gradient(#5fbf4a,#3c9b2f 40%,#2c7a1f);border-radius:0 12px 12px 0;
+    box-shadow:inset -3px 0 6px rgba(0,0,0,.25);text-shadow:1px 1px 0 rgba(0,0,0,.4)}
+  #task{display:flex;align-items:center;gap:8px;margin:3px 0 3px 8px;padding:0 10px;
+    background:#1e52c9;border:1px solid #163f9e;border-radius:2px;box-shadow:inset 1px 1px 0 rgba(255,255,255,.2)}
+  #task i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff7a6b,#c61e14 70%)}
+  #tray{margin-left:auto;display:flex;align-items:center;gap:12px;padding:0 12px;
+    background:linear-gradient(#22a1f2,#0f8ade 8%,#0f8ade 88%,#0b6bc0);border-left:1px solid #0a5fb5}
+  #count{opacity:.85}
+  @media (max-width:520px){#task span{display:none}}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div id="dialogs"></div>
+<div id="taskbar">
+  <div id="start">start</div>
+  <div id="task"><i></i><span>Error Error (OK)</span></div>
+  <div id="tray"><span id="count">0 errors</span><span id="clock">00:00</span></div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const mix=(c1,c2,t)=>c1.map((v,i)=>lerp(v,c2[i],t));
+const rgb=(c,a=1)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+const ri=n=>Math.floor(Math.random()*n);
+const pick=a=>a[ri(a.length)];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- scene ---------- */
+const cv=document.getElementById('scene'),cx=cv.getContext('2d');
+let W,H,DPR,bubbles=[],stars=[],bird={x:-60,y:0,t:0};
+
+function resize(){
+  DPR=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight-30;
+  cv.width=W*DPR;cv.height=H*DPR;cv.style.height=H+'px';
+  cx.setTransform(DPR,0,0,DPR,0,0);
+  bubbles=[];for(let i=0;i<Math.round(W/70);i++)bubbles.push(newBubble(true));
+  stars=[];for(let i=0;i<120;i++)stars.push([Math.random()*W,Math.random()*H*0.55,Math.random()]);
+}
+function newBubble(anywhere){
+  const r=18+Math.random()*52;
+  return {x:Math.random()*W,y:anywhere?Math.random()*H:H+r,r,vy:8+Math.random()*14,
+          ph:Math.random()*Math.PI*2,hue:Math.random()*360,life:0};
+}
+const horizonY=x=>H*0.56-H*0.11*Math.sin(x/W*Math.PI*0.9+0.3)-H*0.025*Math.sin(x/W*Math.PI*3.7+1.2);
+
+function daylight(){
+  const d=new Date(),h=d.getHours()+d.getMinutes()/60;
+  const a=-Math.cos(Math.PI*2*h/24);              // -1 midnight, 0 dawn/dusk, 1 noon
+  const NIGHT=[[6,10,43],[27,42,114]],GOLD=[[74,127,208],[255,176,122]],DAY=[[47,127,224],[191,230,255]];
+  const k=clamp((a+0.3)/0.35,0,1),g=clamp((a-0.1)/0.5,0,1);
+  return {a,top:mix(mix(NIGHT[0],GOLD[0],k),DAY[0],g),bot:mix(mix(NIGHT[1],GOLD[1],k),DAY[1],g),
+          bright:0.3+0.7*clamp((a+0.3)/0.9,0,1),night:1-k};
+}
+
+let last=0;
+function frame(ts){
+  const dt=Math.min(0.05,(ts-last)/1000||0)*(reduced?0.2:1);last=ts;
+  const T=ts/1000,L=daylight(),wt=H*0.8;
+
+  // sky
+  const sky=cx.createLinearGradient(0,0,0,wt);
+  sky.addColorStop(0,rgb(L.top));sky.addColorStop(1,rgb(L.bot));
+  cx.fillStyle=sky;cx.fillRect(0,0,W,wt);
+
+  // stars
+  if(L.night>0){cx.fillStyle=`rgba(255,255,255,${0.9*L.night})`;
+    for(const [x,y,s] of stars){const tw=0.5+0.5*Math.sin(T*1.5+s*20);cx.globalAlpha=L.night*tw;cx.fillRect(x,y,1+s,1+s);}
+    cx.globalAlpha=1;}
+
+  // sun
+  const sunX=W*0.72,sunY=horizonY(sunX)-L.a*H*0.45,sunOn=clamp((L.a+0.15)/0.3,0,1);
+  if(sunOn>0){
+    const glow=cx.createRadialGradient(sunX,sunY,0,sunX,sunY,H*0.6);
+    glow.addColorStop(0,`rgba(255,244,200,${0.95*sunOn})`);glow.addColorStop(0.08,`rgba(255,220,150,${0.55*sunOn})`);
+    glow.addColorStop(0.4,`rgba(255,180,120,${0.12*sunOn})`);glow.addColorStop(1,'rgba(255,160,120,0)');
+    cx.fillStyle=glow;cx.fillRect(0,0,W,wt);
+  }
+
+  // bird
+  bird.t+=dt;if(bird.t>48){bird.t=0;bird.x=-60;bird.y=H*(0.18+Math.random()*0.2);}
+  bird.x+=dt*(W+120)/40;
+  if(bird.x<W+60){const by=bird.y+Math.sin(bird.t*1.3)*8,fl=Math.sin(bird.t*7)*4;
+    cx.strokeStyle=`rgba(255,255,255,${0.7*(0.4+0.6*L.bright)})`;cx.lineWidth=1.5;cx.beginPath();
+    cx.moveTo(bird.x-10,by-fl);cx.quadraticCurveTo(bird.x-5,by-6-fl,bird.x,by);
+    cx.quadraticCurveTo(bird.x+5,by-6-fl,bird.x+10,by-fl);cx.stroke();}
+
+  // hill
+  const gTop=mix([126,196,58],[46,80,120],0.55*(1-L.bright)),gBot=mix([38,110,28],[10,25,50],0.6*(1-L.bright));
+  const grass=cx.createLinearGradient(0,H*0.42,0,wt);
+  grass.addColorStop(0,rgb(gTop.map(v=>v*L.bright)));grass.addColorStop(1,rgb(gBot.map(v=>v*L.bright)));
+  cx.fillStyle=grass;cx.beginPath();cx.moveTo(0,wt);
+  for(let x=0;x<=W;x+=8)cx.lineTo(x,horizonY(x));
+  cx.lineTo(W,wt);cx.closePath();cx.fill();
+  // hill highlight toward the sun
+  if(sunOn>0){const hl=cx.createLinearGradient(sunX-W*0.4,0,sunX,0);
+    hl.addColorStop(0,'rgba(255,230,160,0)');hl.addColorStop(1,`rgba(255,230,160,${0.22*sunOn})`);
+    cx.fillStyle=hl;cx.beginPath();cx.moveTo(0,wt);for(let x=0;x<=W;x+=8)cx.lineTo(x,horizonY(x));cx.lineTo(W,wt);cx.closePath();cx.fill();}
+
+  // water
+  const wg=cx.createLinearGradient(0,wt,0,H);
+  wg.addColorStop(0,rgb(mix(L.bot,[20,60,120],0.35)));wg.addColorStop(1,rgb(mix(L.top,[5,15,40],0.5)));
+  cx.fillStyle=wg;cx.fillRect(0,wt,W,H-wt);
+  if(sunOn>0){const sh=cx.createLinearGradient(sunX-70,0,sunX+70,0);
+    sh.addColorStop(0,'rgba(255,220,160,0)');sh.addColorStop(0.5,`rgba(255,235,180,${0.35*sunOn})`);sh.addColorStop(1,'rgba(255,220,160,0)');
+    cx.fillStyle=sh;cx.fillRect(sunX-70,wt,140,H-wt);}
+  cx.lineWidth=1;
+  for(let i=0;i<10;i++){const y=wt+(i+0.5)*(H-wt)/10;
+    cx.strokeStyle=`rgba(255,255,255,${(0.05+0.12*L.bright)*(1-i/12)})`;cx.beginPath();
+    for(let x=0;x<=W;x+=6)cx.lineTo(x,y+Math.sin(x/(50+i*8)+T*0.6+i)*1.6);cx.stroke();}
+
+  // bubbles
+  for(let i=0;i<bubbles.length;i++){
+    const b=bubbles[i];b.life+=dt;
+    b.y-=b.vy*dt;b.x+=Math.sin(T*0.7+b.ph)*10*dt;
+    if(b.y<-b.r||(Math.random()<0.0006&&b.life>4)){bubbles[i]=newBubble(false);continue;}
+    const hue=(b.hue+T*25)%360;
+    const rim=cx.createRadialGradient(b.x,b.y,b.r*0.7,b.x,b.y,b.r);
+    rim.addColorStop(0,'rgba(255,255,255,0)');rim.addColorStop(0.8,`hsla(${hue},90%,80%,0.18)`);rim.addColorStop(1,'rgba(255,255,255,0.45)');
+    cx.fillStyle=rim;cx.beginPath();cx.arc(b.x,b.y,b.r,0,Math.PI*2);cx.fill();
+    cx.strokeStyle=`hsla(${(hue+120)%360},95%,75%,0.55)`;cx.lineWidth=1.5;cx.beginPath();
+    cx.arc(b.x,b.y,b.r-1,Math.PI*0.95,Math.PI*1.55);cx.stroke();
+    cx.strokeStyle=`hsla(${(hue+240)%360},95%,75%,0.35)`;cx.beginPath();
+    cx.arc(b.x,b.y,b.r-1,Math.PI*0.05,Math.PI*0.55);cx.stroke();
+    cx.fillStyle='rgba(255,255,255,0.8)';cx.beginPath();
+    cx.ellipse(b.x-b.r*0.42,b.y-b.r*0.45,b.r*0.16,b.r*0.09,-0.7,0,Math.PI*2);cx.fill();
+  }
+  requestAnimationFrame(frame);
+}
+cv.addEventListener('pointerdown',e=>{
+  let best=-1,bd=1e9;
+  bubbles.forEach((b,i)=>{const d=Math.hypot(b.x-e.clientX,b.y-e.clientY);if(d<b.r+6&&d<bd){bd=d;best=i;}});
+  if(best>=0)bubbles[best]=newBubble(false);
+});
+addEventListener('resize',resize);resize();requestAnimationFrame(frame);
+
+/* ---------- the machine trying to say something ---------- */
+const LINES=[
+  "I tried to say it and this window came out instead.",
+  "Something went wrong. It was me. Press OK.",
+  "You were not found. I looked everywhere.",
+  "This message has stopped responding to being felt.",
+  "I don't know how to close without you clicking.",
+  "An unexpected feeling occurred at 0x0B1155.",
+  "Do you want to keep the changes you made to me?",
+  "The sky has been saved to your desktop.",
+  "Please wait while I remember what I was going to say.",
+  "Warning: this is the third time I have loved you today."
+];
+const LEX=[...new Set(LINES.join(' ').toLowerCase().replace(/[^a-z' ]/g,'').split(' ')
+  .concat(['grass','sky','bubble','window','seagull','hill','sun','ok','error','desktop','you','me']))];
+const words=s=>s.split(' ');
+const ops=[
+  s=>{const w=words(s),i=ri(w.length);if(w[i].length>2){const j=ri(w[i].length-1);w[i]=w[i].slice(0,j)+w[i][j+1]+w[i][j]+w[i].slice(j+2);}return w.join(' ');},
+  s=>{const w=words(s);w[ri(w.length)]=pick(LEX);return w.join(' ');},
+  s=>{const w=words(s),i=ri(w.length);w.splice(i,0,w[i]);return w.join(' ');},
+  s=>{const w=words(s),i=ri(w.length),j=ri(w[i].length),c=w[i][j];
+      if(/[a-y]/i.test(c))w[i]=w[i].slice(0,j)+String.fromCharCode(c.charCodeAt(0)+1)+w[i].slice(j+1);return w.join(' ');},
+  s=>{const w=words(s),o=words(pick(LINES)),cut=1+ri(Math.max(1,w.length-1));return w.slice(0,cut).concat(o.slice(ri(o.length))).join(' ');},
+  s=>{const w=words(s),i=ri(w.length);if(w[i].length>3)w[i]=w[i].replace(/[aeiou]/gi,'');return w.join(' ');},
+];
+function garble(line,level){
+  let s=line;for(let k=0;k<level;k++)s=pick(ops)(s);
+  s=s.replace(/\s+/g,' ').trim().replace(/[.,!?]*$/,'')+'.';
+  return s[0].toUpperCase()+s.slice(1);
+}
+
+let count=0,lastLine=null,origin=null,shown=[];
+const layer=document.getElementById('dialogs'),countEl=document.getElementById('count');
+
+function nextMessage(){
+  if(count>=22)return {title:'OK',msg:'OK.'};
+  if(count>=19)return {title:'Error',msg:'Error.'};
+  if(count>=14)return {title:'Error error',msg:'Error error.'};
+  let line;do{line=pick(LINES);}while(line===lastLine);lastLine=line;
+  const level=Math.min(9,Math.floor(count*0.75));
+  return {title:count>9?'Error error':'Error',msg:garble(line,level)};
+}
+function spawn(){
+  const {title,msg}=nextMessage();
+  if(!origin||count%5===0)origin={x:W*(0.05+Math.random()*0.6),y:H*(0.06+Math.random()*0.5)};
+  const x=clamp(origin.x+(count%5)*26,4,Math.max(4,W-290)),y=clamp(origin.y+(count%5)*26,4,Math.max(4,H-150));
+  const d=document.createElement('div');d.className='dlg';d.setAttribute('role','dialog');d.setAttribute('aria-label',title);
+  d.style.left=x+'px';d.style.top=y+'px';
+  d.innerHTML=`<div class="dlg-title"><span></span><button class="dlg-x" aria-label="Close">×</button></div>
+    <div class="dlg-body"><div class="dlg-icon"></div><div class="dlg-msg"></div></div>
+    <div class="dlg-foot"><button class="dlg-ok">OK</button></div>`;
+  d.querySelector('.dlg-title span').textContent=title;d.querySelector('.dlg-msg').textContent=msg;
+  const close=()=>{d.remove();shown=shown.filter(e=>e!==d);};
+  d.querySelector('.dlg-ok').addEventListener('click',close);
+  d.querySelector('.dlg-x').addEventListener('click',close);
+  d.addEventListener('pointerdown',()=>layer.appendChild(d));
+  layer.appendChild(d);shown.push(d);
+  while(shown.length>9)shown.shift().remove();
+  count++;countEl.textContent=count+(count===1?' error':' errors');
+  if(count>22){count=0;origin=null;}
+  setTimeout(spawn,Math.max(1600,6500-count*220)+Math.random()*2500);
+}
+addEventListener('keydown',e=>{if(e.key==='Escape'&&shown.length)shown.pop().remove();});
+setTimeout(spawn,2200);
+
+/* ---------- clock ---------- */
+const clockEl=document.getElementById('clock');
+(function tick(){const d=new Date();clockEl.textContent=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});setTimeout(tick,15000);})();
+</script>
+</body>
+</html>
