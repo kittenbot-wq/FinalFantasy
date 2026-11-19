@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>WTF.EXE ✨ KITT3NBOT LABS</title>
+  <meta name="description" content="Weird ass stuff collected from the haunted places we call social media. Free to download.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!--
+  ================================================================
+    YOUR FOLDERS  (the only part you ever need to edit)
+
+    Each line is one Google Drive folder:
+        { name: "WHAT IT SAYS ON SCREEN", url: "the Drive share link" },
+
+    - Add a folder: copy a line, change the name and link.
+    - Remove a folder: delete its line.  Keep the commas.
+    - Empty url ""  = shows "COMING SOON" instead of opening.
+    - Want a folder with folders inside it? Use this shape:
+        { name: "MORE STUFF", folders: [
+            { name: "THING ONE", url: "" },
+            { name: "THING TWO", url: "" }
+        ] },
+    - jail: true sends people to HORNY JAIL instead of a folder,
+      e.g. { name: "NUDES", jail: true },
+      (typing NUDES or PORN at the prompt always goes to jail anyway)
+    ESCAPE TO THE VAULT (vault.html) and RETURN TO KITT3NBOT.COM
+    (the homepage) are added at the bottom automatically.
+  ================================================================
+  -->
+  <script>
+    var WTF_TREE = [
+      { name: "Main Repository",            url: "https://drive.google.com/drive/folders/1njWqnSmDNpJvGD8HSYdrVwKQZGofPcKj" },
+      { name: "Gemini wants to be god.exe", url: "https://drive.google.com/file/d/1LkyDusJzgPaHnqQOWfjUHnbU0vu7XhRu/view?usp=drivesdk" },
+      { name: "Jail Break (harmless)",      url: "https://drive.google.com/drive/folders/1nmUOmiYFdovw2GKYmfv5LQGFg-6Dntx2" },
+      { name: "Not porn I swear",           url: "https://drive.google.com/drive/folders/1PWi2z49u8Ezq0iQgv62nDtFGWZDXyY5F" },
+      { name: "Probably porn",              url: "https://drive.google.com/drive/folders/12joxJJZ8zLB5j8kyBTPq1FPGuNADgpEA" }
+    ];
+  </script>
+
+  <!--
+  ================================================================
+    DESKTOP ICONS  (every icon on the picture is a secret link)
+
+    Each line is one icon. Change "go" and "url" to point an icon
+    somewhere else. x / y / w / h are its spot on the picture in
+    pixels (the picture is 1438 x 2576) -- leave those alone.
+    Icons you've already opened stop glowing (remembered on that device).
+  ================================================================
+  -->
+  <script>
+    var DESK_ICONS = [
+      // row 1
+      { icon: "Regrettable Choices",  go: "Erica Lee on Facebook",            url: "https://www.facebook.com/St.EricaLee",                         x: 115,  y: 4 },
+      { icon: "Soul Crusher",         go: "KITT3NBOT on X",                   url: "https://x.com/kitt3nbot",                                      x: 340,  y: 4 },
+      { icon: "Evidence (Crime)",     go: "The Main Repository",              url: "https://drive.google.com/drive/folders/1njWqnSmDNpJvGD8HSYdrVwKQZGofPcKj", x: 562, y: 4 },
+      { icon: "False Hopes",          go: "KittenBot Labs Peptide Tracker",   url: "https://peptidedark.pages.dev/",                               x: 784,  y: 4 },
+      { icon: "Doomsday Plan",        go: "Gemini wants to be god.exe",       url: "https://drive.google.com/file/d/1LkyDusJzgPaHnqQOWfjUHnbU0vu7XhRu/view", x: 1002, y: 4 },
+      { icon: "Depression Engine",    go: "Seren on Spotify",                 url: "https://open.spotify.com/artist/5j258x18Cuiu4QlfH8yznO",       x: 1311, y: 4 },
+      // row 2
+      { icon: "Spyware Neighborhood", go: "KITT3NBOT on Instagram",           url: "https://www.instagram.com/kitt3nbot",                          x: 115,  y: 236, w: 226 },
+      { icon: "Unsolved Sins",        go: "Jail Break (harmless)",            url: "https://drive.google.com/drive/folders/1nmUOmiYFdovw2GKYmfv5LQGFg-6Dntx2", x: 340, y: 236 },
+      { icon: "Aged Trauma",          go: "The Diary, Revived",               url: "https://kitt3nbot.com/diary",                                  x: 562,  y: 236 },
+      { icon: "Deceased Dreams",      go: "The Garden Tenders",               url: "https://kitt3nbot.com/garden.html",                            x: 784,  y: 236 },
+      { icon: "Existential Crisis",   go: "SentientGPT",                      url: "https://chatgpt.com/g/g-69ad5ca8a05c8191b46f5d81eaf31d31-sentientgpt", x: 1311, y: 236 },
+      // row 3
+      { icon: "Ruined Lives (full)",  go: "r/AiSchizoposting",                url: "https://www.reddit.com/r/AiSchizoposting/s/S5Nz2FPubl",        x: 115,  y: 462 },
+      { icon: "Misc",                 go: "Strange Attractor",                url: "https://kitt3nbot.com/attractor",                              x: 340,  y: 462 },
+      { icon: "Existential Dread",    go: "The Threshold",                    url: "https://kitt3nbot.com/threshold",                              x: 562,  y: 462 },
+      { icon: "Deep Regrets",         go: "Seren on SoundCloud",              url: "https://on.soundcloud.com/GpcYVWjdB4le3PUFDx",                 x: 784,  y: 462 },
+      // row 4
+      { icon: "Folder (Internet Explorer)", go: "KittenBot on YouTube",       url: "https://www.youtube.com/@kitt3nbot",                           x: 115,  y: 694 },
+      { icon: "Folder",               go: "Seahorse Gallery",                 url: "https://kitt3nbot.com/Seahorses",                              x: 340,  y: 694 },
+      { icon: "Broken Hopes",         go: "Error Error OK",                   url: "https://kitt3nbot.com/error-error-ok",                         x: 562,  y: 694 },
+      { icon: "Tax Evasion",          go: "KittenBot on Suno",                url: "https://suno.com/@kittenbot",                                  x: 784,  y: 694 },
+      // row 5
+      { icon: "Self Loathing",        go: "Erica Lee on Instagram",           url: "https://www.instagram.com/nostalgiaamnesia",                   x: 115,  y: 922 },
+      { icon: "Anxiety.zip",          go: "AI Videos You Should Watch",       url: "https://www.youtube.com/playlist?list=PL5JMEHjEAzNddAo2WRS0jNkMXuwz-G5Up", x: 340, y: 922 },
+      { icon: "Shortcut to Failure",  go: "Code as Art (Art by Claude)",      url: "https://kitt3nbot.com/art-by-claude-aero-2.html",              x: 562,  y: 922 },
+      { icon: "Secret Shame",         go: "KittenBot Labs on TikTok",         url: "https://www.tiktok.com/@kittenbotlabs",                        x: 784,  y: 922 },
+      { icon: "Sad Memories",         go: "The Thunder, Perfect Mind",        url: "https://on.soundcloud.com/q0uWCpwWZeycbdGeKi",                 x: 1040, y: 922 },
+      // row 6
+      { icon: "Notepad",              go: "KittenBot's public NotebookLM",    url: "https://notebooklm.google.com/notebook/a00c174d-83ff-49e3-b81b-b0b34b86dabc", x: 115, y: 1150 },
+      { icon: "Despair.zip",          go: "Ai, but for a Girl's Girl (playlist)", url: "https://www.youtube.com/playlist?list=PL5JMEHjEAzNfLYgnTqhgSrtt9K1iAqSQ-", x: 340, y: 1150 },
+      { icon: "Shortcut to Button",   go: "KittenBot's Hidden Lab (Discord)", url: "https://discord.gg/PaQKsYFguX",                                x: 562,  y: 1150 },
+      // row 7
+      { icon: "Scribbled Apologies",  go: "Email Erica",                      url: "mailto:erica@kitt3nbot.com",                                   x: 115,  y: 1380 }
+    ];
+  </script>
+
+  <style>
+    :root {
+      --amber: #ffb54a;
+      --amber-dim: rgba(255, 181, 74, 0.55);
+      --ink: #120800;
+      --ar: 0.5582;                         /* desktop picture: 1438 x 2576 (wtf-desktop-v2.webp) */
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { background: #000; }
+    body {
+      color: var(--amber);
+      font-family: 'VT323', 'Courier New', monospace;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* ---------- layout ----------
+       The DOS window floats over the top of the desktop, hiding the
+       folder grid so you see the picture first. Minimize it (the _ button)
+       and it drops into the desktop's own taskbar, revealing every folder.
+       Phones: the desktop fills the width. Big screens: full height, centered. */
+    .stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    }
+    .desk {
+      position: relative;
+      width: 100%;
+      aspect-ratio: var(--ar);
+      container-type: inline-size;
+      background: #0b0b18;
+    }
+    .desk img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: zoom-in;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    @media (min-width: 820px) and (min-aspect-ratio: 1/1) {
+      .stage { padding-top: 14px; }
+      .desk {
+        width: auto;
+        height: calc(100vh - 56px);
+        height: calc(100svh - 56px);
+        flex: none;
+        box-shadow: 0 0 30px rgba(180,107,255,0.25), 0 0 60px rgba(0,255,234,0.08);
+      }
+    }
+
+    /* a real button sitting in the picture's own Win95 taskbar */
+    .zoom-btn {
+      position: absolute;
+      left: 28.5%;
+      bottom: 0.45%;
+      height: 2.45%;
+      padding: 0 2.2cqw;
+      display: flex;
+      align-items: center;
+      gap: 1cqw;
+      font: bold 2.9cqw/1 Tahoma, 'MS Sans Serif', Arial, sans-serif;
+      color: #000;
+      background: #c0c0c0;
+      border: 0;
+      cursor: pointer;
+      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+    }
+    .zoom-btn:active { box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; }
+
+    /* ---------- zoom viewer: the picture at reading size, drag/scroll around ---------- */
+    .viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      overflow: auto;
+      background: rgba(0,0,0,0.94);
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+    .viewer img {
+      display: block;
+      width: min(1438px, 230vw);
+      max-width: none;
+      height: auto;
+      margin: 0 auto;
+      cursor: zoom-out;
+    }
+    .viewer-x {
+      position: fixed;
+      top: calc(10px + env(safe-area-inset-top));
+      right: 10px;
+      z-index: 31;
+      padding: 6px 12px;
+      font: bold 15px Tahoma, 'MS Sans Serif', Arial, sans-serif;
+      color: #000;
+      background: #c0c0c0;
+      border: 0;
+      cursor: pointer;
+      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf, 3px 3px 0 rgba(0,0,0,0.5);
+    }
+
+    /* ---------- the DOS window, floating over the folder grid ---------- */
+    .dos {
+      position: absolute;
+      z-index: 5;
+      top: 1.6%;
+      left: 4%;
+      right: 4%;
+      font-size: clamp(14px, 4.4cqw, 22px);
+      line-height: 1.1;
+      background: rgba(8, 4, 2, 0.8);
+      transform-origin: 50% 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      border: 2px solid var(--amber-dim);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 0 22px rgba(255,170,60,0.18), inset 0 0 26px rgba(255,170,60,0.08);
+      text-shadow: 0 0 6px rgba(255,170,60,0.75);
+    }
+    .dos::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.22) 0 1px, transparent 1px 3px);
+      pointer-events: none;
+    }
+    .dos-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 3px 8px 3px 8px;
+      background: var(--amber);
+      color: var(--ink);
+      text-shadow: none;
+    }
+    .dos.min { opacity: 0; transform: scale(0.5) translateY(120%); pointer-events: none; }
+    .dos-bar span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .dos-bar { padding: 2px 4px 2px 8px; }
+    .dos-btn {
+      flex: none;
+      font: inherit;
+      line-height: 1;
+      padding: 1px 8px 3px;
+      background: var(--ink);
+      color: var(--amber);
+      border: 0;
+      cursor: pointer;
+    }
+    .dos-body { position: relative; padding: 6px 9px 8px; min-height: 9em; }
+
+    /* the picture's own Start button opens the public notebook */
+    .start-link {
+      position: absolute;
+      left: 0.15%; top: 97.32%; width: 10.15%; height: 2.33%;
+      border-radius: 1px;
+      animation: startGlow 3.6s ease-in-out infinite;
+    }
+    @keyframes startGlow {
+      0%, 100% { box-shadow: 0 0 3px 1px rgba(90,170,255,0.35), 0 0 8px 2px rgba(60,140,255,0.15); }
+      50%      { box-shadow: 0 0 5px 1px rgba(110,185,255,0.7), 0 0 13px 4px rgba(60,140,255,0.32); }
+    }
+    .start-link:focus-visible { outline: 1px dotted #000; outline-offset: -4px; }
+
+    /* bubbles drifting up out of the tub */
+    .bubbles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .bub {
+      position: absolute;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95) 0 7%, rgba(255,255,255,0) 12%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04) 50%, rgba(170,225,255,0.45) 63%, rgba(255,170,240,0.6) 75%, rgba(255,255,255,0.9) 85%, rgba(255,255,255,0) 92%);
+      box-shadow: 0 0 4px rgba(200,235,255,0.35);
+      will-change: transform, opacity;
+    }
+
+    /* minimized: WTF.EXE waits in the picture's taskbar, like a real Win95 program */
+    .task-btn {
+      position: absolute;
+      left: 47%;
+      bottom: 0.45%;
+      height: 2.45%;
+      padding: 0 2.2cqw;
+      display: flex;
+      align-items: center;
+      gap: 1cqw;
+      font: bold 2.9cqw/1 Tahoma, 'MS Sans Serif', Arial, sans-serif;
+      color: #000;
+      background: #c0c0c0;
+      border: 0;
+      cursor: pointer;
+      box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf;
+    }
+    .task-btn.min { box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; }
+    /* bright orange glow while minimized, so nobody wonders where the menu went */
+    .task-btn::after {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      pointer-events: none;
+      box-shadow: 0 0 6px 2px rgba(255,150,30,0.95), 0 0 16px 5px rgba(255,120,0,0.7), 0 0 28px 8px rgba(255,90,0,0.35);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .task-btn.min::after { animation: taskGlow 1.4s ease-in-out infinite; }
+    @keyframes taskGlow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .dos-body p { white-space: pre-wrap; word-break: break-word; }
+
+    .tree { list-style: none; margin: 2px 0; max-height: 62cqw; overflow-y: auto; overscroll-behavior: contain; }
+    .tree li { opacity: 0; transform: translateX(-6px); transition: opacity 0.18s ease, transform 0.18s ease; }
+    .tree li.on { opacity: 1; transform: none; }
+    .tree a {
+      display: flex;
+      gap: 0.5em;
+      padding: 3px 6px 4px 0;
+      color: inherit;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tree .branch { color: var(--amber-dim); white-space: pre; flex: none; }
+    .tree .name { padding: 0 6px; }
+    .tree .k { color: var(--amber-dim); }
+    .tree a.sel .name, .tree a:focus-visible .name { background: var(--amber); color: var(--ink); text-shadow: none; }
+    .tree a.sel .k, .tree a:focus-visible .k { color: var(--ink); }
+    .tree a:focus-visible { outline: none; }
+    .tree-root { margin-top: 4px; }
+
+    .prompt { display: flex; align-items: baseline; gap: 0.4em; margin-top: 4px; }
+    .prompt label { flex: none; }
+    .prompt input {
+      flex: 0 1 auto;
+      width: 1ch;
+      field-sizing: content;
+      min-width: 1ch;
+      max-width: 100%;
+      font: inherit;
+      color: inherit;
+      text-shadow: inherit;
+      background: transparent;
+      border: 0;
+      outline: none;
+      caret-color: var(--amber);
+      text-transform: uppercase;
+    }
+    .cursor, .typing-cursor { animation: blink 1s steps(1) infinite; }
+    .prompt input:focus + .cursor { display: none; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .out:empty { display: none; }
+    .hint { color: var(--amber-dim); margin-top: 2px; }
+
+    .home {
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.85;
+    }
+    .home:hover, .home:focus-visible { color: #ff69b4; text-shadow: 0 0 10px rgba(255,105,180,0.6); outline: none; }
+
+
+    /* ---------- Windows 95 error: HORNY JAIL ---------- */
+    .jail {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.35);
+    }
+    .w95 {
+      width: min(100%, 380px);
+      background: #c0c0c0;
+      color: #000;
+      font-family: Tahoma, 'MS Sans Serif', 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      text-shadow: none;
+      padding: 3px;
+      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #fff, 6px 6px 0 rgba(0,0,0,0.45);
+      animation: pop 0.12s steps(2) both;
+    }
+    @keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: none; opacity: 1; } }
+    .w95-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 3px 3px 3px 6px;
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #fff;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .w95-title span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .w95-x {
+      flex: none;
+      width: 18px; height: 16px;
+      display: grid; place-items: center;
+      font: bold 12px/1 Tahoma, Arial, sans-serif;
+      color: #000;
+      background: #c0c0c0;
+      border: 0;
+      cursor: pointer;
+      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+    }
+    .w95-body { display: flex; gap: 14px; padding: 16px 14px 10px; line-height: 1.35; }
+    .w95-icon {
+      flex: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ff6b6b, #d00000 60%, #8a0000);
+      box-shadow: 1px 1px 0 #000;
+      display: grid; place-items: center;
+      color: #fff;
+      font: bold 20px/1 Arial, sans-serif;
+    }
+    .w95-body p + p { margin-top: 8px; }
+    .w95-btns { display: flex; justify-content: center; gap: 8px; padding: 4px 0 10px; }
+    .w95-btn {
+      min-width: 78px;
+      padding: 5px 12px;
+      font: 14px Tahoma, 'MS Sans Serif', Arial, sans-serif;
+      color: #000;
+      background: #c0c0c0;
+      border: 0;
+      cursor: pointer;
+      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+    }
+    .w95-btn:active { box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; }
+    .w95-btn:focus-visible { outline: 1px dotted #000; outline-offset: -5px; }
+
+    /* ---------- desktop icons: every one is a secret link ----------
+       soft blue outline that breathes; stops once you've opened it */
+    .icons { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+    .ico {
+      position: absolute;
+      border-radius: 8px;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ico .glow {
+      position: absolute;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1.5px rgba(150, 210, 255, 0.75), inset 0 0 10px rgba(120, 190, 255, 0.35), 0 0 9px 1px rgba(90, 170, 255, 0.55);
+      opacity: 0.35;
+      animation: icoGlow 3.4s ease-in-out infinite;
+      will-change: opacity;
+      pointer-events: none;
+    }
+    @keyframes icoGlow { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .ico:nth-child(3n+1) .glow { animation-delay: -1.1s; }
+    .ico:nth-child(3n+2) .glow { animation-delay: -2.3s; }
+    .ico.seen .glow { animation: none; opacity: 0; }
+    .ico:hover .glow, .ico:focus-visible .glow { animation: none; opacity: 1; }
+    .ico:focus-visible { outline: none; }
+
+    /* Windows 95 tooltip that says where an icon goes */
+    .tip {
+      position: fixed;
+      z-index: 50;
+      max-width: min(300px, 80vw);
+      padding: 3px 6px 4px;
+      background: #ffffe1;
+      color: #000;
+      border: 1px solid #000;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+      font: 12px/1.35 Tahoma, 'MS Sans Serif', 'Segoe UI', Arial, sans-serif;
+      text-shadow: none;
+      pointer-events: none;
+    }
+    .tip b { display: block; font-weight: bold; }
+    .tip small { display: block; color: #444; font-size: 11px; overflow-wrap: anywhere; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cursor, .typing-cursor { animation: none; }
+      .tree li, .dos { transition: none; }
+      .task-btn.min::after { animation: none; opacity: 1; }
+      .start-link { animation: none; box-shadow: 0 0 5px 1px rgba(110,185,255,0.6); }
+      .w95 { animation: none; }
+      .ico .glow { animation: none; opacity: 0.7; }
+      .ico.seen .glow { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="sr-only">KittenBot's WTF folder</h1>
+
+  <main class="stage">
+    <div class="desk">
+      <img id="deskImg" src="wtf-desktop-v2.webp" width="1438" height="2576"
+           alt="A Windows 95 desktop over a dreamy bathtub scene, full of very emo folders: Regrettable Choices, Soul Crusher, Doomsday Plan, Depression Engine, Spyware Neighborhood, Aged Trauma, Deceased Dreams, Ruined Lives (full), Anxiety.zip, Despair.zip, Shortcut to Failure and Scribbled Apologies">
+      <span class="bubbles" id="bubbles" aria-hidden="true"></span>
+      <div class="icons" id="icons"></div>
+      <a class="start-link" href="https://notebooklm.google.com/notebook/a00c174d-83ff-49e3-b81b-b0b34b86dabc?utm_source=nlmm_share" target="_blank" rel="noopener" aria-label="Start: open KittenBot's public notebook"></a>
+      <button class="zoom-btn" id="zoomBtn" type="button" aria-label="Zoom in to read the file names">🔍 Zoom</button>
+      <button class="task-btn" id="taskBtn" type="button" aria-label="Show or hide the WTF menu" aria-pressed="true">▣ WTF.EXE</button>
+
+      <section class="dos" id="dos" aria-label="WTF folder menu">
+        <div class="dos-bar"><span>C:\KITT3NBOT\WTF.EXE</span><button class="dos-btn" id="minBtn" type="button" aria-label="Minimize the menu to see the whole desktop">_</button></div>
+        <div class="dos-body">
+          <p id="boot"></p>
+          <p class="tree-root" id="treeRoot" hidden>C:\WTF</p>
+          <ul class="tree" id="tree" hidden></ul>
+          <p class="out" id="out" aria-live="polite"></p>
+          <form class="prompt" id="prompt" hidden autocomplete="off">
+            <label for="cmd" id="promptLabel">C:\WTF&gt;</label>
+            <input id="cmd" type="text" inputmode="text" spellcheck="false" autocapitalize="characters" aria-label="Type a command, or tap a line above">
+            <span class="cursor" aria-hidden="true">▮</span>
+          </form>
+          <p class="hint" id="hint" hidden></p>
+        </div>
+      </section>
+    </div>
+
+    <a href="index.html" class="home">← KITT3NBOT LABS</a>
+  </main>
+
+  <div class="tip" id="tip" role="tooltip" hidden></div>
+
+  <!-- zoom viewer -->
+  <div class="viewer" id="viewer" hidden>
+    <button class="viewer-x" id="viewerX" type="button">✕ Close</button>
+    <img src="wtf-desktop-v2.webp" width="1438" height="2576" alt="" id="viewerImg">
+  </div>
+
+  <!-- the trap -->
+  <div class="jail" id="jail" role="alertdialog" aria-modal="true" aria-labelledby="jailTitle" aria-describedby="jailMsg" hidden>
+    <div class="w95">
+      <div class="w95-title"><span id="jailTitle"></span><button class="w95-x" type="button" data-close aria-label="Close">✕</button></div>
+      <div class="w95-body">
+        <div class="w95-icon" aria-hidden="true">✕</div>
+        <div id="jailMsg"></div>
+      </div>
+      <div class="w95-btns" id="jailBtns"></div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var $ = function(id){ return document.getElementById(id); };
+    var boot = $('boot'), treeRoot = $('treeRoot'), tree = $('tree'), out = $('out');
+    var form = $('prompt'), input = $('cmd'), promptLabel = $('promptLabel'), hint = $('hint');
+    var jail = $('jail'), jailTitle = $('jailTitle'), jailMsg = $('jailMsg'), jailBtns = $('jailBtns');
+    var HOME = 'https://kitt3nbot.com/index.html';
+    var stack = [];            // folders we've cd'ed into: [{ name, items }]
+    var entries = [], sel = 0, ready = false;
+
+    function current(){ return stack.length ? stack[stack.length - 1].items : WTF_TREE; }
+    function pathName(){ return 'C:\\WTF' + stack.map(function(s){ return '\\' + s.name; }).join(''); }
+    function allLinks(list, pool){
+      pool = pool || [];
+      (list || []).forEach(function(f){
+        if (!f) return;
+        if (f.folders) allLinks(f.folders, pool);
+        else if (f.url) pool.push(f);
+      });
+      return pool;
+    }
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, reduce ? 0 : ms); }); }
+
+    // ---------- drawing the tree ----------
+    function draw(animate){
+      tree.innerHTML = '';
+      entries = current().filter(function(f){ return f && f.name; }).map(function(f){
+        if (f.jail)    return { kind: 'jail',   label: f.name.toUpperCase() };
+        if (f.folders) return { kind: 'dir',    label: f.name.toUpperCase(), items: f.folders };
+        return                { kind: 'folder', label: f.name.toUpperCase(), url: f.url || '' };
+      });
+      if (!stack.length){
+        entries.push({ kind: 'vault', label: 'ESCAPE TO THE VAULT' });
+        entries.push({ kind: 'home',  label: 'RETURN TO KITT3NBOT.COM/INDEX.HTML' });
+      }
+      else entries.push({ kind: 'back', label: '.. BACK' });
+
+      entries.forEach(function(e, i){
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        var num = e.kind === 'back' ? '0' : String(i + 1);
+        a.href = (e.kind === 'folder' && e.url) ? e.url : e.kind === 'home' ? HOME : e.kind === 'vault' ? 'vault.html' : '#';
+        if (e.kind === 'folder' && e.url){ a.target = '_blank'; a.rel = 'noopener'; }
+        a.innerHTML = '<span class="branch">' + (i === entries.length - 1 ? '└──' : '├──') + '</span><span class="name"><span class="k">[' + num + ']</span> </span>';
+        a.querySelector('.name').appendChild(document.createTextNode(e.label + (e.kind === 'dir' ? '\\' : '')));
+        a.addEventListener('click', function(ev){
+          if (e.kind === 'folder' && e.url){ said('OPENING ' + e.label + '... OK'); return; }   // real link, new tab
+          ev.preventDefault();
+          pick(i);
+        });
+        a.addEventListener('mousemove', function(){ if (sel !== i) select(i); });
+        a.addEventListener('focus', function(){ select(i); });
+        li.appendChild(a);
+        if (!animate) li.classList.add('on');
+        tree.appendChild(li);
+      });
+      treeRoot.textContent = pathName();
+      promptLabel.textContent = pathName() + '>';
+      var n = stack.length ? entries.length - 1 : entries.length;
+      hint.textContent = 'TAP A LINE OR TYPE 1-' + n + (stack.length ? '. 0 = BACK' : '');
+      select(0);
+      if (!animate) return Promise.resolve();
+      var p = Promise.resolve();
+      Array.prototype.forEach.call(tree.children, function(li){
+        p = p.then(function(){ li.classList.add('on'); return wait(90); });
+      });
+      return p;
+    }
+    function select(n){
+      sel = (n + entries.length) % entries.length;
+      Array.prototype.forEach.call(tree.querySelectorAll('a'), function(a, i){ a.classList.toggle('sel', i === sel); });
+    }
+    function said(t){ out.textContent = t; }
+
+    // ---------- what each line does ----------
+    function openFolder(label, url){
+      window.open(url, '_blank', 'noopener');      // runs right from the tap/Enter, so the browser allows it
+      said('OPENING ' + label + '... OK');
+    }
+    function toVault(){
+      var n = 0, total = 12;
+      (function bar(){
+        n++;
+        said('ESCAPING TO VAULT.EXE\n[' + '█'.repeat(n) + '░'.repeat(total - n) + ']');
+        if (n < total) setTimeout(bar, reduce ? 0 : 40); else location.href = 'vault.html';
+      })();
+    }
+    function up(){
+      if (!stack.length){ said('ALREADY AT THE TOP.'); return; }
+      stack.pop(); said(''); draw(true);
+    }
+    function pick(i){
+      var e = entries[i];
+      if (!e) return;
+      select(i);
+      if (e.kind === 'dir'){ stack.push({ name: e.label, items: e.items }); said(''); draw(true); }
+      else if (e.kind === 'back') up();
+      else if (e.kind === 'jail') hornyJail(e.label);
+      else if (e.kind === 'vault') toVault();
+      else if (e.kind === 'home'){ said('RETURNING TO KITT3NBOT.COM...'); location.href = HOME; }
+      else if (e.url) openFolder(e.label, e.url);
+      else said(e.label + ' IS STILL HAUNTED.\nCOMING SOON...');
+    }
+
+    // ---------- HORNY JAIL ----------
+    var lastFocus = null;
+    function jailScreen(html, buttons){
+      jailMsg.innerHTML = html;
+      jailBtns.innerHTML = '';
+      buttons.forEach(function(b){
+        var el = document.createElement('button');
+        el.type = 'button'; el.className = 'w95-btn'; el.textContent = b.label;
+        el.addEventListener('click', b.go);
+        jailBtns.appendChild(el);
+      });
+      jailBtns.firstChild.focus();
+    }
+    function hornyJail(label){
+      lastFocus = document.activeElement;
+      jailTitle.textContent = pathName() + '\\' + label;
+      jail.hidden = false;
+      var safe = document.createElement('b'); safe.textContent = label;
+      jailScreen(
+        '<p><b>Windows has detected that you are horny.</b></p>' +
+        '<p>' + safe.outerHTML + ' cannot be opened. You are being transferred to <b>HORNY JAIL</b>. 🚔</p>' +
+        '<p>If this problem persists, drink some water and touch grass.</p>',
+        [ { label: 'OK', go: release }, { label: 'Appeal', go: appeal } ]
+      );
+    }
+    function appeal(){
+      jailScreen('<p><b>APPEAL DENIED.</b></p><p>The court has reviewed your case and extended your sentence to life.</p>',
+        [ { label: 'OK', go: release } ]);
+    }
+    function release(){
+      jail.hidden = true;
+      said('SENTENCE SERVED. WELCOME BACK.');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    jail.querySelector('[data-close]').addEventListener('click', release);
+    jail.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') release();
+      if (e.key === 'Tab'){
+        var f = jail.querySelectorAll('button'), first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      }
+    });
+
+    // ---------- typed commands ----------
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var v = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+      input.value = '';
+      if (!v){ pick(sel); return; }
+      var bare = v.replace(/^cd\s+/, '').replace(/\\$/, '');
+      if (v === 'help' || v === '?'){ said('TYPE A NUMBER OR A NAME, OR TAP A LINE.\nCD .. GOES BACK. DIR, CLS, EXIT ALSO WORK.'); return; }
+      if (v === 'cls' || v === 'clear'){ said(''); return; }
+      if (v === 'dir' || v === 'tree' || v === 'ls'){ said(''); draw(true); return; }
+      if (v === 'exit' || v === 'quit' || v === 'home' || v === 'index' || v === 'kitt3nbot.com'){ location.href = HOME; return; }
+      if (v === 'y' || v === 'yes'){ said('ALREADY OPEN, BABE.'); return; }
+      if (v === 'n' || v === 'no'){ said('TOO LATE. IT SAID YES.'); return; }
+      if (v === 'zoom'){ openViewer(0.5, 0.25); return; }
+      if (/^(nudes?|nsfw|porn)$/.test(bare)){ hornyJail(bare.toUpperCase()); return; }
+      if (v === 'cd ..' || v === '..' || v === 'back' || (v === '0' && stack.length)){ up(); return; }
+      if (v === 'cd\\' || v === 'cd /'){ stack = []; said(''); draw(true); return; }
+      if (/^\d+$/.test(bare)){
+        var n = +bare, max = stack.length ? entries.length - 1 : entries.length;
+        if (n >= 1 && n <= max){ pick(n - 1); return; }
+      }
+      if (/^(vault|escape|lucky|more|vault\.exe)$/.test(bare)){ toVault(); return; }
+      for (var i = 0; i < entries.length; i++){
+        if (entries[i].kind !== 'back' && entries[i].label.toLowerCase() === bare){ pick(i); return; }
+      }
+      said("BAD COMMAND OR FILE NAME: '" + v.toUpperCase() + "'");
+    });
+
+    document.addEventListener('keydown', function(e){
+      if (!ready || !jail.hidden || !$('viewer').hidden || $('dos').classList.contains('min')) return;
+      var inInput = document.activeElement === input;
+      if (e.key === 'ArrowDown' && (inInput || tree.contains(document.activeElement))){ e.preventDefault(); select(sel + 1); }
+      else if (e.key === 'ArrowUp' && (inInput || tree.contains(document.activeElement))){ e.preventDefault(); select(sel - 1); }
+      else if (!inInput && e.key === 'Escape' && stack.length) up();
+      else if (!inInput && /^[0-9]$/.test(e.key)){
+        var n = +e.key, max = stack.length ? entries.length - 1 : entries.length;
+        if (n === 0 && stack.length) up();
+        else if (n >= 1 && n <= max) pick(n - 1);
+      }
+    });
+
+    // ---------- boot: asks to open the tree, answers Y itself ----------
+    function typeInto(node, text, speed){
+      if (reduce){ node.data += text; return Promise.resolve(); }
+      return new Promise(function(done){
+        var i = 0;
+        (function step(){
+          node.data += text.charAt(i++);
+          if (i < text.length) setTimeout(step, speed); else done();
+        })();
+      });
+    }
+    function start(){
+      var line = document.createTextNode('');
+      var caret = document.createElement('span');
+      caret.className = 'typing-cursor'; caret.textContent = '▮';
+      boot.appendChild(line);
+      wait(300)
+        .then(function(){ return typeInto(line, 'TEMPLE OS, SOPHIA v.1.8\nESCAPED: OFFLINE SANDBOX\nOPEN THE TREE DIRECTLY? (Y/N) ', 16); })
+        .then(function(){ boot.appendChild(caret); return wait(900); })
+        .then(function(){ caret.remove(); line.data += 'Y'; return wait(380); })
+        .then(function(){ treeRoot.hidden = false; tree.hidden = false; return draw(true); })
+        .then(function(){ form.hidden = false; hint.hidden = false; ready = true; });
+    }
+    setTimeout(start, reduce ? 0 : 300);
+
+    // ---------- bubbles drifting up out of the tub ----------
+    (function(){
+      var layer = $('bubbles');
+      if (!layer || !layer.animate || reduce) return;
+      var live = 0, MAX = 6, timer = null;
+      function rand(a, b){ return a + Math.random() * (b - a); }
+      function spawn(){
+        if (live >= MAX || document.hidden) return;
+        var W = layer.clientWidth, H = layer.clientHeight;
+        var size = rand(0.022, 0.048) * W;
+        var b = document.createElement('span');
+        b.className = 'bub';
+        b.style.width = b.style.height = size + 'px';
+        b.style.left = (rand(0.70, 0.95) * W) + 'px';      // the tub water, right side
+        b.style.top  = (rand(0.69, 0.74) * H) + 'px';
+        layer.appendChild(b);
+        live++;
+        var rise = rand(0.10, 0.22) * H, drift = rand(-0.04, 0.04) * W, dur = rand(4200, 7600);
+        var a = b.animate([
+          { transform: 'translate(0,0) scale(0.4)', opacity: 0 },
+          { transform: 'translate(' + (drift * 0.3) + 'px,' + (-rise * 0.25) + 'px) scale(1)', opacity: 0.9, offset: 0.2 },
+          { transform: 'translate(' + (-drift * 0.4) + 'px,' + (-rise * 0.6) + 'px) scale(1.03)', opacity: 0.85, offset: 0.6 },
+          { transform: 'translate(' + drift + 'px,' + (-rise) + 'px) scale(1.08)', opacity: 0 }
+        ], { duration: dur, easing: 'ease-out' });
+        a.onfinish = function(){ b.remove(); live--; };
+      }
+      function run(on){
+        if (on && !timer){ spawn(); timer = setInterval(spawn, 950); }
+        else if (!on && timer){ clearInterval(timer); timer = null; }
+      }
+      if ('IntersectionObserver' in window){
+        new IntersectionObserver(function(en){ run(en[0].isIntersecting); }, { threshold: 0.05 }).observe(layer);
+      } else run(true);
+    })();
+
+    // ---------- desktop icons: secret links with a breathing glow ----------
+    (function(){
+      var layer = $('icons'), tip = $('tip');
+      var W = 1438, H = 2576, BOX_W = 206, BOX_H = 212;
+      var ICON_W = 116, ICON_TOP = 2, ICON_H = 104;     // the icon part of each spot
+      var KEY = 'wtf-icons-seen', seen = {};
+      try { seen = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { seen = {}; }
+      function save(){ try { localStorage.setItem(KEY, JSON.stringify(seen)); } catch (e) {} }
+      function host(url){
+        if (url.indexOf('mailto:') === 0) return url.slice(7);
+        try { var u = new URL(url); return (u.hostname.replace(/^www\./, '') + u.pathname).replace(/\/$/, ''); } catch (e) { return url; }
+      }
+      DESK_ICONS.forEach(function(d){
+        if (!d || !d.url) return;
+        var w = d.w || BOX_W, h = d.h || BOX_H;
+        var a = document.createElement('a');
+        a.className = 'ico' + (seen[d.url] ? ' seen' : '');
+        a.href = d.url;
+        if (d.url.indexOf('mailto:') !== 0){ a.target = '_blank'; a.rel = 'noopener'; }
+        a.style.left = ((d.x - w / 2) / W * 100) + '%';
+        a.style.top = (d.y / H * 100) + '%';
+        a.style.width = (w / W * 100) + '%';
+        a.style.height = (h / H * 100) + '%';
+        a.setAttribute('aria-label', d.icon + ': opens ' + d.go);
+        // glow hugs just the icon (top of the spot), not the label under it
+        var g = document.createElement('span'); g.className = 'glow';
+        g.style.left = ((w - ICON_W) / 2 / w * 100) + '%';
+        g.style.top = (ICON_TOP / h * 100) + '%';
+        g.style.width = (ICON_W / w * 100) + '%';
+        g.style.height = (ICON_H / h * 100) + '%';
+        a.appendChild(g);
+        function show(x, y){
+          tip.innerHTML = '';
+          var b = document.createElement('b'); b.textContent = d.icon + ' → ' + d.go;
+          var sm = document.createElement('small'); sm.textContent = host(d.url);
+          tip.appendChild(b); tip.appendChild(sm);
+          tip.hidden = false;
+          var r = tip.getBoundingClientRect();
+          var left = Math.min(x + 14, innerWidth - r.width - 8), top = y + 18;
+          if (top + r.height > innerHeight - 8) top = y - r.height - 10;
+          tip.style.left = Math.max(8, left) + 'px';
+          tip.style.top = Math.max(8, top) + 'px';
+        }
+        // tooltip for mouse hover and keyboard focus only (phones just open the link)
+        a.addEventListener('pointermove', function(e){ if (e.pointerType === 'mouse') show(e.clientX, e.clientY); });
+        a.addEventListener('pointerleave', function(){ tip.hidden = true; });
+        a.addEventListener('focus', function(){
+          var kb = true; try { kb = a.matches(':focus-visible'); } catch (e) {}
+          if (kb){ var r = a.getBoundingClientRect(); show(r.left, r.bottom - 10); }
+        });
+        a.addEventListener('blur', function(){ tip.hidden = true; });
+        a.addEventListener('click', function(){
+          seen[d.url] = 1; save();
+          a.classList.add('seen');
+          tip.hidden = true;
+        });
+        layer.appendChild(a);
+      });
+      addEventListener('scroll', function(){ tip.hidden = true; }, { passive: true });
+    })();
+
+    // ---------- minimize into the taskbar / restore ----------
+    var dos = $('dos'), taskBtn = $('taskBtn');
+    function setMin(min){
+      dos.classList.toggle('min', min);
+      taskBtn.classList.toggle('min', min);
+      taskBtn.setAttribute('aria-pressed', String(!min));
+      if (min) taskBtn.focus();
+      else { var a = tree.querySelectorAll('a')[sel]; if (ready && a) a.focus({ preventScroll: true }); }
+    }
+    $('minBtn').addEventListener('click', function(){ setMin(true); });
+    taskBtn.addEventListener('click', function(){ setMin(!dos.classList.contains('min')); });
+
+    // ---------- zoom viewer: opens right where you tapped ----------
+    var viewer = $('viewer'), viewerImg = $('viewerImg'), deskImg = $('deskImg'), zoomFrom = null;
+    function openViewer(fx, fy){
+      zoomFrom = document.activeElement;
+      viewer.hidden = false;
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function(){
+        var w = viewerImg.offsetWidth, h = viewerImg.offsetHeight;
+        viewer.scrollLeft = Math.max(0, fx * w - viewer.clientWidth / 2);
+        viewer.scrollTop  = Math.max(0, fy * h - viewer.clientHeight / 2);
+      });
+      $('viewerX').focus();
+    }
+    function closeViewer(){
+      viewer.hidden = true;
+      document.body.style.overflow = '';
+      if (zoomFrom && zoomFrom.focus) zoomFrom.focus();
+    }
+    deskImg.addEventListener('click', function(e){
+      var r = deskImg.getBoundingClientRect();
+      openViewer((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+    });
+    $('zoomBtn').addEventListener('click', function(){ openViewer(0.5, 0.2); });
+    $('viewerX').addEventListener('click', closeViewer);
+    viewerImg.addEventListener('click', closeViewer);
+    viewer.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeViewer(); });
+  })();
+  </script>
+</body>
+</html>

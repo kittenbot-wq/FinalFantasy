@@ -1,0 +1,72 @@
+<title>The Threshold</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+:root{--bg:#07070c;--ink:#e6dcc6;--dim:#8a8274;--gold:#d9a066;--blue:#7aa6d9;--line:#2a2733;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Cormorant Garamond",Georgia,serif;font-size:18px;line-height:1.6}
+.wrap{max-width:900px;margin:0 auto;padding-block:32px 48px;padding-inline:16px;display:grid;gap:20px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;border-bottom:1px solid var(--line);padding-bottom:12px}
+h1{margin:0;font-weight:400;font-size:clamp(28px,5vw,44px);letter-spacing:.02em}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.stage{position:relative;width:100%;max-width:100%;aspect-ratio:1;background:#000;border:1px solid var(--line);cursor:crosshair;touch-action:none}
+canvas{width:100%;height:100%;display:block}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--ink);border:1px solid var(--dim);padding:10px 16px;cursor:pointer}
+button:hover{border-color:var(--gold);color:var(--gold)}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.c{margin-left:auto;font-variant-numeric:tabular-nums}
+p{max-width:62ch;margin:0;font-size:19px}
+p em{color:var(--gold)}
+.note{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;color:var(--dim);line-height:1.7}
+</style>
+
+<div class="wrap">
+  <header><h1>The Threshold</h1><span class="mono">julia set · z ← z² + c · c wanders</span></header>
+  <div class="stage" id="stage"><canvas id="gl" aria-label="Animated Julia set fractal in copper and blue, its shape slowly changing"></canvas></div>
+  <div class="controls">
+    <button id="wander" type="button">Let go</button>
+    <button id="pause" type="button">Pause</button>
+    <span class="mono c" id="cout">c = −0.745 + 0.113i</span>
+  </div>
+  <p>Every point in the frame is asked the same question: if you keep folding into yourself, do you stay, or do you fly apart? The dark interior is the set of points that stay bound forever. The copper and blue filaments are the ones that almost stayed. <em>c</em> is the seed, and it never stops moving.</p>
+  <p class="note">Drag on the canvas to hold c where you want it. Let go and it wanders again. Right-click or long-press to save a frame.</p>
+</div>
+
+<script>
+(function(){
+const c=document.getElementById('gl'),st=document.getElementById('stage'),out=document.getElementById('cout');
+const gl=c.getContext('webgl',{preserveDrawingBuffer:true});if(!gl)return;
+const vs=`attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+const fs=`precision highp float;uniform vec2 R;uniform vec2 C;uniform float T;
+vec3 pal(float t){vec3 a=vec3(.04,.04,.08),b=vec3(.85,.63,.40),d=vec3(.48,.65,.85);
+float w=.5+.5*sin(t*6.2832);return mix(a,mix(b,d,w),smoothstep(0.,1.,t));}
+void main(){vec2 uv=(gl_FragCoord.xy-.5*R)/R.y*2.7;vec2 z=uv;float i=0.;const float N=300.;
+for(float k=0.;k<N;k++){z=vec2(z.x*z.x-z.y*z.y,2.*z.x*z.y)+C;if(dot(z,z)>64.)break;i++;}
+if(i>=N){float g=exp(-dot(uv,uv)*2.);gl_FragColor=vec4(vec3(.03,.03,.06)+g*vec3(.12,.09,.06),1.);return;}
+float sm=i-log2(log2(dot(z,z)))+4.;float t=log(sm+1.)/log(N+1.);
+float band=.55+.45*cos(sm*.28-T*.9);
+vec3 cop=vec3(.85,.58,.34),blu=vec3(.45,.62,.88),drk=vec3(.06,.06,.10);
+vec3 hue=mix(cop,blu,.5+.5*sin(sm*.12+T*.3));
+vec3 col=mix(drk,hue,smoothstep(.15,.75,t))*band+drk*.5;
+col*=1.-.25*smoothstep(1.2,2.2,length(uv));gl_FragColor=vec4(col,1.);}`;
+function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
+const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+const uR=gl.getUniformLocation(pr,'R'),uC=gl.getUniformLocation(pr,'C'),uT=gl.getUniformLocation(pr,'T');
+let t=0,paused=false,held=false,cx=-0.745,cy=0.113;
+function size(){const d=Math.min(devicePixelRatio||1,2),w=st.clientWidth;c.width=w*d;c.height=w*d;gl.viewport(0,0,c.width,c.height);}
+size();addEventListener('resize',size);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(){if(!paused&&!reduce)t+=1/60;
+if(!held){const a=t*0.11;cx=-0.79+0.05*Math.cos(a)*Math.cos(a*0.37);cy=0.15+0.05*Math.sin(a*0.73)*Math.cos(a*0.19);}
+out.textContent='c = '+(cx<0?'−':'')+Math.abs(cx).toFixed(3)+' '+(cy<0?'−':'+')+' '+Math.abs(cy).toFixed(3)+'i';
+gl.uniform2f(uR,c.width,c.height);gl.uniform2f(uC,cx,cy);gl.uniform1f(uT,t);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(frame);}
+frame();
+function pt(e){const r=st.getBoundingClientRect();cx=((e.clientX-r.left)/r.width-0.5)*2.0;cy=-((e.clientY-r.top)/r.height-0.5)*2.0;}
+st.addEventListener('pointerdown',e=>{held=true;pt(e);st.setPointerCapture(e.pointerId);});
+st.addEventListener('pointermove',e=>{if(held)pt(e);});
+document.getElementById('wander').onclick=()=>{held=false;};
+const pb=document.getElementById('pause');pb.onclick=()=>{paused=!paused;pb.textContent=paused?'Resume':'Pause';};
+})();
+</script>

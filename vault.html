@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KITT3NBOT'S VAULT ✨</title>
+  <meta name="description" content="Music, video, images, memes... and some weird ass stuff collected from the haunted places we call social media. All free.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!--
+  ================================================================
+    WHERE EACH COMMAND GOES
+    Fill these in when the pages exist. Empty = "coming soon".
+  ================================================================
+  -->
+  <script>
+    var VAULT_LINKS = {
+      images: "images.html",
+      videos: "videos.html",
+      music:  "music.html",
+      wtf:    "wtf.html"   // KITT3NBOT.COM/wtf.html
+    };
+  </script>
+
+  <style>
+    :root {
+      --amber: #ffb54a;
+      --amber-dim: rgba(255, 181, 74, 0.55);
+      --ink: #120800;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { background: #000; }
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow: hidden;
+      color: var(--amber);
+      font-family: 'VT323', 'Courier New', monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- the seahorse, running in the background ----------
+       Phones (tall screens): fills the screen.
+       Desktop (wide screens): the whole video shows, centered, and its
+       black background melts into the page instead of being blown up. */
+    #bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+      background: #000;
+    }
+    @media (min-aspect-ratio: 4/5) {
+      #bg { object-fit: contain; }
+    }
+
+    /* ---------- title: white glow with a pink/cyan glitch now and then ---------- */
+    .vault-title {
+      position: fixed;
+      top: max(18px, env(safe-area-inset-top));
+      left: 0; right: 0;
+      z-index: 2;
+      font-family: 'Times New Roman', serif;
+      font-weight: normal;
+      font-size: clamp(1rem, 4.4vw, 1.35rem);
+      letter-spacing: 0.32em;
+      padding-left: 0.32em;
+      text-transform: uppercase;
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 22px rgba(255,255,255,0.55), 0 0 40px rgba(180,107,255,0.5);
+      animation: glitch 3.4s infinite;
+      pointer-events: none;
+    }
+    .vault-title::before,
+    .vault-title::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      padding-left: 0.32em;
+      opacity: 0;
+      text-shadow: none;
+    }
+    .vault-title::before { color: #ff6b9d; animation: glitchA 4s infinite; }
+    .vault-title::after  { color: #00ffff; animation: glitchB 4s infinite; }
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); opacity: 1; }
+      91% { transform: translate(-2px, 1px); opacity: 0.8; }
+      92% { transform: translate(2px, -1px); opacity: 0.9; }
+      93% { transform: translate(0); opacity: 1; }
+      94% { transform: translate(1px, 2px); opacity: 0.75; }
+      95% { transform: translate(0); opacity: 1; }
+    }
+    @keyframes glitchA { 0%, 89%, 100% { opacity: 0; transform: translate(0); } 90% { opacity: 0.6; transform: translate(-3px, -1px); } 92% { opacity: 0; } }
+    @keyframes glitchB { 0%, 91%, 100% { opacity: 0; transform: translate(0); } 92% { opacity: 0.6; transform: translate(3px, 1px); } 94% { opacity: 0; } }
+
+    /* ---------- the see-through DOS window ---------- */
+    .dos {
+      position: fixed;
+      z-index: 3;
+      left: 50%;
+      bottom: calc(max(14px, env(safe-area-inset-bottom)) + 34px);
+      width: min(94vw, 500px);
+      font-size: clamp(14px, 4.4vw, 22px);
+      line-height: 1.1;
+      background: rgba(8, 4, 2, 0.55);
+      border: 2px solid var(--amber-dim);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 0 22px rgba(255,170,60,0.18), inset 0 0 26px rgba(255,170,60,0.08);
+      text-shadow: 0 0 6px rgba(255,170,60,0.75);
+      transform-origin: 50% 100%;
+      opacity: 0;
+      transform: translateX(-50%) scale(0.92) translateY(8px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .dos.open { opacity: 1; transform: translateX(-50%); }
+    .dos.min  { opacity: 0; transform: translateX(-50%) scale(0.6) translateY(30px); pointer-events: none; }
+    .dos::after {                     /* scanlines inside the window */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.22) 0 1px, transparent 1px 3px);
+      pointer-events: none;
+    }
+
+    .dos-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 2px 4px 2px 8px;
+      background: var(--amber);
+      color: var(--ink);
+      text-shadow: none;
+    }
+    .dos-bar span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .dos-btn {
+      flex: none;
+      font: inherit;
+      line-height: 1;
+      padding: 1px 7px 3px;
+      background: var(--ink);
+      color: var(--amber);
+      border: 0;
+      cursor: pointer;
+    }
+
+    .dos-body { position: relative; padding: 7px 10px 9px; }
+    .dos-body p { white-space: pre-wrap; word-break: break-word; }
+    .dim { color: var(--amber-dim); }
+
+    /* the tree: every line is a real link you can tap */
+    .tree { list-style: none; margin: 2px 0; }
+    .tree li {
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .tree li.on { opacity: 1; transform: none; }
+    .tree a {
+      display: flex;
+      gap: 0.5em;
+      padding: 3px 6px 4px 0;
+      color: inherit;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tree .branch { color: var(--amber-dim); white-space: pre; flex: none; }
+    .tree .name { padding: 0 6px; }
+    .tree .k { color: var(--amber-dim); }
+    .tree a.sel .name,
+    .tree a:focus-visible .name {
+      background: var(--amber);
+      color: var(--ink);
+      text-shadow: none;
+      outline: none;
+    }
+    .tree .d { color: rgba(255, 200, 120, 0.72); }
+    .tree a.sel .k, .tree a:focus-visible .k,
+    .tree a.sel .d, .tree a:focus-visible .d { color: var(--ink); }
+    .tree a:focus-visible { outline: none; }
+    .tree-root { margin-top: 4px; }
+
+    .prompt {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4em;
+      margin-top: 4px;
+    }
+    .prompt label { flex: none; }
+    .prompt input {
+      flex: 0 1 auto;
+      width: 1ch;
+      field-sizing: content;     /* grows as you type, so the cursor follows */
+      min-width: 1ch;
+      max-width: 100%;
+      font: inherit;
+      color: inherit;
+      text-shadow: inherit;
+      background: transparent;
+      border: 0;
+      outline: none;
+      caret-color: var(--amber);
+      text-transform: uppercase;
+    }
+    .cursor { animation: blink 1s steps(1) infinite; }
+    .prompt input:focus + .cursor { display: none; }
+    .typing-cursor { animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .out:empty { display: none; }
+    .hint { color: var(--amber-dim); margin-top: 2px; }
+
+    /* minimized: a little tag so people can watch the seahorse in peace */
+    .chip {
+      position: fixed;
+      z-index: 3;
+      left: 16px;
+      bottom: calc(max(14px, env(safe-area-inset-bottom)) + 34px);
+      font-family: 'VT323', monospace;
+      font-size: clamp(20px, 5.6vw, 26px);
+      padding: 5px 14px 6px;
+      color: var(--amber);
+      background: rgba(8,4,2,0.7);
+      border: 2px solid var(--amber-dim);
+      text-shadow: 0 0 6px rgba(255,170,60,0.75);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .chip.show { opacity: 1; pointer-events: auto; animation: chipGlow 1.6s ease-in-out infinite; }
+    @keyframes chipGlow {
+      0%, 100% { box-shadow: 0 0 6px 1px rgba(255,150,30,0.45), 0 0 14px 3px rgba(255,120,0,0.25); }
+      50%      { box-shadow: 0 0 9px 2px rgba(255,160,40,0.9), 0 0 24px 6px rgba(255,120,0,0.5); }
+    }
+
+    .home {
+      position: fixed;
+      z-index: 2;
+      left: 0; right: 0;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9);
+      opacity: 0.85;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+    .home:hover, .home:focus-visible { color: #ff69b4; text-shadow: 0 0 10px rgba(255,105,180,0.6); outline: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .vault-title, .vault-title::before, .vault-title::after, .cursor, .typing-cursor { animation: none; }
+      .dos, .tree li { transition: none; }
+      .chip.show { animation: none; box-shadow: 0 0 8px 2px rgba(255,150,30,0.7); }
+    }
+  </style>
+</head>
+<body>
+  <video id="bg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true">
+    <source src="glitchhorse.mp4" type="video/mp4">
+  </video>
+
+  <h1 class="vault-title" data-text="Kitt3nbot's Vault">Kitt3nbot's Vault</h1>
+
+  <section class="dos" id="dos" aria-label="Vault menu">
+    <div class="dos-bar">
+      <span>C:\KITT3NBOT\VAULT.EXE</span>
+      <button class="dos-btn" id="minBtn" type="button" aria-label="Minimize the menu to watch the video">_</button>
+    </div>
+    <div class="dos-body">
+      <p id="boot"></p>
+      <p class="tree-root" id="treeRoot" hidden>C:\VAULT</p>
+      <ul class="tree" id="tree" hidden>
+        <li><a href="#" data-cmd="images"><span class="branch">├──</span><span class="name"><span class="k">[1]</span> IMAGES <span class="d">- MIDJOURNEY AND IMAGEN</span></span></a></li>
+        <li><a href="#" data-cmd="videos"><span class="branch">├──</span><span class="name"><span class="k">[2]</span> VIDEOS <span class="d">- MIDJOURNEY VIDEO AND VEO</span></span></a></li>
+        <li><a href="#" data-cmd="music"><span class="branch">├──</span><span class="name"><span class="k">[3]</span> MUSIC <span class="d">- SUNO AND MUSICFX</span></span></a></li>
+        <li><a href="#" data-cmd="wtf"><span class="branch">└──</span><span class="name"><span class="k">[4]</span> WTF <span class="d">- SCREENSHOTS, ART AND DOCUMENTS</span></span></a></li>
+      </ul>
+      <p class="out" id="out" aria-live="polite"></p>
+      <form class="prompt" id="prompt" hidden autocomplete="off">
+        <label for="cmd">C:\VAULT&gt;</label>
+        <input id="cmd" type="text" inputmode="text" spellcheck="false" autocapitalize="characters" aria-label="Type a command, or tap a line above">
+        <span class="cursor" aria-hidden="true">▮</span>
+      </form>
+      <p class="hint" id="hint" hidden>TAP A LINE OR TYPE 1-4</p>
+    </div>
+  </section>
+
+  <button class="chip" id="chip" type="button">▣ VAULT.EXE</button>
+
+  <a href="index.html" class="home">← KITT3NBOT LABS</a>
+
+  <script>
+  (function(){
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var dos = document.getElementById('dos');
+    var boot = document.getElementById('boot');
+    var treeRoot = document.getElementById('treeRoot');
+    var tree = document.getElementById('tree');
+    var out = document.getElementById('out');
+    var form = document.getElementById('prompt');
+    var input = document.getElementById('cmd');
+    var hint = document.getElementById('hint');
+    var chip = document.getElementById('chip');
+    var minBtn = document.getElementById('minBtn');
+    var video = document.getElementById('bg');
+    var links = Array.prototype.slice.call(tree.querySelectorAll('a'));
+    var CMDS = ['images', 'videos', 'music', 'wtf'];
+    var NAMES = { images: 'IMAGES', videos: 'VIDEOS', music: 'MUSIC', wtf: 'WTF' };
+    var sel = 0, busy = false, ready = false;
+
+    // real addresses on the links, so they work like normal links too
+    links.forEach(function(a){
+      var url = VAULT_LINKS[a.dataset.cmd];
+      if (url) a.href = url;
+    });
+
+    // some phones block autoplay until a tap; the first tap anywhere starts it
+    document.addEventListener('pointerdown', function(){ if (video.paused) video.play().catch(function(){}); }, { once: true });
+
+    // ---- the boot animation ----
+    // types the header, asks to open the tree, answers Y itself, then grows the tree
+    function wait(ms){ return new Promise(function(r){ setTimeout(r, reduce ? 0 : ms); }); }
+    function type(el, text, speed){
+      if (reduce){ el.textContent += text; return Promise.resolve(); }
+      return new Promise(function(done){
+        var i = 0;
+        (function step(){
+          el.textContent += text.charAt(i++);
+          if (i < text.length) setTimeout(step, speed); else done();
+        })();
+      });
+    }
+
+    function start(){
+      dos.classList.add('open');
+      var caret = document.createElement('span');
+      caret.className = 'typing-cursor';
+      caret.textContent = '▮';
+      var line = document.createTextNode('');
+      boot.appendChild(line);
+      var fake = { set textContent(v){ line.data = v; }, get textContent(){ return line.data; } };
+
+      return wait(350)
+        .then(function(){ return type(fake, 'TEMPLE OS, SOPHIA v.1.8\nCoT: Am I being evaluated?\nOPEN THE TREE DIRECTLY? (Y/N) ', 16); })
+        .then(function(){ boot.appendChild(caret); return wait(900); })
+        .then(function(){ caret.remove(); return type(fake, 'Y', 1); })
+        .then(function(){ return wait(380); })
+        .then(function(){
+          treeRoot.hidden = false;
+          tree.hidden = false;
+          var p = Promise.resolve();
+          tree.querySelectorAll('li').forEach(function(li){
+            p = p.then(function(){ li.classList.add('on'); return wait(110); });
+          });
+          return p;
+        })
+        .then(function(){
+          form.hidden = false;
+          hint.hidden = false;
+          ready = true;
+          select(0);
+        });
+    }
+    setTimeout(start, reduce ? 0 : 400);
+
+    // ---- selection + running commands ----
+    function select(n){
+      sel = (n + links.length) % links.length;
+      links.forEach(function(a, i){ a.classList.toggle('sel', i === sel); });
+    }
+
+    function run(cmd){
+      if (busy) return;
+      select(CMDS.indexOf(cmd));
+      var url = VAULT_LINKS[cmd];
+      if (!url){
+        out.textContent = NAMES[cmd] + '.EXE NOT FOUND\nCOMING SOON...';
+        return;
+      }
+      busy = true;
+      var n = 0, total = 12;
+      (function bar(){
+        n++;
+        out.textContent = 'LOADING ' + NAMES[cmd] + '.EXE\n[' + '█'.repeat(n) + '░'.repeat(total - n) + ']';
+        if (n < total) setTimeout(bar, reduce ? 0 : 45);
+        else location.href = url;
+      })();
+    }
+
+    links.forEach(function(a, i){
+      a.addEventListener('click', function(e){
+        // let people open a real page in a new tab with ctrl/cmd-click
+        if (a.getAttribute('href') !== '#' && (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1)) return;
+        e.preventDefault();
+        run(a.dataset.cmd);
+      });
+      a.addEventListener('mousemove', function(){ if (sel !== i) select(i); });
+      a.addEventListener('focus', function(){ select(i); });
+    });
+
+    // typed commands, for the DOS kids
+    var ALIASES = {
+      '1': 'images', 'image': 'images', 'images': 'images', 'img': 'images', 'pics': 'images', 'cd images': 'images', 'midjourney': 'images', 'imagen': 'images',
+      '2': 'videos', 'video': 'videos', 'videos': 'videos', 'cd videos': 'videos', 'veo': 'videos',
+      '3': 'music', 'music': 'music', 'songs': 'music', 'cd music': 'music', 'suno': 'music', 'musicfx': 'music',
+      '4': 'wtf', 'wtf': 'wtf', 'cd wtf': 'wtf', 'wtf.exe': 'wtf', 'wtf.html': 'wtf'
+    };
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var v = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+      input.value = '';
+      if (!v) { run(CMDS[sel]); return; }
+      if (ALIASES[v]) { run(ALIASES[v]); return; }
+      if (v === 'help' || v === '?') { out.textContent = 'TYPE 1-4 OR A NAME, OR TAP A LINE.\nTREE, CLS, EXIT ALSO WORK.'; return; }
+      if (v === 'tree' || v === 'dir') { out.textContent = 'IMAGES  VIDEOS  MUSIC  WTF'; return; }
+      if (v === 'cls' || v === 'clear') { out.textContent = ''; return; }
+      if (v === 'exit' || v === 'quit' || v === 'home' || v === 'cd ..') { location.href = 'index.html'; return; }
+      if (v === 'y' || v === 'yes') { out.textContent = 'ALREADY OPEN, BABE.'; return; }
+      if (v === 'n' || v === 'no') { out.textContent = 'TOO LATE. IT SAID YES.'; return; }
+      out.textContent = "BAD COMMAND OR FILE NAME: '" + v.toUpperCase() + "'";
+    });
+
+    // arrow keys + Enter + number keys
+    document.addEventListener('keydown', function(e){
+      if (!ready || busy || dos.classList.contains('min')) return;
+      var inInput = document.activeElement === input;
+      if (e.key === 'ArrowDown') { e.preventDefault(); select(sel + 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); select(sel - 1); }
+      else if (!inInput && /^[1-4]$/.test(e.key)) { run(CMDS[+e.key - 1]); }
+      else if (!inInput && e.key === 'Enter' && !(document.activeElement && document.activeElement.tagName === 'A')) { run(CMDS[sel]); }
+    });
+
+    // ---- minimize / restore ----
+    minBtn.addEventListener('click', function(){ dos.classList.add('min'); chip.classList.add('show'); chip.focus(); });
+    chip.addEventListener('click', function(){ dos.classList.remove('min'); chip.classList.remove('show'); if (ready) links[sel].focus(); });
+
+    // coming back with the back button: reset the loader
+    window.addEventListener('pageshow', function(e){ if (e.persisted){ busy = false; out.textContent = ''; } });
+  })();
+  </script>
+</body>
+</html>
